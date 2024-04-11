@@ -7,9 +7,7 @@ import { configLoader } from 'config-loader';
 import { envSchema } from 'env-schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
-import { GoogleDriveModule } from './managergoogledrive/managergoogledrive.module';
-import { GoogleDriveConfig } from './managergoogledrive/types/GoogleDriveConfig';
-import { GoogleDriveService } from './managergoogledrive/services/googleDriveService';
+
 //import { ObraModule } from './obra/obra.module';
 //import { PresupuestoModule } from './presupuesto/presupuesto.module';
 //import { ValorizacionModule } from './valorizacion/valorizacion.module';
@@ -59,6 +57,6 @@ import { GoogleDriveService } from './managergoogledrive/services/googleDriveSer
 
   ],
   controllers: [AppController],
-  providers: [AppService,GoogleDriveService,ConfigModule],
+  providers: [AppService,ConfigModule],
 })
 export class AppModule {}
