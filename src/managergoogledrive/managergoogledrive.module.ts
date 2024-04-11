@@ -17,7 +17,7 @@ export const enum EFOLDERSIDS {
 @Module({
     imports: [HttpModule],
 })
-export class ManagergoogledriveModule {
+export class GoogleDriveModule {
     /**
    *
    * @param googleDriveConfig your config file/all config fields
@@ -32,7 +32,7 @@ export class ManagergoogledriveModule {
     //googleDriveArchivosFolderId: string,//carpeta donde se alojara toda la gestion documentaria del usuario
   ): DynamicModule {
     return {
-      module: ManagergoogledriveModule,
+      module: GoogleDriveModule,
       global: true,
       providers: [
         GoogleAutenticarService,

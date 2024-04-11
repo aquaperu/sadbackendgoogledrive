@@ -2,13 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
 import { HttpModule } from '@nestjs/axios';
 import { configLoader } from 'config-loader';
 import { envSchema } from 'env-schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
-import { ManagergoogledriveModule } from './managergoogledrive/managergoogledrive.module';
+import { GoogleDriveModule } from './managergoogledrive/managergoogledrive.module';
 import { GoogleDriveConfig } from './managergoogledrive/types/GoogleDriveConfig';
 import { GoogleDriveService } from './managergoogledrive/services/googleDriveService';
 //import { ObraModule } from './obra/obra.module';
@@ -34,7 +33,7 @@ import { GoogleDriveService } from './managergoogledrive/services/googleDriveSer
         }, 
       }),
     HttpModule,
-    ManagergoogledriveModule.register({//el accouint es como servicio de google
+    /*GoogleDriveModule.register({//el accouint es como servicio de google
       "type": "service_account",
       "project_id": "sadsinfactura",
       "private_key_id": "70808a05a5e17813ee62ae5d0444a5390948ed7e",
@@ -49,7 +48,8 @@ import { GoogleDriveService } from './managergoogledrive/services/googleDriveSer
        
     }as GoogleDriveConfig,
     '1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t',//carpeta base SAD
-    ),
+    ),*/
+
     ConfigModule.forRoot(),
     AuthModule,
     //ObraModule,
