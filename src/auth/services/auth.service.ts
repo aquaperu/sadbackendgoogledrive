@@ -6,14 +6,14 @@ import * as bcrypt from 'bcrypt'
 import { AuthDto } from '../dtos/auth.dto';
 import { AuthEntity } from '../entity/auth.entity';
 import { IAuthRepository, IAUTH_REPOSITORY } from '../patronAdapter/auth.interface.repository';
-import { GoogleDriveService } from 'src/managergoogledrive/services/googleDriveService';
+//import { GoogleDriveService } from 'src/managergoogledrive/services/googleDriveService';
 
 @Injectable()
 export class AuthService {
     constructor(
         @Inject(IAUTH_REPOSITORY) private authRepository:IAuthRepository,
         private jwtService:JwtService,
-        private readonly googleDriveService: GoogleDriveService,
+        //private readonly googleDriveService: GoogleDriveService,
         ){ }
 
     async validateUser(email:string,password:string):Promise<any>{
@@ -71,7 +71,7 @@ export class AuthService {
         
       const usuario = await this.authRepository.register(userObjectCreate)
      
-      const usuarioFolderId =    await this.googleDriveService.crearCarpeta(
+      /*const usuarioFolderId =    await this.googleDriveService.crearCarpeta(
             '1aT_8H66m-3yQWeCwfEKNvRHRB_6WAEWy',//carpeta base, es la carpeta creada en drive destinada a almacenar sad. No se modifica.
             usuario.usuarioId)
       const logoFolderId = await this.googleDriveService.crearCarpeta(
@@ -81,7 +81,7 @@ export class AuthService {
 
       await this.actualizaFolderId(usuario.usuarioId,usuarioFolderId)
       await this.actualizaLogoFolderId(usuario.usuarioId,logoFolderId)
-      
+      */
 
       return usuario
 
