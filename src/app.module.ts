@@ -16,6 +16,7 @@ import { GoogleDriveConfig } from './googledrivecasa/types/googledriveconfig';
 //import { GoogledrivecasaModule } from './googledrivecasa/googledrivecasa.module';
 import { ObraModule } from './obra/obra.module';
 import { ValorizacionModule } from './valorizacion/valorizacion.module';
+import { PresupuestoModule } from './presupuesto/presupuesto.module';
 
 @Module({
   imports: [
@@ -56,10 +57,8 @@ import { ValorizacionModule } from './valorizacion/valorizacion.module';
     AuthModule,
     ObraModule,
     ValorizacionModule,
-    //GoogledrivecasaModule,
-    //ObraModule,
-    //PresupuestoModule,
-    //ValorizacionModule,
+    PresupuestoModule,
+    
 
 
   ],
