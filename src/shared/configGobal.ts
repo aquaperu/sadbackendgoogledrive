@@ -1,4 +1,7 @@
 import { fixPathAssets } from './toolbox/fixPath';
+export const jwtConstants = {
+    secret:'mysemilla'
+}
 enum nombreHojasPlantillaValorizacion{
     CONFIGURACION ="configuracion",
     PRESUPUESTOCONTRACTUAL='presupuesto_contractual',
