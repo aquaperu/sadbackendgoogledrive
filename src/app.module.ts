@@ -7,11 +7,13 @@ import { configLoader } from 'config-loader';
 import { envSchema } from 'env-schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
+import { GoogledrivecasaModule } from './googledrivecasa/googledrivecasa.module';
+import { GoogleDriveConfig } from './googledrivecasa/types/googledriveconfig';
 
 //import { ObraModule } from './obra/obra.module';
 //import { PresupuestoModule } from './presupuesto/presupuesto.module';
 //import { ValorizacionModule } from './valorizacion/valorizacion.module';
-
+//import { GoogledrivecasaModule } from './googledrivecasa/googledrivecasa.module';
 
 @Module({
   imports: [
@@ -31,7 +33,7 @@ import { AuthModule } from './auth/auth.module';
         }, 
       }),
     HttpModule,
-    /*GoogleDriveModule.register({//el accouint es como servicio de google
+    GoogledrivecasaModule.register({//el accouint es como servicio de google
       "type": "service_account",
       "project_id": "sadsinfactura",
       "private_key_id": "70808a05a5e17813ee62ae5d0444a5390948ed7e",
@@ -46,10 +48,11 @@ import { AuthModule } from './auth/auth.module';
        
     }as GoogleDriveConfig,
     '1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t',//carpeta base SAD
-    ),*/
+    ),
 
     ConfigModule.forRoot(),
     AuthModule,
+    //GoogledrivecasaModule,
     //ObraModule,
     //PresupuestoModule,
     //ValorizacionModule,
