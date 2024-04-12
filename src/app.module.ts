@@ -11,7 +11,7 @@ import { AuthModule } from './auth/auth.module';
 //import { ObraModule } from './obra/obra.module';
 //import { PresupuestoModule } from './presupuesto/presupuesto.module';
 //import { ValorizacionModule } from './valorizacion/valorizacion.module';
-
+//import { GoogledrivecasaModule } from './googledrivecasa/googledrivecasa.module';
 
 @Module({
   imports: [
@@ -50,6 +50,7 @@ import { AuthModule } from './auth/auth.module';
 
     ConfigModule.forRoot(),
     AuthModule,
+    //GoogledrivecasaModule,
     //ObraModule,
     //PresupuestoModule,
     //ValorizacionModule,
