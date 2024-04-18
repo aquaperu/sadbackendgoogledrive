@@ -205,7 +205,7 @@ export class ValorizacionService {
   
     public async generaIndice(indices:INombreColumna[]){ 
        // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
-        const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
+       // const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
         //console.log(pathAssets)
         const indice = new PDFDocument({
             size: "A4"//typePage
