@@ -205,7 +205,7 @@ export class ValorizacionService {
   
     public async generaIndice(indices:INombreColumna[]){ 
        // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
-        //const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
+        const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
         //console.log(pathAssets)
         const indice = new PDFDocument({
             size: "A4"//typePage
@@ -215,7 +215,8 @@ export class ValorizacionService {
         indices.map((val:INombreColumna)=>{    
             indice.moveDown()
             indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
-            //indice.font(`${path.join(process.cwd(),'/AmaticSC_Regular.ttf')}`).text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
+            this.generaSeparadores(val.titulo)
+            
            
         })
         indice.end()
@@ -303,6 +304,29 @@ export class ValorizacionService {
                     
     
   }
+  public async generaSeparadores(dataText:string){
+    // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
+    const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
+    //console.log(pathAssets)
+    const indice = new PDFDocument({
+        size: "A4"//typePage
+    });
+   // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
+    
+       
+        indice.fontSize(60).text(`${dataText}`,150,265,{align:"center"});
+        await this.googleDriveService.GeneraIndiceEnPDF(dataText,indice,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")
+        indice.end()
+       
+       
+    
+      
+      
+     
+  
+
+  }
+
     public async plantillaDocxV3(){
         const evidencias:any[] = []
         let payload:any

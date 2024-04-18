@@ -267,6 +267,7 @@ export class ValorizacionController {
 
         return this.valorizacionService.generaIndice(indices)
     }
+    
 
     @Get('curvas')
     curvas(){
