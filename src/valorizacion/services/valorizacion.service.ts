@@ -215,7 +215,16 @@ export class ValorizacionService {
         indices.map(async (val:INombreColumna)=>{    
             indice.moveDown()
             indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
-            await this.generaSeparadores(val.titulo)
+            const separador = new PDFDocument({
+                size: "A4"//typePage
+            });
+           // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
+            
+               
+                separador.fontSize(60).text(`${val.titulo}`,150,265,{align:"center"});
+                const ve = await this.googleDriveService.GeneraIndiceEnPDF(val.titulo,separador,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")
+                console.log({"resultado del id de un separador":ve})
+                separador.end()
             
            
         })
