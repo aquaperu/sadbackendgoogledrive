@@ -206,7 +206,7 @@ export class ValorizacionService {
     public async generaIndice(indices:INombreColumna[]){ 
        // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
         const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
-        
+        console.log(pathAssets)
         const indice = new PDFDocument({
             size: "A4"//typePage
         });
@@ -214,7 +214,7 @@ export class ValorizacionService {
         indice.text(`INDICE`,{width:400,align:'center'});
         indices.map((val:INombreColumna)=>{    
             indice.moveDown()
-            indice.font(pathAssets).text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
+            indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
             //indice.font(`${path.join(process.cwd(),'/AmaticSC_Regular.ttf')}`).text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
            
         })
