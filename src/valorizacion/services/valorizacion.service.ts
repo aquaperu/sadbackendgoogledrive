@@ -212,7 +212,7 @@ export class ValorizacionService {
         });
        // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
         indice.text(`INDICE`,{width:400,align:'center'});
-        indices.map((val:INombreColumna)=>{    
+        indices.map(async (val:INombreColumna)=>{    
             indice.moveDown()
             indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
             await this.generaSeparadores(val.titulo)
