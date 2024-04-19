@@ -233,6 +233,7 @@ export class ValorizacionService {
         })
 
         const funcs = separador.map(url => () => this.googleDriveService.GeneraIndiceEnPDFv1("url",url,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t"))
+        console.log(funcs)
         /*
         * serial executes Promises sequentially.
         * @param {funcs} An array of funcs that return promises.
@@ -246,15 +247,15 @@ export class ValorizacionService {
         promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
         //fin de la funcion
 
-        serial(funcs).then((valores)=>{
+        /*serial(funcs).then((valores)=>{
             console.log(valores)
 
-        })
+        })*/
 
 
 
 
-        return await this.googleDriveService.GeneraIndiceEnPDF("myindice",indice,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")//retorna el id del pdf
+        //return await this.googleDriveService.GeneraIndiceEnPDF("myindice",indice,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")//retorna el id del pdf
 
     
     
