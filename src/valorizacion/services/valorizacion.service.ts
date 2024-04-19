@@ -217,7 +217,7 @@ export class ValorizacionService {
         indice.text(`INDICE`,{width:400,align:'center'});
         indices.map(async (val:INombreColumna,index)=>{    
             indice.moveDown()
-            //indice.font(fixPathAssets('AmaticSC_Regular.ttf'))
+            indice.font(fixPathAssets('AmaticSC_Regular.ttf'))
             indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
 
            
