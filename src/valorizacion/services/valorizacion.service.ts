@@ -232,8 +232,8 @@ export class ValorizacionService {
             })
         })
 
-        const funcs = separador.map(url => () => this.googleDriveService.GeneraIndiceEnPDFv1("url",url,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t"))
-        console.log(funcs)
+        //const funcs = separador.map(url => () => )
+        console.log(separador)
         /*
         * serial executes Promises sequentially.
         * @param {funcs} An array of funcs that return promises.
