@@ -207,28 +207,55 @@ export class ValorizacionService {
        // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
        // const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
         //console.log(pathAssets)
+        let separador=[]
         const indice = new PDFDocument({
             size: "A4"//typePage
         });
        // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
         indice.text(`INDICE`,{width:400,align:'center'});
-        indices.map(async (val:INombreColumna)=>{    
+        indices.map(async (val:INombreColumna,index)=>{    
             indice.moveDown()
             indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
-            const separador = new PDFDocument({
-                size: "A4"//typePage
-            });
+
            // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
             
                
-                separador.fontSize(60).text(`${val.titulo}`,150,265,{align:"center"});
-                const ve = await this.googleDriveService.GeneraIndiceEnPDF(val.titulo,separador,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")
-                console.log({"resultado del id de un separador":ve})
-                separador.end()
-            
+                
            
         })
         indice.end()
+
+        const valores = ["uno","dos"]
+        valores.map((valor,index)=>{
+            separador[index] = new PDFDocument({
+                size:"A4"
+            })
+            separador[index].text(`${valor}`)
+
+        })
+
+        const funcs = separador
+        /*
+        * serial executes Promises sequentially.
+        * @param {funcs} An array of funcs that return promises.
+        * @example
+        * const urls = ['/url1', '/url2', '/url3']
+        * serial(urls.map(url => () => $.ajax(url)))
+        *     .then(console.log.bind(console))
+        */
+        const serial = funcs =>
+        funcs.reduce((promise, func) =>
+        promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
+        //fin de la funcion
+
+        serial(funcs).then((valores)=>{
+            console.log(valores)
+
+        })
+
+
+
+
         return await this.googleDriveService.GeneraIndiceEnPDF("myindice",indice,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")//retorna el id del pdf
 
     
