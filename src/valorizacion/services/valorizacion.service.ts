@@ -206,7 +206,11 @@ export class ValorizacionService {
     public async generaIndice(indices:INombreColumna[]){ 
         
         
-        fixPathAssets('AmaticSC_Regular.ttf')
+        const fuentedeletra = fixPathAssets('AmaticSC_Regular.ttf')
+        console.log(fuentedeletra)
+        const myseparador = fixPathAssets('separadorv4.png')
+        console.log(myseparador) 
+        
 
       
         
@@ -217,8 +221,10 @@ export class ValorizacionService {
         indice.text(`INDICE`,{width:400,align:'center'});
         indices.map(async (val:INombreColumna,index)=>{    
             indice.moveDown()
-            indice.font(fixPathAssets('AmaticSC_Regular.ttf'))
-            indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
+            
+            indice
+            //.font(fuentedeletra)
+            .text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
 
            
             
@@ -240,8 +246,15 @@ export class ValorizacionService {
         
 
         for(let j=0;j<misarchivos.length;j++){
+            misarchivos[j].image(myseparador,0,0,{width:594, height:841})//ancho y largo
            
-             misarchivos[j].text(`hora ${indices[j].titulo}`)
+            misarchivos[j].moveDown();
+            misarchivos[j].moveDown();
+             misarchivos[j]
+             
+             .font(fuentedeletra)
+             .fontSize(60)
+             .text(`${indices[j].titulo}`,150,265,{align:'center'})
         }
         
        

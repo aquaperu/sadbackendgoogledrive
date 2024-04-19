@@ -1,7 +1,9 @@
 import  * as path from 'path';
-
+import * as fs from 'fs';
 export const fixPathAssets = (recursoAssets:string)=>{
-    process.chdir('dist/src/assets')
+    console.log(`Starting directory: ${process.cwd()}`);
+    //process.chdir()
    
-    return `${path.join(process.cwd(),'/',recursoAssets)}`
+   
+    return `${path.join(process.cwd(),'/','dist/src/assets/',recursoAssets)}`
 }
