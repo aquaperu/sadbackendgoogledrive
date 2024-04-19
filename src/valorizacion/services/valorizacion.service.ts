@@ -226,12 +226,10 @@ export class ValorizacionService {
         indice.end()
 
         const valores = ["uno","dos"]
-        valores.map((valor,index)=>{
-            separador[index] = new PDFDocument({
+        separador =  valores.map((valor,index)=>{
+            return new PDFDocument({
                 size:"A4"
             })
-            separador[index].text(`${valor}`)
-
         })
 
         const funcs = separador
