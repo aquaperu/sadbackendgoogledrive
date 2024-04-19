@@ -252,6 +252,44 @@ public async crearCarpeta(idForGoogleElement:string,nameForGoogleElement:string)
      
           
   }
+
+  public async GeneraIndiceEnPDFv1(nameFile:string,streamPDFKit:any,carpetaContenedora:string) {
+    
+    const folderId = carpetaContenedora;
+
+        const fileMetadata = {
+            name: `label_${nameFile}.pdf`,
+            parents: [folderId],
+        };
+
+        const media = {
+            mimeType: "application/pdf",
+            body: streamPDFKit,
+        };
+
+        try {
+           return this.drive.files.create(
+            {
+                resource: fileMetadata,
+                media: media,
+                fields: "id",
+            },
+            
+        );
+        
+        //return asPdf.data.id
+          
+        } catch (error) {
+          console.error('Failed to export PDF', error);
+        }
+
+       
+
+
+
+
+        
+  }
   
     
    
