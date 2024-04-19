@@ -204,19 +204,20 @@ export class ValorizacionService {
     }
   
     public async generaIndice(indices:INombreColumna[]){ 
-        fixPathAssets('')
         
-
+        
+        fixPathAssets('AmaticSC_Regular.ttf')
 
       
         
-        /*const indice = new PDFDocument({
+        const indice = new PDFDocument({
             size: "A4"//typePage
         });
        
         indice.text(`INDICE`,{width:400,align:'center'});
         indices.map(async (val:INombreColumna,index)=>{    
             indice.moveDown()
+            //indice.font(fixPathAssets('AmaticSC_Regular.ttf'))
             indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
 
            
@@ -249,7 +250,7 @@ export class ValorizacionService {
        }
        for(let l=0;l<misarchivos.length;l++){
         const ve = await this.googleDriveService.GeneraIndiceEnPDF(indices[l].titulo,misarchivos[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
-       }*/
+       }
 
     
 
