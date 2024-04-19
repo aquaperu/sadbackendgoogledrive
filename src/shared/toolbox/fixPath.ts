@@ -6,12 +6,11 @@ export const fixPathAssets = (recursoAssets:string)=>{
     //process.chdir('dist/src/assets')
     //console.log(process.chdir('dist/src'))
     //return `${path.join(process.cwd(),'/',recursoAssets)}`
-    process.chdir('src')
-    console.log("Current working directory: ", process.cwd());
+    
 
-          fs.readdir('./src/assets', (err, files) => {
+          fs.readdir('./src/dist/assets', (err, files) => {
               files.forEach(file => {
-                console.log(file);
+                console.log({"los archivos":file});
               });
             });
 }
