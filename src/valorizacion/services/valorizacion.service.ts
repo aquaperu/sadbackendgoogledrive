@@ -204,20 +204,22 @@ export class ValorizacionService {
     }
   
     public async generaIndice(indices:INombreColumna[]){ 
-       // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
-       // const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
-        //console.log(pathAssets)
-        let separador=[]
-        const indice = new PDFDocument({
+        fixPathAssets('')
+        
+
+
+      
+        
+        /*const indice = new PDFDocument({
             size: "A4"//typePage
         });
-       // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
+       
         indice.text(`INDICE`,{width:400,align:'center'});
         indices.map(async (val:INombreColumna,index)=>{    
             indice.moveDown()
             indice.text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
 
-           // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
+           
             
                
                 
@@ -225,40 +227,30 @@ export class ValorizacionService {
         })
         indice.end()
 
-        const valores = ["uno","dos"]
-        separador =  valores.map((valor,index)=>{
-            return new PDFDocument({
+        let misarchivos = []
+
+        for(let i=0;i<indices.length;i++){
+            misarchivos[i] = new PDFDocument({
                 size:"A4"
             })
-        })
 
-        //const funcs = separador.map(url => () => )
-        console.log(separador)
-        /*
-        * serial executes Promises sequentially.
-        * @param {funcs} An array of funcs that return promises.
-        * @example
-        * const urls = ['/url1', '/url2', '/url3']
-        * serial(urls.map(url => () => $.ajax(url)))
-        *     .then(console.log.bind(console))
-        */
-        const serial = funcs =>
-        funcs.reduce((promise, func) =>
-        promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
-        //fin de la funcion
+        }
+        
+        
 
-        /*serial(funcs).then((valores)=>{
-            console.log(valores)
+        for(let j=0;j<misarchivos.length;j++){
+           
+             misarchivos[j].text(`hora ${indices[j].titulo}`)
+        }
+        
+       
+       for(let k =0;k<misarchivos.length;k++){
+        misarchivos[k].end()
+       }
+       for(let l=0;l<misarchivos.length;l++){
+        const ve = await this.googleDriveService.GeneraIndiceEnPDF(indices[l].titulo,misarchivos[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
+       }*/
 
-        })*/
-
-
-
-
-        //return await this.googleDriveService.GeneraIndiceEnPDF("myindice",indice,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")//retorna el id del pdf
-
-    
-    
     
 
         
