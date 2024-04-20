@@ -223,7 +223,7 @@ export class ValorizacionService {
             indice.moveDown()
             
             indice
-            //.font(fuentedeletra)
+            .font(fuentedeletra)
             .text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
 
            
