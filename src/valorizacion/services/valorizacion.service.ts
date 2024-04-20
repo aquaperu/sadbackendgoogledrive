@@ -254,7 +254,7 @@ export class ValorizacionService {
              
              .font(fuentedeletra)
              .fontSize(60)
-             .text(`${indices[j].titulo}`,150,265,{align:'center'})
+             .text(`${indices[j].titulo}`,150,200,{align:'center'})//150,265
         }
         
        
@@ -264,6 +264,7 @@ export class ValorizacionService {
        for(let l=0;l<misarchivos.length;l++){
         const ve = await this.googleDriveService.GeneraIndiceEnPDF(indices[l].titulo,misarchivos[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
        }
+       await this.googleDriveService.GeneraIndiceEnPDF("INDICE",indice,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
 
     
 
