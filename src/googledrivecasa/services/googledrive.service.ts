@@ -211,7 +211,7 @@ public async crearCarpeta(idForGoogleElement:string,nameForGoogleElement:string)
     const folderId = carpetaContenedora;
 
         const fileMetadata = {
-            name: `label_${nameFile}.pdf`,
+            name: `${nameFile}.pdf`,
             parents: [folderId],
         };
 

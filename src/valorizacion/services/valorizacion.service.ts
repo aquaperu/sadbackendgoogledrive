@@ -14,9 +14,10 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-
+import { Alignment, Document, Packer, Paragraph, TextRun } from "docx";
 import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
+import { margins } from 'pdfkit/js/page';
 
 interface INombreColumna{
     titulo:string;
@@ -204,76 +205,35 @@ export class ValorizacionService {
     }
   
     public async generaIndice(indices:INombreColumna[]){ 
-        
-        
-        //const fuentedeletra = fixPathAssets('AmaticSC_Regular.ttf')
+
         const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
-        
-        const myseparador = fixPathAssets('separadorv4.png')
-        
-
-      
-        
-        const indice = new PDFDocument({
-            size: "A4"//typePage
-        });
-       
-        indice.text(`INDICE`,{width:400,align:'center'});
-        indices.map(async (val:INombreColumna,index)=>{    
-            indice.moveDown()
-            
-            indice
-            .font(fuentedeletra)
-            .text(`${val.titulo}`,{width:400,indent:Number(val.columna)*10});
-
-           
-            
-               
-                
-           
+        const myseparador = fixPathAssets('separadorv4.png')  
+        let tmp =[]
+        indices.map((val)=>{
+            tmp.push(val.titulo)   
         })
-        indice.end()
-
-        let misarchivos = []
-
+        let misarchivosSeparadores = []
+        
         for(let i=0;i<indices.length;i++){
-            misarchivos[i] = new PDFDocument({
+            misarchivosSeparadores[i] = new PDFDocument({
                 size:"A4"
             })
-
         }
-        
-        
 
-        for(let j=0;j<misarchivos.length;j++){
-            misarchivos[j].image(myseparador,0,0,{width:594, height:841})//ancho y largo
-           
-            misarchivos[j].moveDown();
-            misarchivos[j].moveDown();
-             misarchivos[j]
-             
+        for(let j=0;j<misarchivosSeparadores.length;j++){
+            misarchivosSeparadores[j].image(myseparador,0,0,{width:594, height:841})//ancho y largo
+            misarchivosSeparadores[j].moveDown();
+            misarchivosSeparadores[j]
              .font(fuentedeletra)
-             .fontSize(60)
-             .text(`${indices[j].titulo}`,150,200,{align:'center'})//150,265
+             .fontSize(25)
+             .text(`${indices[j].titulo}`,150,200,{align:'justify'})//150,265
         }
-        
-       
-       for(let k =0;k<misarchivos.length;k++){
-        misarchivos[k].end()
+       for(let k =0;k<misarchivosSeparadores.length;k++){
+        misarchivosSeparadores[k].end()
        }
-       for(let l=0;l<misarchivos.length;l++){
-        const ve = await this.googleDriveService.GeneraIndiceEnPDF(indices[l].titulo,misarchivos[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
-       }
-       await this.googleDriveService.GeneraIndiceEnPDF("INDICE",indice,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
-
-    
-
-        
-
-   
-
-            
-            
+       for(let l=0;l<misarchivosSeparadores.length;l++){  
+        const ve = await this.googleDriveService.GeneraIndiceEnPDF(indices[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
+       }   
             /**
              * fonts
              * 'Courier'
@@ -291,55 +251,40 @@ export class ValorizacionService {
                 'Times-BoldItalic'
                 'ZapfDingbats'
              * */
-
-   
-            /*const tabBase = 1.25
-
+            //agregando los paragragraf
+            let losparrafosDelIndice=[]
+            //primer paraffo INDICE
+            losparrafosDelIndice.push(new Paragraph({
+                children: [
+                    new TextRun({
+                        text: "INDICE",
+                        bold: true,
+                        allCaps: true,
+                    })],
+                    spacing: {
+                        after: 200,
+                    },
+                    alignment:'center'
+            },
+            
+        ))
+            indices.map((val)=>{
+                losparrafosDelIndice.push(addParagraf(val.columna,val.titulo))
+            })
             const doc = new Document({
                 sections: [
                     {
                         properties: {},
-                        children: [
-                            new Paragraph({
-                                indent:{
-                                    left:`${tabBase*1}cm`
-                                },
-                                children: [
-                                    new TextRun({
-                                        text: "Name:",
-                                        bold: true,
-                                        //font: "Calibri",
-                                        allCaps: true,
-                                        
-                                    }),
-                                    
-                                ],
-                            }),
-                            new Paragraph({
-                                indent:{
-                                    left:`${tabBase*2}cm`
-                                },
-                                children: [
-                                    new TextRun({
-                                        text: "my nombre:",
-                                        bold: true,
-                                        font: "Rubik Scribble",
-                                        allCaps: true,
-                                        
-                                    }),
-                                    
-                                ],
-                            }),
-                        ],
+                        children: losparrafosDelIndice,
                     },
                 ],
                 //fonts: [{ name: "Pacifico", data: font, characterSet: CharacterSet.ANSI }],
             });
             
             Packer.toBuffer(doc).then(async(buffer) => {
-                const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google, con la plantilla reemplazada
-                this.googleDriveService.exportaAsPdf(docid)
-            });       */
+                const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
+                
+            });       
                  
                     
                    
@@ -575,6 +520,29 @@ export const contenido = {
             
 
         ]
+
+}
+export const addParagraf = (tabula:number,texto:string)=>{
+    const tabBase:number = 1.1
+    
+    return  new Paragraph({
+        indent:{
+            left:`${tabBase*tabula}cm`
+        },
+        children: [
+            new TextRun({
+                text: texto,
+                //bold: true,
+                allCaps: true,
+            
+                
+            }),
+        ],
+        spacing: {
+            after: 200,
+        },
+        
+    })
 
 }
 
