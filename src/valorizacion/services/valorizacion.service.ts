@@ -206,10 +206,10 @@ export class ValorizacionService {
     public async generaIndice(indices:INombreColumna[]){ 
         
         
-        const fuentedeletra = fixPathAssets('AmaticSC_Regular.ttf')
-        console.log(fuentedeletra)
+        //const fuentedeletra = fixPathAssets('AmaticSC_Regular.ttf')
+        const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
+        
         const myseparador = fixPathAssets('separadorv4.png')
-        console.log(myseparador) 
         
 
       

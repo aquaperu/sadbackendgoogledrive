@@ -228,7 +228,7 @@ export class ValorizacionController {
         const indices = [
             {titulo:"1. RESUMEN EJECUTIVO",columna:1},
             {titulo:"A. INFORMACION GENERAL DEL PROYECTO",columna:2},
-            /*{titulo:"B. PLANTEAMIENTO DEL PROBLEMA",columna:2},
+            {titulo:"B. PLANTEAMIENTO DEL PROBLEMA",columna:2},
             {titulo:"C. DETERMINACION DE LA BRECHA OFERTA Y DEMANDA",columna:2},
             {titulo:"D. ANALISIS TECNICO DEL PROYECTO",columna:2},
             {titulo:"E. COSTO DEL PROYECTO",columna:2},
@@ -243,7 +243,7 @@ export class ValorizacionController {
             {titulo:"2. ANALISIS DE LA DEMANDA, OFERTA Y BALANCE",columna:2},
             {titulo:"3. ANALISIS DE LOS COSTOS Y PRESUPUESTOS",columna:2},
             {titulo:"4. EVALUACION SOCIAL (inc. Planilla Electronica)",columna:2},
-            {titulo:"5. ACTA DE CONSTATACION DE VICITA DE CAMPO FIRMADO POR LOS REPRESENTANTES Y/O AUTORIDADES DEL LUGAR",columna:2},
+            {titulo:"5. ACTA DE VICITA DE CAMPO FIRMADO POR LOS REPRESENTANTES Y/O AUTORIDADES DEL LUGAR",columna:2},
             {titulo:"6. DOCUMENTO DE SUSTENTO DE PRIORIDAD Y ACEPTACION DEL PROYECTO",columna:2},
             {titulo:"7. ALA",columna:2},
             {titulo:"8. LIBRE DISPONIBILIDAD DE TERRENO",columna:2},
@@ -259,7 +259,7 @@ export class ValorizacionController {
             {titulo:"18. INFORMACION EN DIGITAL",columna:2},
             {titulo:"19. CRONOGRAMAS",columna:2},
             {titulo:"20. COTIZACIONES",columna:2},
-            {titulo:"21. DOCUMENTOS ADICIONALES",columna:2},*/
+            {titulo:"21. DOCUMENTOS ADICIONALES",columna:2}
 
 
 
