@@ -22,6 +22,9 @@ async function bootstrap() {
     "https://192.168.1.86:4444",
     "https://legendary-space-fiesta-69vxg6jqp77xf49rg-5000.app.github.dev/",
     "https://legendary-space-fiesta-69vxg6jqp77xf49rg-5000.app.github.dev",
+    "https://legendary-space-fiesta-69vxg6jqp77xf49rg-5000.app.github.dev/*",
+    "https://legendary-space-fiesta-69vxg6jqp77xf49rg-5000.app.github.dev/autenticar/login",
+    
     "*"
   ]
   const corsOptions: CorsOptions = {
