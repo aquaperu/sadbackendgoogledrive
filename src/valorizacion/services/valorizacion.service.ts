@@ -20,6 +20,7 @@ import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { margins } from 'pdfkit/js/page';
 
 interface INombreColumna{
+    esNoCorresponde:number;
     esSeparador:number
     titulo:string;
     columna:number
@@ -211,16 +212,27 @@ export class ValorizacionService {
         const myseparador = fixPathAssets('separadorv4.png')  
 
         let listaSeparadores =[]
+        let listaNoCorresponde = []
 
         listaSeparadores = indices.filter((val)=>{
             return val.esSeparador === 1
         })
-        console.log({"filtro separadores":listaSeparadores})
+        listaNoCorresponde = indices.filter((val)=>{
+            return val.esNoCorresponde === 1
+        })
+        console.log({"filtro no correponde":listaNoCorresponde})
         
         let misarchivosSeparadores = []
+        let misArchivosNoCorresponde = []
         
         for(let i=0;i<listaSeparadores.length;i++){
             misarchivosSeparadores[i] = new PDFDocument({
+                size:"A4"
+            })
+        }
+        
+        for(let x=0;x<listaNoCorresponde.length;x++){
+            misArchivosNoCorresponde[x] = new PDFDocument({
                 size:"A4"
             })
         }
@@ -233,13 +245,40 @@ export class ValorizacionService {
              .fontSize(25)
              .text(`${listaSeparadores[j].titulo}`,150,200,{align:'justify'})//150,265
         }
+
+        for(let y=0;y<misArchivosNoCorresponde.length;y++){
+            misArchivosNoCorresponde[y].image(myseparador,0,0,{width:594, height:841})//ancho y largo
+            misArchivosNoCorresponde[y].moveDown();
+            misArchivosNoCorresponde[y]
+             .font(fuentedeletra)
+             .fontSize(25)
+             .text(`NO CORRESPONDE}`,200,200,{align:'justify'})//150,265
+        }
+
+
        for(let k =0;k<misarchivosSeparadores.length;k++){
         misarchivosSeparadores[k].end()
        }
+
+       for(let z =0;z<misArchivosNoCorresponde.length;z++){
+        misArchivosNoCorresponde[z].end()
+       }
+       let fixPos = 0
+
        for(let l=0;l<misarchivosSeparadores.length;l++){ 
         //cada separador en su carpeta
         let carpetaContenedoraId = await this.googleDriveService.crearCarpeta("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t",listaSeparadores[l].titulo)
-        this.generaSeparadoresEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],carpetaContenedoraId) 
+        if(listaSeparadores[l].esNoCorresponde === 1){
+            
+            console.log({"no correspnde":listaSeparadores[l].titulo})  
+            this.generaSeparadoresEnPDF(listaSeparadores[l].titulo,misArchivosNoCorresponde[fixPos],carpetaContenedoraId)
+            fixPos = fixPos + 1
+        }else{
+            this.generaSeparadoresEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],carpetaContenedoraId)
+
+        }
+
+        
         //const ve = await this.googleDriveService.GeneraIndiceEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
        }   
             /**
