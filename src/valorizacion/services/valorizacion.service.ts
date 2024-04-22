@@ -20,6 +20,7 @@ import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { margins } from 'pdfkit/js/page';
 
 interface INombreColumna{
+    esSeparador:number
     titulo:string;
     columna:number
   }
@@ -204,17 +205,21 @@ export class ValorizacionService {
     
     }
   
-    public async generaIndice(indices:INombreColumna[]){ 
+    public async generaSeparadoresConIndice(indices:INombreColumna[]){ 
 
         const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
         const myseparador = fixPathAssets('separadorv4.png')  
-        let tmp =[]
-        indices.map((val)=>{
-            tmp.push(val.titulo)   
+
+        let listaSeparadores =[]
+
+        listaSeparadores = indices.filter((val)=>{
+            return val.esSeparador === 1
         })
+        console.log({"filtro separadores":listaSeparadores})
+        
         let misarchivosSeparadores = []
         
-        for(let i=0;i<indices.length;i++){
+        for(let i=0;i<listaSeparadores.length;i++){
             misarchivosSeparadores[i] = new PDFDocument({
                 size:"A4"
             })
@@ -226,13 +231,16 @@ export class ValorizacionService {
             misarchivosSeparadores[j]
              .font(fuentedeletra)
              .fontSize(25)
-             .text(`${indices[j].titulo}`,150,200,{align:'justify'})//150,265
+             .text(`${listaSeparadores[j].titulo}`,150,200,{align:'justify'})//150,265
         }
        for(let k =0;k<misarchivosSeparadores.length;k++){
         misarchivosSeparadores[k].end()
        }
-       for(let l=0;l<misarchivosSeparadores.length;l++){  
-        const ve = await this.googleDriveService.GeneraIndiceEnPDF(indices[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
+       for(let l=0;l<misarchivosSeparadores.length;l++){ 
+        //cada separador en su carpeta
+        let carpetaContenedoraId = await this.googleDriveService.crearCarpeta("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t",listaSeparadores[l].titulo)
+        this.generaSeparadoresEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],carpetaContenedoraId) 
+        //const ve = await this.googleDriveService.GeneraIndiceEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
        }   
             /**
              * fonts
@@ -282,7 +290,8 @@ export class ValorizacionService {
             });
             
             Packer.toBuffer(doc).then(async(buffer) => {
-                const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
+               // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
+              // this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')
                 
             });       
                  
@@ -291,29 +300,7 @@ export class ValorizacionService {
                     
     
   }
-  public async generaSeparadores(dataText:string){
-    // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
-    //const pathAssets = fixPathAssets('AmaticSC_Regular.ttf')
-    //console.log(pathAssets)
-    const indice = new PDFDocument({
-        size: "A4"//typePage
-    });
-   // process.chdir('dist/src/assets')//posisiona el proceso de ejecucion en esta carpeta
-    
-       console.log({"dataText":dataText})
-        indice.fontSize(60).text(`${dataText}`,150,265,{align:"center"});
-        const ve = await this.googleDriveService.GeneraIndiceEnPDF(dataText,indice,"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")
-        console.log({"resultado del id de un separador":ve})
-        indice.end()
-       
-       
-    
-      
-      
-     
   
-
-  }
 
     public async plantillaDocxV3(){
         const evidencias:any[] = []
@@ -384,6 +371,14 @@ export class ValorizacionService {
           
         }
     
+      }
+      private async generaSeparadoresEnPDF(titulo:string,listaSeparadores:Array<string>[],carpetaContenedoraId:string){
+        const ve = await this.googleDriveService.GeneraIndiceEnPDF(titulo,listaSeparadores,carpetaContenedoraId)
+
+      }
+      private async generaIndiceEnWord(buffer:Uint8Array,nombreArchivo:string,carpetaContenedoraId:string){
+        const docid = await this.googleDocService.creaDocumento(buffer,nombreArchivo,carpetaContenedoraId)//crea un nuevo archivo en google
+
       }
       
   
