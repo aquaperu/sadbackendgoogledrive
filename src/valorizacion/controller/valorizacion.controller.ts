@@ -298,7 +298,7 @@ export class ValorizacionController {
 {esSeparador:0,titulo:'1.1.13.4. Plano topográfico.',columna:3,esNoCorresponde:0},
 {esSeparador:0,titulo:'1.1.13.5. Plano del ámbito de influencia del proyecto, delimitado.',columna:3,esNoCorresponde:0},
 {esSeparador:0,titulo:'1.1.13.6. Plano Trazado y Lotización Aprobado por el GR/GL correspondiente.',columna:3,esNoCorresponde:0},
-{esSeparador:0,titulo:'1.1.13.7. Planos de Sistema de Abastecimiento de Agua Potable.',columna:3,esNoCorresponde:},
+{esSeparador:0,titulo:'1.1.13.7. Planos de Sistema de Abastecimiento de Agua Potable.',columna:3,esNoCorresponde:0},
 {esSeparador:0,titulo:'1.1.13.8. Planos del sistema de Tratamiento de Agua Potable PTAP',columna:3,esNoCorresponde:1},
 {esSeparador:0,titulo:'1.1.13.9. Planos del Almacenamiento de agua para consumo humano',columna:3,esNoCorresponde:1},
 {esSeparador:0,titulo:'1.1.13.10. Estaciones de bombeo de agua para consumo humano (de ser el caso)',columna:3,esNoCorresponde:1},
