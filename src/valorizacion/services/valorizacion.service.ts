@@ -272,7 +272,7 @@ export class ValorizacionService {
         let carpetaContenedoraId = await this.googleDriveService.crearCarpeta("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t",listaSeparadores[l].titulo)
         if(listaSeparadores[l].esNoCorresponde === 1){
             
-            console.log({"no correspnde":listaSeparadores[l].titulo})  
+            console.log({"no correspnde el titulo":listaSeparadores[l].titulo})  
             this.generaSeparadoresEnPDF(listaSeparadores[l].titulo,misArchivosNoCorresponde[fixPos],carpetaContenedoraId)
             fixPos = fixPos + 1
         }else{
