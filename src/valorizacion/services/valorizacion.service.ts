@@ -321,9 +321,9 @@ export class ValorizacionService {
                 losparrafosDelIndice.push(addParagraf(val.columna,val.titulo))
             })
             
-            const cabeceraImagen = await this.googleDriveService.descargaImagenArrayBuffer('1GQIxwW-AkRcBCYGuHv1eua7UNFcnEOaZ')
+            //const cabeceraImagen = await this.googleDriveService.descargaImagenArrayBuffer('1GQIxwW-AkRcBCYGuHv1eua7UNFcnEOaZ')
 
-            const doc = new Document({
+            /*const doc = new Document({
                 //numbering:numbering("ref1"),
                 //styles:styleHeaderIndexWord(),
                 sections: [
@@ -338,9 +338,9 @@ export class ValorizacionService {
             
             Packer.toBuffer(doc).then(async(buffer) => {
                // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
-               this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')
+               //this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')
                 
-            });       
+            });     */  
                  
                     
                    
@@ -564,7 +564,7 @@ export const contenido = {
         ]
 
 }
-export const addHeaderTextAndShieldClientWordDocument = (textoCabecera:string,style:string,buffer:any)=>{
+export const addHeaderTextAndShieldClientWordDocument = (textoCabecera:string,buffer:any)=>{
     const imageEscudoPeru = fixPathAssets('EscudoNacional.jpg');
     const image1 = fixPathAssets('separadorv4.png')
     const image2 = fixPathAssets('ulluna01.png')
