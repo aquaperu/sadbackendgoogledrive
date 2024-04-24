@@ -235,7 +235,7 @@ export class ValorizacionController {
 {esSeparador:1,titulo:'1.1.5. Planilla de Metrados',columna:2,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.1.6. Presupuesto de Obra',columna:2,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.1.6.1. Cuadro de Resumen de Presupuesto',columna:3,esNoCorresponde:0},
-{esSeparador:1,titulo:'1.1.6.2. Presupuesto de obra',columna:3,esNoCorresponde:0},
+/*{esSeparador:1,titulo:'1.1.6.2. Presupuesto de obra',columna:3,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.1.6.3. Presupuesto Desagregado',columna:3,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.1.6.4. Análisis de costos unitarios',columna:3,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.1.6.5. Planilla de metrados',columna:3,esNoCorresponde:0},
@@ -282,7 +282,7 @@ export class ValorizacionController {
 {esSeparador:1,titulo:'1.2.3. Estudio de mecánica de Suelos.',columna:2,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.2.4. Estudio de Gestión de Riesgo en la planificación de ejecución de la obra según la metodología del CENEPRED.',columna:2,esNoCorresponde:0},
 
-/*{esSeparador:1,titulo:'1.3. ANEXOS',columna:1,esNoCorresponde:0},
+{esSeparador:1,titulo:'1.3. ANEXOS',columna:1,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.3.1. Plan de seguridad y salud ocupacional',columna:2,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.3.2. Manual de operación y mantenimiento',columna:2,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.3.3. Componente social (plan de capacitaciones)',columna:2,esNoCorresponde:0},
