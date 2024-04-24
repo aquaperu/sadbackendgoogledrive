@@ -315,7 +315,7 @@ export class ValorizacionController {
 {esSeparador:1,titulo:'1.2.3. Estudio de mecánica de Suelos.',columna:2,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.2.4. Estudio de Gestión de Riesgo en la planificación de ejecución de la obra según la metodología del CENEPRED.',columna:2,esNoCorresponde:0},
 
-{esSeparador:1,titulo:'1.3. ANEXOS',columna:1,esNoCorresponde:0},
+/*{esSeparador:1,titulo:'1.3. ANEXOS',columna:1,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.3.1. Plan de seguridad y salud ocupacional',columna:2,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.3.2. Manual de operación y mantenimiento',columna:2,esNoCorresponde:0},
 {esSeparador:1,titulo:'1.3.3. Componente social (plan de capacitaciones)',columna:2,esNoCorresponde:0},
@@ -337,7 +337,7 @@ export class ValorizacionController {
 {esSeparador:0,titulo:'1.3.19. Autorización Sanitaria del Sistema de Tratamiento y Disposición final de Aguas Residuales domésticas con Infiltración en el Terreno — DIGESA',columna:2,esNoCorresponde:1},
 {esSeparador:0,titulo:'1.3.20. Informe Técnico de la Unidad Ejecutora que demuestre que cuenta con el personal Técnico Administrativo, los equipos necesarios y la Capacidad Operativa para asegurar el cumplimiento de las metas previstas, en caso de Modalidad de Ejecución por Administración Directa',columna:2,esNoCorresponde:1},
 {esSeparador:0,titulo:'1.3.21. Otros documentos y/o estudios -Información complementaria',columna:2,esNoCorresponde:0}
-/*{esSeparador:0,titulo:'1.3.22. Dispositivo portátil UBS de capacidad correspondiente al proyecto versión digital editable (incluye base de datos del presupuesto editable).',columna:2,esNoCorresponde:1},
+{esSeparador:0,titulo:'1.3.22. Dispositivo portátil UBS de capacidad correspondiente al proyecto versión digital editable (incluye base de datos del presupuesto editable).',columna:2,esNoCorresponde:1},
 {esSeparador:0,titulo:'1.3.23. Contrato y Términos de referencia de los Adscritos menores a 8 UIT.',columna:2,esNoCorresponde:0}*/
 
 
