@@ -20,7 +20,7 @@ import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { margins } from 'pdfkit/js/page';
 
-interface INombreColumna{
+export interface INombreColumna{
     esNoCorresponde:number;
     esSeparador:number
     titulo:string;
@@ -281,7 +281,7 @@ export class ValorizacionService {
         }
 
         
-        const ve = await this.googleDriveService.GeneraIndiceEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
+        //const ve = await this.googleDriveService.GeneraIndiceEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
        }   
             /**
              * fonts
