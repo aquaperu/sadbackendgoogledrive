@@ -6,6 +6,7 @@ import { IVALORIZACION_REPOSITORY, IValorizacionRepository } from '../patronAdap
 import { jwtConstants } from 'src/shared/configGobal';
 import { HttpService } from "@nestjs/axios";
 import * as PDFDocument from 'pdfkit';
+import * as fs from 'fs'
 import createReport from 'docx-templates';
 import { map, tap } from 'rxjs/operators';
 import { GoogleDriveService } from 'src/googledrivecasa/services/googledrive.service';
@@ -14,7 +15,7 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, Document, Packer, Paragraph, TextRun } from "docx";
+import { Alignment, AlignmentType, Document, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, LevelFormat, Packer, Paragraph, TextRun, TextWrappingSide, TextWrappingType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertInchesToTwip, convertMillimetersToTwip } from "docx";
 import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { margins } from 'pdfkit/js/page';
@@ -206,7 +207,7 @@ export class ValorizacionService {
     
     }
   
-    public async generaSeparadoresConIndice(indices:INombreColumna[]){ 
+    public async generaSeparadoresConIndice(indices:INombreColumna[],nombreObra:string){ 
 
         const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
         const myseparador = fixPathAssets('separadorv4.png')  
@@ -247,12 +248,13 @@ export class ValorizacionService {
         }
 
         for(let y=0;y<misArchivosNoCorresponde.length;y++){
-            misArchivosNoCorresponde[y].image(myseparador,0,0,{width:594, height:841})//ancho y largo
+            //la hora de no corresponde no lleva imagen y la hoja en la que se imprime es de color blanco
+            //misArchivosNoCorresponde[y].image(myseparador,0,0,{width:594, height:841})//ancho y largo
             misArchivosNoCorresponde[y].moveDown();
             misArchivosNoCorresponde[y]
              .font(fuentedeletra)
              .fontSize(25)
-             .text(`NO CORRESPONDE}`,200,200,{align:'justify'})//150,265
+             .text(`NO CORRESPONDE`,200,200,{align:'justify'})//150,265
         }
 
 
@@ -279,7 +281,7 @@ export class ValorizacionService {
         }
 
         
-        //const ve = await this.googleDriveService.GeneraIndiceEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
+        const ve = await this.googleDriveService.GeneraIndiceEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
        }   
             /**
              * fonts
@@ -318,9 +320,15 @@ export class ValorizacionService {
             indices.map((val)=>{
                 losparrafosDelIndice.push(addParagraf(val.columna,val.titulo))
             })
+            
+            const cabeceraImagen = await this.googleDriveService.descargaImagenArrayBuffer('1GQIxwW-AkRcBCYGuHv1eua7UNFcnEOaZ')
+
             const doc = new Document({
+                //numbering:numbering("ref1"),
+                //styles:styleHeaderIndexWord(),
                 sections: [
-                    {
+                    {  
+                        headers:addHeaderTextAndShieldClientWordDocument(nombreObra,"normalPara",cabeceraImagen),
                         properties: {},
                         children: losparrafosDelIndice,
                     },
@@ -556,12 +564,79 @@ export const contenido = {
         ]
 
 }
+export const addHeaderTextAndShieldClientWordDocument = (textoCabecera:string,style:string,buffer:any)=>{
+    const imageEscudoPeru = fixPathAssets('EscudoNacional.jpg');
+    const image1 = fixPathAssets('separadorv4.png')
+    const image2 = fixPathAssets('ulluna01.png')
+    const separadorK = 6
+    //1cm = 2.54 pulgadas
+    //1 wip = 1/1440 pulgadas
+    //en word = 0.01 cm
+    //17.64 μm
+
+    const posX = convertMillimetersToTwip(100*158)//1440 ->se enmcuentra en:
+    
+    return  {
+        default: new Header({
+            children: [
+                new Paragraph({
+                   // style,
+                    
+                    children: [
+                  
+                        new ImageRun({
+                            
+                            data: fs.readFileSync(imageEscudoPeru),
+                            transformation: {
+                                width: 100,
+                                height: 100,
+                            },
+                            floating: {
+
+                                horizontalPosition: {
+
+                                    offset: posX, // relative: HorizontalPositionRelativeFrom.PAGE by default
+                                    //relative: HorizontalPositionRelativeFrom.RIGHT_MARGIN,
+                                    //align: HorizontalPositionAlign.RIGHT,
+                                },
+                                verticalPosition: {
+                                    offset: 10, // relative: VerticalPositionRelativeFrom.PAGE by default
+                                    //relative: VerticalPositionRelativeFrom.PAGE,
+                                    //align: VerticalPositionAlign.TOP,
+                                },
+                                wrap:{
+                                    type:TextWrappingType.SQUARE,
+                                    side:TextWrappingSide.RIGHT
+                                }
+                            },
+                        }),
+                        new TextRun({
+                            text:textoCabecera,
+                            bold: true,
+                            break:1,
+                            border:{
+                                style:'thinThickLargeGap',
+                                color:"999999"
+                            },
+                            size:14
+                        }),
+                        
+                    
+                    //alignment:'center'
+                    ]
+                }),
+            ],
+        }),
+    }
+}
 export const addParagraf = (tabula:number,texto:string)=>{
-    const tabBase:number = 1.1
+    const tabBase:number = 0.72
+    
+    //convertMillimetersToTwip()
     
     return  new Paragraph({
         indent:{
-            left:`${tabBase*tabula}cm`
+            left:`${tabBase*(tabula-1)}cm`
         },
         children: [
             new TextRun({
@@ -577,6 +652,54 @@ export const addParagraf = (tabula:number,texto:string)=>{
         },
         
     })
+
+}
+export const numbering=(reference:string)=>{
+    return {
+        config: [
+            {
+                reference,
+                levels: [
+                    {
+                        level: 0,
+                        format: LevelFormat.DECIMAL,
+                        text: "%1)",
+                        start: 50,
+                    },
+                ],
+            },
+        ],
+    }
+}
+export const styleHeaderIndexWord = ()=>{
+    return {
+        paragraphStyles: [
+        {
+            id: "normalPara",
+            name: "Normal Para",
+            basedOn: "Normal",
+            next: "Normal",
+            quickFormat: true,
+            run: {
+                color: "34aadc",
+                font: "Calibri",
+                size: 26,
+                bold: true,
+                //italics: true,
+            },
+            paragraph: {
+                alignment: AlignmentType.CENTER,
+                //spacing: { line: 276, before: 20 * 72 * 0.1, after: 20 * 72 * 0.05 },
+                //rightTabStop: TabStopPosition.MAX,
+                //leftTabStop: 453.543307087,
+                //indent: { left: convertInchesToTwip(0.5) },
+                /*numbering: {
+                    reference: "ref1",
+                    instance: 0,
+                    level: 0,
+                }*/
+            },
+        }]}
 
 }
 
