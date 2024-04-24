@@ -336,9 +336,9 @@ export class ValorizacionController {
 {esSeparador:0,titulo:'1.3.18. Autorización Sanitaria de Aprobación de Diseño de las Plantas de Tratamiento de Agua Potable por la DIGESA.',columna:2,esNoCorresponde:1},
 {esSeparador:0,titulo:'1.3.19. Autorización Sanitaria del Sistema de Tratamiento y Disposición final de Aguas Residuales domésticas con Infiltración en el Terreno — DIGESA',columna:2,esNoCorresponde:1},
 {esSeparador:0,titulo:'1.3.20. Informe Técnico de la Unidad Ejecutora que demuestre que cuenta con el personal Técnico Administrativo, los equipos necesarios y la Capacidad Operativa para asegurar el cumplimiento de las metas previstas, en caso de Modalidad de Ejecución por Administración Directa',columna:2,esNoCorresponde:1},
-{esSeparador:0,titulo:'1.3.21. Otros documentos y/o estudios -Información complementaria',columna:2,esNoCorresponde:0},
-{esSeparador:0,titulo:'1.3.22. Dispositivo portátil UBS de capacidad correspondiente al proyecto versión digital editable (incluye base de datos del presupuesto editable).',columna:2,esNoCorresponde:1},
-{esSeparador:0,titulo:'1.3.23. Contrato y Términos de referencia de los Adscritos menores a 8 UIT.',columna:2,esNoCorresponde:0},
+{esSeparador:0,titulo:'1.3.21. Otros documentos y/o estudios -Información complementaria',columna:2,esNoCorresponde:0}
+/*{esSeparador:0,titulo:'1.3.22. Dispositivo portátil UBS de capacidad correspondiente al proyecto versión digital editable (incluye base de datos del presupuesto editable).',columna:2,esNoCorresponde:1},
+{esSeparador:0,titulo:'1.3.23. Contrato y Términos de referencia de los Adscritos menores a 8 UIT.',columna:2,esNoCorresponde:0}*/
 
 
 
