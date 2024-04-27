@@ -15,10 +15,9 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Document, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, LevelFormat, Packer, Paragraph, TextRun, TextWrappingSide, TextWrappingType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertInchesToTwip, convertMillimetersToTwip } from "docx";
+import { Alignment, AlignmentType, Document, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, LevelFormat, Packer, Paragraph, TextRun, TextWrappingSide, TextWrappingType, UnderlineType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertInchesToTwip, convertMillimetersToTwip } from "docx";
 import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
-import { margins } from 'pdfkit/js/page';
 
 export interface INombreColumna{
     esNoCorresponde:number;
@@ -209,11 +208,13 @@ export class ValorizacionService {
   
     public async generaSeparadoresConIndice(indices:INombreColumna[],nombreObra:string){ 
 
-        const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
-        const myseparador = fixPathAssets('separadorv4.png')  
+        //const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
+        //const myseparador = fixPathAssets('separadorv4.png')  
 
-        let listaSeparadores =[]
-        let listaNoCorresponde = []
+        /*let listaSeparadores =[];
+        let listaNoCorresponde = [];
+        let misarchivosSeparadores = [];
+        let misArchivosNoCorresponde:any;
 
         listaSeparadores = indices.filter((val)=>{
             return val.esSeparador === 1
@@ -221,23 +222,20 @@ export class ValorizacionService {
         listaNoCorresponde = indices.filter((val)=>{
             return val.esNoCorresponde === 1
         })
-        console.log({"filtro no correponde":listaNoCorresponde})
+       
         
-        let misarchivosSeparadores = []
-        let misArchivosNoCorresponde = []
+        
         
         for(let i=0;i<listaSeparadores.length;i++){
             misarchivosSeparadores[i] = new PDFDocument({
                 size:"A4"
             })
         }
-        
-        for(let x=0;x<listaNoCorresponde.length;x++){
-            misArchivosNoCorresponde[x] = new PDFDocument({
+        //ES UN UNICO ARCHIVO SIEMPRE CON EL MISMO CONTENIDO, NO LLEVA IMAGEN
+        misArchivosNoCorresponde = new PDFDocument({
                 size:"A4"
-            })
-        }
-
+        })
+        
         for(let j=0;j<misarchivosSeparadores.length;j++){
             misarchivosSeparadores[j].image(myseparador,0,0,{width:594, height:841})//ancho y largo
             misarchivosSeparadores[j].moveDown();
@@ -247,100 +245,93 @@ export class ValorizacionService {
              .text(`${listaSeparadores[j].titulo}`,150,200,{align:'justify'})//150,265
         }
 
-        for(let y=0;y<misArchivosNoCorresponde.length;y++){
+        
             //la hora de no corresponde no lleva imagen y la hoja en la que se imprime es de color blanco
-            //misArchivosNoCorresponde[y].image(myseparador,0,0,{width:594, height:841})//ancho y largo
-            misArchivosNoCorresponde[y].moveDown();
-            misArchivosNoCorresponde[y]
+           
+            misArchivosNoCorresponde.moveDown();
+            misArchivosNoCorresponde
              .font(fuentedeletra)
              .fontSize(25)
              .text(`NO CORRESPONDE`,200,200,{align:'justify'})//150,265
-        }
+        
 
 
        for(let k =0;k<misarchivosSeparadores.length;k++){
         misarchivosSeparadores[k].end()
        }
 
-       for(let z =0;z<misArchivosNoCorresponde.length;z++){
-        misArchivosNoCorresponde[z].end()
-       }
-       let fixPos = 0
-
-       for(let l=0;l<misarchivosSeparadores.length;l++){ 
-        //cada separador en su carpeta
-        let carpetaContenedoraId = await this.googleDriveService.crearCarpeta("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t",listaSeparadores[l].titulo)
-        if(listaSeparadores[l].esNoCorresponde === 1){
-            
-            console.log({"no correspnde el titulo":listaSeparadores[l].titulo})  
-            this.generaSeparadoresEnPDF(listaSeparadores[l].titulo,misArchivosNoCorresponde[fixPos],carpetaContenedoraId)
-            fixPos = fixPos + 1
-        }else{
-            this.generaSeparadoresEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],carpetaContenedoraId)
-
-        }
-
-        
-        //const ve = await this.googleDriveService.GeneraIndiceEnPDF(listaSeparadores[l].titulo,misarchivosSeparadores[l],"1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t") 
-       }   
-            /**
-             * fonts
-             * 'Courier'
-                'Courier-Bold'
-                'Courier-Oblique'
-                'Courier-BoldOblique'
-                'Helvetica'
-                'Helvetica-Bold'
-                'Helvetica-Oblique'
-                'Helvetica-BoldOblique'
-                'Symbol'
-                'Times-Roman'
-                'Times-Bold'
-                'Times-Italic'
-                'Times-BoldItalic'
-                'ZapfDingbats'
-             * */
-            //agregando los paragragraf
-            let losparrafosDelIndice=[]
-            //primer paraffo INDICE
-            losparrafosDelIndice.push(new Paragraph({
-                children: [
-                    new TextRun({
-                        text: "INDICE",
-                        bold: true,
-                        allCaps: true,
-                    })],
-                    spacing: {
-                        after: 200,
-                    },
-                    alignment:'center'
-            },
-            
-        ))
-            indices.map((val)=>{
-                losparrafosDelIndice.push(addParagraf(val.columna,val.titulo))
-            })
-            
-            //const cabeceraImagen = await this.googleDriveService.descargaImagenArrayBuffer('1GQIxwW-AkRcBCYGuHv1eua7UNFcnEOaZ')
-
-            /*const doc = new Document({
-                //numbering:numbering("ref1"),
-                //styles:styleHeaderIndexWord(),
-                sections: [
-                    {  
-                        headers:addHeaderTextAndShieldClientWordDocument(nombreObra,"normalPara",cabeceraImagen),
-                        properties: {},
-                        children: losparrafosDelIndice,
-                    },
-                ],
-                //fonts: [{ name: "Pacifico", data: font, characterSet: CharacterSet.ANSI }],
-            });
-            
-            Packer.toBuffer(doc).then(async(buffer) => {
-               // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
-               //this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')
+       
+        misArchivosNoCorresponde.end()
+       
+       */
+       //para que funcione perfectamente tiene que tener esto: url => () => flecha gruesa dos veces.
+       /*const promiseCarpetas = listaSeparadores.map(separador => () =>this.googleDriveService.crearCarpetav1("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t",separador.titulo))
+       const serial = funcs =>
+            funcs.reduce((promise, func) =>
+            promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
+            serial(promiseCarpetas)
+            .then(async(val:any[])=>{
                 
-            });     */  
+                val.forEach((folderId,index)=>{
+                    const carpetaContenedoraId = folderId.data.id
+                    console.log(carpetaContenedoraId)
+                    if(listaSeparadores[index].esNoCorresponde === 1){//cuando es no corresponde, entonces en la carpeta debe haber el nombre del separador y tambien el no corresponde
+                        console.log({"no correspnde el titulo":listaSeparadores[index].titulo})  
+                        this.generaSeparadoresEnPDF(`${listaSeparadores[index].titulo}-NC`,misArchivosNoCorresponde,carpetaContenedoraId)
+                       
+                    }
+                        this.generaSeparadoresEnPDF(listaSeparadores[index].titulo,misarchivosSeparadores[index],carpetaContenedoraId)
+                        
+                       
+                })
+            })*/
+            //gnera el indice en word
+                        //agregando los paragragraf
+                        let losparrafosDelIndice=[]
+                        //primer paraffo INDICE
+                        losparrafosDelIndice.push(new Paragraph({
+                            children: [
+                                new TextRun({
+                                text: "INDICE",
+                                bold: true,
+                                allCaps: true,
+                            })],
+                            spacing: {
+                                after: 200,
+                            },
+                            alignment:'center'
+                        }))
+             //insertando la cabecera
+             this.googleDriveService.descargaImagenArrayBuffer('1GQIxwW-AkRcBCYGuHv1eua7UNFcnEOaZ').then((cabeceraImagen:any)=>{
+                //el contenido
+                indices.map((val)=>{
+                    losparrafosDelIndice.push(addParagraf(val.columna,val.titulo))
+                })
+                const doc = new Document({
+                    sections: [
+                        {  
+                            headers:addHeaderTextAndShieldClientWordDocument(nombreObra,cabeceraImagen),
+                            properties: {},
+                            children: losparrafosDelIndice,
+                        },
+                    ],
+                    //fonts: [{ name: "Pacifico", data: font, characterSet: CharacterSet.ANSI }],
+                });
+                 
+                //consolidando
+                Packer.toBuffer(doc).then(async(buffer) => {
+                   // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
+                   this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
+                }); 
+            })
+       
+       
+           
+            
+            
+            
+
+                 
                  
                     
                    
@@ -566,66 +557,54 @@ export const contenido = {
 }
 export const addHeaderTextAndShieldClientWordDocument = (textoCabecera:string,buffer:any)=>{
     const imageEscudoPeru = fixPathAssets('EscudoNacional.jpg');
-    const image1 = fixPathAssets('separadorv4.png')
+    const logoMunicipalidad = fixPathAssets('separadorv4.png')
     const image2 = fixPathAssets('ulluna01.png')
     const separadorK = 6
     //1cm = 2.54 pulgadas
     //1 wip = 1/1440 pulgadas
     //en word = 0.01 cm
     //17.64 μm
+    //const twip = convertMillimetersToTwip(50); // returns 2834
+    const imagenDerecha = {
+        horizontal:5725000,
+        vertical:275000
 
-    const posX = convertMillimetersToTwip(100*158)//1440 ->se enmcuentra en:
+    }
+    const imagenIzquierda = {
+        horizontal:950000,
+        vertical:275000
+
+    }
+
+
+
+
+    
+    
+    
+
+
     
     return  {
         default: new Header({
             children: [
-                new Paragraph({
-                   // style,
-                    
-                    children: [
-                  
-                        new ImageRun({
-                            
-                            data: fs.readFileSync(imageEscudoPeru),
-                            transformation: {
-                                width: 100,
-                                height: 100,
-                            },
-                            floating: {
-
-                                horizontalPosition: {
-
-                                    offset: posX, // relative: HorizontalPositionRelativeFrom.PAGE by default
-                                    //relative: HorizontalPositionRelativeFrom.RIGHT_MARGIN,
-                                    //align: HorizontalPositionAlign.RIGHT,
-                                },
-                                verticalPosition: {
-                                    offset: 10, // relative: VerticalPositionRelativeFrom.PAGE by default
-                                    //relative: VerticalPositionRelativeFrom.PAGE,
-                                    //align: VerticalPositionAlign.TOP,
-                                },
-                                wrap:{
-                                    type:TextWrappingType.SQUARE,
-                                    side:TextWrappingSide.RIGHT
-                                }
-                            },
-                        }),
-                        new TextRun({
-                            text:textoCabecera,
-                            bold: true,
-                            break:1,
-                            border:{
-                                style:'thinThickLargeGap',
-                                color:"999999"
-                            },
-                            size:14
-                        }),
+                new Paragraph({//IMAGEN DE LA IZQUIERDA
+                    children:[
+                        new ImageRun({data: fs.readFileSync(imageEscudoPeru),transformation:{width: 100,height: 100,},
+                        floating: {horizontalPosition: {offset: imagenIzquierda.horizontal },verticalPosition: {offset: imagenIzquierda.vertical},
+                                    wrap:{type:TextWrappingType.SQUARE,side:TextWrappingSide.RIGHT}}})]}
+                ),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+                new Paragraph({children: [ new TextRun({text: textoCabecera})],alignment:'center'}),
+                new Paragraph({//IMAGEN DE LA DERECHA
+                    children:[
+                        new ImageRun({data: fs.readFileSync(logoMunicipalidad),transformation:{width: 100,height: 100,},
+                        floating: {horizontalPosition: {offset: imagenDerecha.horizontal },verticalPosition: {offset: imagenDerecha.vertical},
+                                    wrap:{type:TextWrappingType.SQUARE,side:TextWrappingSide.LEFT}}})]}
+                ),
                         
-                    
-                    //alignment:'center'
-                    ]
-                }),
+                        
             ],
+            
         }),
     }
 }

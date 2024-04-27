@@ -27,9 +27,32 @@ public async crearCarpeta(idForGoogleElement:string,nameForGoogleElement:string)
     throw err;
   }
 
+  
     
   
   }
+  public async crearCarpetav1(folderContenedorId:string,nameFolder:string){
+    const fileMetadata = {
+      name: nameFolder,
+      mimeType: 'application/vnd.google-apps.folder',
+      parents: [folderContenedorId]
+    };
+    try {
+      return this.drive.files.create({
+       resource: fileMetadata,
+        fields: 'id',
+      });
+      
+    }catch (err) {
+    // TODO(developer) - Handle error
+      throw err;
+    }
+  
+    
+      
+    
+    }
+  
   public async compartirCarpeta(idForGoogleElement:string){
     const service = this.drive;
   
