@@ -310,9 +310,10 @@ export class ValorizacionController {
 
         ]
 
-        const nombreObra = "“MEJORAMIENTO DEL SERVICIO DE AGUA POTABLE RURAL EN EL SISTEMA DE AGUA POTABLE DE LA LOCALIDAD DE TICAPAMPA DISTRITO DE TICAPAMPA DE LA PROVINCIA DE RECUAY DEL DEPARTAMENTO DE ANCASH"
+        const nombreObra = "MEJORAMIENTO DEL SERVICIO DE AGUA POTABLE RURAL EN EL SISTEMA DE AGUA POTABLE DE LA LOCALIDAD DE TICAPAMPA DISTRITO DE TICAPAMPA DE LA PROVINCIA DE RECUAY DEL DEPARTAMENTO DE ANCASH"
+        const pieDePagina = "INDICE GENERAL - MUNICIPALIDAD DISTRITAL DE TICAPAMPA"
 
-        return this.valorizacionService.generaSeparadoresConIndice (indices,nombreObra)
+        return this.valorizacionService.generaSeparadoresConIndice (indices,nombreObra,pieDePagina)
     }
     
 

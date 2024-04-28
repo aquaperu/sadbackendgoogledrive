@@ -15,7 +15,7 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Document, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, LevelFormat, Packer, Paragraph, TextRun, TextWrappingSide, TextWrappingType, UnderlineType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertInchesToTwip, convertMillimetersToTwip } from "docx";
+import { Alignment, AlignmentType, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, LevelFormat, Packer, Paragraph, ShadingType, TextRun, TextWrappingSide, TextWrappingType, UnderlineType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertInchesToTwip, convertMillimetersToTwip } from "docx";
 import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 
@@ -206,7 +206,7 @@ export class ValorizacionService {
     
     }
   
-    public async generaSeparadoresConIndice(indices:INombreColumna[],nombreObra:string){ 
+    public async generaSeparadoresConIndice(indices:INombreColumna[],nombreObra:string,pieDePagina:string){ 
 
         //const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
         //const myseparador = fixPathAssets('separadorv4.png')  
@@ -311,7 +311,19 @@ export class ValorizacionService {
                     sections: [
                         {  
                             headers:addHeaderTextAndShieldClientWordDocument(nombreObra,cabeceraImagen),
-                            properties: {},
+                            footers:addFooterTextAndShieldClientWordDocument(pieDePagina),
+                            properties: {
+                                page: {
+                                    margin: {
+                                        header:`0.5cm`,
+                                        footer:`0.50cm`,
+                                        //top: 137500/800,
+                                        //right: 137500/100,
+                                        bottom: `0.5cm`,
+                                        //left: 137500/100,
+                                    },
+                                },
+                            },
                             children: losparrafosDelIndice,
                         },
                     ],
@@ -324,19 +336,6 @@ export class ValorizacionService {
                    this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
                 }); 
             })
-       
-       
-           
-            
-            
-            
-
-                 
-                 
-                    
-                   
-                    
-    
   }
   
 
@@ -556,50 +555,51 @@ export const contenido = {
 
 }
 export const addHeaderTextAndShieldClientWordDocument = (textoCabecera:string,buffer:any)=>{
-    const imageEscudoPeru = fixPathAssets('EscudoNacional.jpg');
-    const logoMunicipalidad = fixPathAssets('separadorv4.png')
-    const image2 = fixPathAssets('ulluna01.png')
+    const imagenIzquierda = fixPathAssets('escudofermin.png');
+    const imagenDerecha = fixPathAssets('escudo_ticapampa.jpg')
+    const linea = fixPathAssets('linea.png')
     const separadorK = 6
     //1cm = 2.54 pulgadas
     //1 wip = 1/1440 pulgadas
     //en word = 0.01 cm
     //17.64 μm
     //const twip = convertMillimetersToTwip(50); // returns 2834
-    const imagenDerecha = {
-        horizontal:5725000,
-        vertical:275000
-
+    const posicionImagenDerecha = {
+        horizontal:5900000,
+//        5725000,
+        vertical:275000//-3500//-275000/2        //275000
     }
-    const imagenIzquierda = {
+    const posicionImagenIzquierda = {
         horizontal:950000,
-        vertical:275000
-
+        vertical:275000//-3500//-275000/2
+    }
+    const lineaSeparador = {
+        horizontal:3700000,
+        vertical:-1900000
     }
 
-
-
-
-    
-    
-    
-
-
-    
     return  {
         default: new Header({
             children: [
                 new Paragraph({//IMAGEN DE LA IZQUIERDA
                     children:[
-                        new ImageRun({data: fs.readFileSync(imageEscudoPeru),transformation:{width: 100,height: 100,},
-                        floating: {horizontalPosition: {offset: imagenIzquierda.horizontal },verticalPosition: {offset: imagenIzquierda.vertical},
+                        new ImageRun({data: fs.readFileSync(imagenIzquierda),transformation:{width: 73,height: 73,},
+                        floating: {horizontalPosition: {offset: posicionImagenIzquierda.horizontal },verticalPosition: {offset: posicionImagenIzquierda.vertical},
                                     wrap:{type:TextWrappingType.SQUARE,side:TextWrappingSide.RIGHT}}})]}
                 ),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
                 new Paragraph({children: [ new TextRun({text: textoCabecera})],alignment:'center'}),
+                
                 new Paragraph({//IMAGEN DE LA DERECHA
                     children:[
-                        new ImageRun({data: fs.readFileSync(logoMunicipalidad),transformation:{width: 100,height: 100,},
-                        floating: {horizontalPosition: {offset: imagenDerecha.horizontal },verticalPosition: {offset: imagenDerecha.vertical},
+                        new ImageRun({data: fs.readFileSync(imagenDerecha),transformation:{width: 73,height: 73,},
+                        floating: {horizontalPosition: {offset: posicionImagenDerecha.horizontal },verticalPosition: {offset: posicionImagenDerecha.vertical},
                                     wrap:{type:TextWrappingType.SQUARE,side:TextWrappingSide.LEFT}}})]}
+                ),
+                new Paragraph({//linea
+                    children:[
+                        new ImageRun({data: fs.readFileSync(linea),transformation:{width:1,height:600,flip: {horizontal: true},rotation: 90},
+                        floating: {horizontalPosition: {offset: lineaSeparador.horizontal },verticalPosition: {offset: lineaSeparador.vertical},
+                                    wrap:{type:TextWrappingType.TIGHT,side:TextWrappingSide.BOTH_SIDES}}})]}
                 ),
                         
                         
@@ -607,6 +607,33 @@ export const addHeaderTextAndShieldClientWordDocument = (textoCabecera:string,bu
             
         }),
     }
+}
+export const addFooterTextAndShieldClientWordDocument=(textoHeader)=>{
+    const imagenLineaHeader = fixPathAssets('footer.png')
+    const lineaSeparador = {
+        horizontal:3500,
+        vertical:3500
+    }
+    return {
+        default: new Footer({ // The standard default footer on every page or footer on odd pages when the 'Different Odd & Even Pages' option is activated
+            children: [
+                new Paragraph({//linea
+                    children:[
+                        new ImageRun({data: fs.readFileSync(imagenLineaHeader),transformation:{width:5,height:700,flip: {horizontal: true},rotation: 90},
+                        floating: {horizontalPosition: {offset: lineaSeparador.horizontal },verticalPosition: {offset: lineaSeparador.vertical},
+                                    wrap:{type:TextWrappingType.TIGHT,side:TextWrappingSide.BOTH_SIDES}}})]}
+                ),
+                new Paragraph({children:[
+                    new TextRun({text:textoHeader,color:"007aff",bold:true})
+                ]
+
+                })
+                    
+                
+            ]
+        })
+       }
+    
 }
 export const addParagraf = (tabula:number,texto:string)=>{
     const tabBase:number = 0.72
