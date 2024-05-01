@@ -27,7 +27,7 @@ async function bootstrap() {
     "https://miniature-space-zebra-7v7j9qg6xrjx266g-4200.app.github.dev/",
     "https://miniature-space-zebra-7v7j9qg6xrjx266g-4200.app.github.dev",
     "https://4200-monospace-sadfrontenddrive17-1713883251017.cluster-2xid2zxbenc4ixa74rpk7q7fyk.cloudworkstations.dev",
-    "https://4200-monospace-sadfrontenddrive17-1713883251017.cluster-2xid2zxbenc4ixa74rpk7q7fyk.cloudworkstations.dev/"
+    "https://4200-monospace-sadfrontenddrive17-1713883251017.cluster-2xid2zxbenc4ixa74rpk7q7fyk.cloudworkstations.dev/",
    
     
     "*"
