@@ -208,10 +208,10 @@ export class ValorizacionService {
   
     public async generaSeparadoresConIndice(indices:INombreColumna[],nombreObra:string,pieDePagina:string){ 
 
-        //const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
-        //const myseparador = fixPathAssets('separadorv4.png')  
+        const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
+        const myseparador = fixPathAssets('separadorv4.png')  
 
-        /*let listaSeparadores =[];
+        let listaSeparadores =[];
         let listaNoCorresponde = [];
         let misarchivosSeparadores = [];
         let misArchivosNoCorresponde:any;
@@ -263,9 +263,9 @@ export class ValorizacionService {
        
         misArchivosNoCorresponde.end()
        
-       */
+       
        //para que funcione perfectamente tiene que tener esto: url => () => flecha gruesa dos veces.
-       /*const promiseCarpetas = listaSeparadores.map(separador => () =>this.googleDriveService.crearCarpetav1("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t",separador.titulo))
+       const promiseCarpetas = listaSeparadores.map(separador => () =>this.googleDriveService.crearCarpetav1("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t",separador.titulo))
        const serial = funcs =>
             funcs.reduce((promise, func) =>
             promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
@@ -284,7 +284,7 @@ export class ValorizacionService {
                         
                        
                 })
-            })*/
+            })
             //gnera el indice en word
                         //agregando los paragragraf
                         let losparrafosDelIndice=[]
