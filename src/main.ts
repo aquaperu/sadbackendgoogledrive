@@ -34,7 +34,7 @@ async function bootstrap() {
     "https://4200-monospace-sadfrontenddrive17-1714863088995.cluster-wfwbjypkvnfkaqiqzlu3ikwjhe.cloudworkstations.dev",
     "https://sadfrontenddrive17.onrender.com/",
     "https://sadfrontenddrive17.onrender.com",
-   "https://4200-idx-sadfrontenddrive17-1717536473815.cluster-m7tpz3bmgjgoqrktlvd4ykrc2m.cloudworkstations.dev/",
+   "https://4200-idx-sadfrontenddrive17-1717536473815.cluster-m7tpz3bmgjgoqrktlvd4ykrc2m.cloudworkstations.dev/*",
     "https://4200-idx-sadfrontenddrive17-1717536473815.cluster-m7tpz3bmgjgoqrktlvd4ykrc2m.cloudworkstations.dev",
     
     "*"
