@@ -21,7 +21,9 @@ export class ObraService {
     async creaObra(body: any)
     //:Promise<ObraEntity> 
     {
-        const jwt = body.autorization.replace('Bearer ', '');   
+        console.log({"en el cuerpo":body.autorization})
+        const jwt = body.autorization//.replace('Bearer ', '');   
+        console.log({"en el servidor jwt": jwt})
         const usuarioLogin:string | { [key: string]: any; } = this.jwtService.decode(jwt) 
         const usuarioId = usuarioLogin['id']
         //busca al usuario registrado, para obtener el usuarioFolderId, logoFolderId
