@@ -15,7 +15,7 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, LevelFormat, Packer, Paragraph, ShadingType, TextRun, TextWrappingSide, TextWrappingType, UnderlineType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertInchesToTwip, convertMillimetersToTwip } from "docx";
+import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip } from "docx";
 import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 
@@ -280,6 +280,7 @@ export class ValorizacionService {
                         this.generaSeparadoresEnPDF(`${listaSeparadores[index].titulo}-NC`,misArchivosNoCorresponde,carpetaContenedoraId)
                        
                     }
+                    console.log({"correspnde al titulo":listaSeparadores[index].titulo}) 
                         this.generaSeparadoresEnPDF(listaSeparadores[index].titulo,misarchivosSeparadores[index],carpetaContenedoraId)
                         
                        
@@ -336,6 +337,100 @@ export class ValorizacionService {
                    this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
                 }); 
             })
+  }
+  public async bookmark(){
+    const doc = new File({
+        features: {
+            updateFields: true,
+        },
+        styles: {
+            paragraphStyles: [
+                {
+                    id: "MySpectacularStyle",
+                    name: "My Spectacular Style",
+                    basedOn: "Heading1",
+                    next: "Heading1",
+                    quickFormat: true,
+                    run: {
+                        italics: true,
+                        color: "990000",
+                    },
+                },
+            ],
+            default:{
+                heading2:{
+                    run: {
+                        font: "Calibri",
+                        size: 26,
+                        bold: true,
+                    },
+                    paragraph: {
+                        spacing: { line: 340 },//espacio entre lineas de texto
+                        alignment: AlignmentType.JUSTIFIED,
+                        rightTabStop: TabStopPosition.MAX,
+                        leftTabStop: 453.543307087,
+                        indent: { left: convertInchesToTwip(0.5) },
+                    },
+                },
+                heading3:{
+                    run:{
+                        font: "Calibri",
+                        size: 26,//13 en word
+                        bold: true,
+                    },
+                    paragraph:{
+                        spacing: { line: 340 },//espacio entre lineas de texto
+                        alignment: AlignmentType.JUSTIFIED,
+                        rightTabStop: TabStopPosition.MAX,
+                        leftTabStop: 453.543307087,
+                        indent: { left: convertInchesToTwip(0.5) },
+                    }
+                }
+            }
+        },
+        sections: [
+            {
+                children: [
+                    new TableOfContents("Summary", {
+                        hyperlink: true,
+                        headingStyleRange: "1-5",
+                        stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
+                    }),
+                    new Paragraph({
+                        text: "Header #1",
+                        heading: HeadingLevel.HEADING_1,
+                        pageBreakBefore: true,
+                    }),
+                    new Paragraph("I'm a little text very nicely written.'"),
+                    new Paragraph({
+                        text: "Header #2",
+                        heading: HeadingLevel.HEADING_1,
+                        pageBreakBefore: true,
+                    }),
+                    new Paragraph("I'm a other text very nicely written.'"),
+                    new Paragraph({
+                        text: "Header #2.1",
+                        heading: HeadingLevel.HEADING_2,
+                    }),
+                    new Paragraph({
+                        text:"I'm a another text very nicely written.'",
+                        heading:HeadingLevel.HEADING_2
+                    }),
+                    new Paragraph({
+                        text: "My Spectacular Style #1",
+                        style: "MySpectacularStyle",
+                        pageBreakBefore: true,
+                    }),
+                ],
+            },
+        ],
+    });
+    
+    
+    Packer.toBuffer(doc).then(async(buffer) => {
+        // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
+        this.generaIndiceEnWord(buffer,"mark",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
+     }); 
   }
   
 
@@ -414,6 +509,10 @@ export class ValorizacionService {
 
       }
       private async generaIndiceEnWord(buffer:Uint8Array,nombreArchivo:string,carpetaContenedoraId:string){
+        const docid = await this.googleDocService.creaDocumento(buffer,nombreArchivo,carpetaContenedoraId)//crea un nuevo archivo en google
+
+      }
+      private async generaBookmarkEnWord(buffer:Uint8Array,nombreArchivo:string,carpetaContenedoraId:string){
         const docid = await this.googleDocService.creaDocumento(buffer,nombreArchivo,carpetaContenedoraId)//crea un nuevo archivo en google
 
       }
@@ -556,7 +655,7 @@ export const contenido = {
 }
 export const addHeaderTextAndShieldClientWordDocument = (textoCabecera:string,buffer:any)=>{
     const imagenIzquierda = fixPathAssets('escudofermin.png');
-    const imagenDerecha = fixPathAssets('escudo_ticapampa.jpg')
+    const imagenDerecha = fixPathAssets('escudo_pira.png')
     const linea = fixPathAssets('linea.png')
     const separadorK = 6
     //1cm = 2.54 pulgadas
@@ -656,6 +755,7 @@ export const addParagraf = (tabula:number,texto:string)=>{
         spacing: {
             after: 200,
         },
+        alignment: AlignmentType.JUSTIFIED,
         
     })
 
