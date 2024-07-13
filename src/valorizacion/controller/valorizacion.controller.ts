@@ -22,8 +22,10 @@ export class ValorizacionController {
         private valorizacionService:ValorizacionService,  
     ){}
     public au:string
+    
     @Get('saludahijo')
     public saludaHijo(){
+    
         this.valorizacionService.saludaHijo()
     }
     public pathToImage:string

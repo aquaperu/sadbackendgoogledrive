@@ -19,6 +19,7 @@ import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLe
 import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
+import { Hijo } from './polimorfismo/hijo';
 
 
 export interface INombreColumna{
@@ -40,11 +41,14 @@ export class ValorizacionService {
         private readonly httpService : HttpService,
         //probando directamente como servicio
         @Inject(IPADRE_REPOSITORY) private iPadreRepository:IPadreRepository,
+        private myhijo:Hijo
 
     ){}
     async saludaHijo(){
-        this.iPadreRepository.configuraSaludo("habla macho")
-        this.iPadreRepository.saluda()
+        //this.iPadreRepository.configuraSaludo("habla macho")
+        //this.iPadreRepository.saluda()
+        this.myhijo.implementaEdad()
+        this.myhijo.muestraEdad()
     }
 
     async creaperiodovalorizacion(creaValorizacionDto: CreateValorizacionDto): Promise<ValorizacionEntity> {

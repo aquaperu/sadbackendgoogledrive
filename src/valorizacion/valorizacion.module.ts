@@ -19,6 +19,8 @@ import { ObraModule } from 'src/obra/obra.module';
 import { ObraService } from 'src/obra/services/obra.servicio';
 import { IPADRE_REPOSITORY } from './patronAdapter/adapter.ts';
 import { SaludoDePersona } from './patronAdapter/adaptaAPersona/persona';
+import { Padre } from './services/polimorfismo/padre';
+import { Hijo } from './services/polimorfismo/hijo';
 
 @Module({
   imports:[
@@ -41,7 +43,7 @@ import { SaludoDePersona } from './patronAdapter/adaptaAPersona/persona';
     ObraService,
     {provide:IVALORIZACION_REPOSITORY,useClass:ValorizacionMongoRepository},
     JwtstrategyService, JwtauthguardService, LoggingInterceptor,
-    //Padre
+    Padre, Hijo,
     {provide:IPADRE_REPOSITORY,useClass:SaludoDePersona}
     ],
   controllers: [ValorizacionController]
