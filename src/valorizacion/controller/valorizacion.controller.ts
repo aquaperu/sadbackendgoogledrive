@@ -19,12 +19,13 @@ import { HttpService } from '@nestjs/axios';
 export class ValorizacionController {
     
     constructor(
-        private valorizacionService:ValorizacionService,
-        
-    ){
-
-    }
+        private valorizacionService:ValorizacionService,  
+    ){}
     public au:string
+    @Get('saludahijo')
+    public saludaHijo(){
+        this.valorizacionService.saludaHijo()
+    }
     public pathToImage:string
     @Get('bookmark')
     async bookmark(){

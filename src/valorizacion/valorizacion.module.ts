@@ -17,6 +17,9 @@ import { AuthModule } from 'src/auth/auth.module';
 import { HttpModule } from "@nestjs/axios";
 import { ObraModule } from 'src/obra/obra.module';
 import { ObraService } from 'src/obra/services/obra.servicio';
+import { IPADRE_REPOSITORY } from './patronAdapter/adapter.ts';
+import { SaludoDePersona } from './patronAdapter/adaptaAPersona/persona';
+
 @Module({
   imports:[
     HttpModule,
@@ -37,7 +40,9 @@ import { ObraService } from 'src/obra/services/obra.servicio';
     ValorizacionService,
     ObraService,
     {provide:IVALORIZACION_REPOSITORY,useClass:ValorizacionMongoRepository},
-    JwtstrategyService, JwtauthguardService, LoggingInterceptor
+    JwtstrategyService, JwtauthguardService, LoggingInterceptor,
+    //Padre
+    {provide:IPADRE_REPOSITORY,useClass:SaludoDePersona}
     ],
   controllers: [ValorizacionController]
 })

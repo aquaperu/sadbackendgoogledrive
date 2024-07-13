@@ -18,6 +18,8 @@ import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service
 import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip } from "docx";
 import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
+import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
+
 
 export interface INombreColumna{
     esNoCorresponde:number;
@@ -33,12 +35,17 @@ export class ValorizacionService {
         @Inject(IVALORIZACION_REPOSITORY) private ivalorizacionRepository:IValorizacionRepository,
         @Inject(IOBRA_REPOSITORY) private iobraRepository:IObraRepository, 
         private jwtService: JwtService,
-        
         private readonly googleDriveService: GoogleDriveService,
         protected readonly googleDocService:GoogleDocService,
-        private readonly httpService : HttpService
+        private readonly httpService : HttpService,
+        //probando directamente como servicio
+        @Inject(IPADRE_REPOSITORY) private iPadreRepository:IPadreRepository,
 
     ){}
+    async saludaHijo(){
+        this.iPadreRepository.configuraSaludo("habla macho")
+        this.iPadreRepository.saluda()
+    }
 
     async creaperiodovalorizacion(creaValorizacionDto: CreateValorizacionDto): Promise<ValorizacionEntity> {
         return await  this.ivalorizacionRepository.creaperiodovalorizacion(creaValorizacionDto)
