@@ -3,10 +3,10 @@ import { Padre } from "./padre"
 
 @Injectable()
 export class Hijo extends Padre {
-    implementaEdad(){
-        this.set(25)
+    implementaEdad(edad:number){
+        this.edad = edad
     }
     muestraEdad(){
-        console.log(this.get())
+        return this.edad
     }
 }

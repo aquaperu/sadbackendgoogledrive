@@ -17,6 +17,9 @@ import { GoogleDriveConfig } from './googledrivecasa/types/googledriveconfig';
 import { ObraModule } from './obra/obra.module';
 import { ValorizacionModule } from './valorizacion/valorizacion.module';
 import { PresupuestoModule } from './presupuesto/presupuesto.module';
+import { ToolsDocsModule } from './toolsdocx/tools.docs.module';
+import { fixPathAssets } from './shared/toolbox/fixPath';
+import { ToolsDocsConfig } from './toolsdocx/types/tools.docs.config';
 
 @Module({
   imports: [
@@ -52,7 +55,16 @@ import { PresupuestoModule } from './presupuesto/presupuesto.module';
     }as GoogleDriveConfig,
     '1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t',//carpeta base SAD
     ),
-
+    ToolsDocsModule.register({
+      fontFile:fixPathAssets('AmoeraRegular.otf'),
+      backgroundSeparatorFile:fixPathAssets('separadorv4.png'),
+      headerIndexImageFileLeft:fixPathAssets('escudofermin.png'),
+      headerIndexImageFileRight: fixPathAssets('escudo_pira.png'),
+      lineHeaderIndexImageFile:fixPathAssets('linea.png'),
+      lineFooterIndexImageFile:fixPathAssets('footer.png'),
+    }as ToolsDocsConfig,
+  
+  ),
     ConfigModule.forRoot(),
     AuthModule,
     ObraModule,

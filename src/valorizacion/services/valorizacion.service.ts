@@ -47,7 +47,7 @@ export class ValorizacionService {
     async saludaHijo(){
         //this.iPadreRepository.configuraSaludo("habla macho")
         //this.iPadreRepository.saluda()
-        this.myhijo.implementaEdad()
+        this.myhijo.implementaEdad(25)
         this.myhijo.muestraEdad()
     }
 
