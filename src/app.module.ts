@@ -62,6 +62,9 @@ import { ToolsDocsConfig } from './toolsdocx/types/tools.docs.config';
       headerIndexImageFileRight: fixPathAssets('escudo_pira.png'),
       lineHeaderIndexImageFile:fixPathAssets('linea.png'),
       lineFooterIndexImageFile:fixPathAssets('footer.png'),
+      headerFloatingPositionImageRight: {horizontalPosition:{offset:5900000},verticalPosition:{offset:275000},wrap:{side:"left",type:1}},
+      headerFloatingpositionImageLeft:{horizontalPosition:{offset:950000},verticalPosition:{offset:275000},wrap:{side:"right",type:1}},
+      footerLineFloatingPositionImage:{horizontalPosition:{offset:3700000},verticalPosition:{offset:-1900000},wrap:{side:"bothSides",type:2}}
     }as ToolsDocsConfig,
   
   ),

@@ -20,6 +20,7 @@ import { fixPathAssets } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
 import { Hijo } from './polimorfismo/hijo';
+import { ToolsDocsService } from 'src/toolsdocx/services/tools.docs.service';
 
 
 export interface INombreColumna{
@@ -41,7 +42,8 @@ export class ValorizacionService {
         private readonly httpService : HttpService,
         //probando directamente como servicio
         @Inject(IPADRE_REPOSITORY) private iPadreRepository:IPadreRepository,
-        private myhijo:Hijo
+        private myhijo:Hijo,
+        private toolsDoc:ToolsDocsService
 
     ){}
     async saludaHijo(){
@@ -322,7 +324,7 @@ export class ValorizacionService {
                 const doc = new Document({
                     sections: [
                         {  
-                            headers:addHeaderTextAndShieldClientWordDocument(nombreObra,cabeceraImagen),
+                            headers:  this.toolsDoc.setHeader(nombreObra), //addHeaderTextAndShieldClientWordDocument(nombreObra,cabeceraImagen),
                             footers:addFooterTextAndShieldClientWordDocument(pieDePagina),
                             properties: {
                                 page: {
