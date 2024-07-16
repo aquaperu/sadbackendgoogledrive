@@ -60,14 +60,17 @@ import { ToolsDocsConfig } from './toolsdocx/types/tools.docs.config';
       backgroundSeparatorFile:fixPathAssets('separadorv4.png'),
       headerIndexImageFileLeft:fixPathAssets('escudofermin.png'),
       headerIndexImageFileRight: fixPathAssets('escudo_pira.png'),
-      lineHeaderIndexImageFile:fixPathAssets('linea.png'),
-      lineFooterIndexImageFile:fixPathAssets('footer.png'),
+      
+      headerIndexLineImageFile:fixPathAssets('linea.png'),
+      footerIndexLineImageFile:fixPathAssets('footer.png'),
 
-      headerFloatingpositionImageLeft:{horizontalPosition:{offset:950000},verticalPosition:{offset:275000},wrap:{side:"right",type:3}},
+      headerFloatingPositionImageLeft:{horizontalPosition:{offset:950000},verticalPosition:{offset:275000},wrap:{side:"right",type:1}},
       
       headerFloatingPositionImageRight: {horizontalPosition:{offset:5900000},verticalPosition:{offset:275000},wrap:{side:"left",type:1}},
       
-      footerLineFloatingPositionImage:{horizontalPosition:{offset:3700000},verticalPosition:{offset:-1900000},wrap:{side:"bothSides",type:2}}
+      headerFloatingPositionLineImageFile:{horizontalPosition:{offset:3700000},verticalPosition:{offset:-1900000},wrap:{side:"bothSides",type:2}},
+
+      footerFloatingPositionLineImageFile:{horizontalPosition:{offset:3500},verticalPosition:{offset:3500},wrap:{side:"bothSides",type:2}}
     
     }as ToolsDocsConfig,
   

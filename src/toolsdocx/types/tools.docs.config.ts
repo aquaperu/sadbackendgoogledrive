@@ -26,14 +26,19 @@ export class ToolsDocsConfig {
     fontFile?:string; //estilo de fuente
     
     //configuracion para el indice
-    lineHeaderIndexImageFile?:string;//linea divisora de la cabecera
+    
+    
     headerIndexImageFileLeft?:string;//imagen de la izquierda de la cabecera
-    headerIndexImageFileRight?:string;//imagen de la derecha de la cabecera
-    headerFloatingPositionImageRight?:IFloating;
     headerFloatingPositionImageLeft?:IFloating;
     
-    lineFooterIndexImageFile?:string;//linea devisora del pie de pagina
-    footerLineFloatingPositionImage?:IFloating;
+    headerIndexImageFileRight?:string;//imagen de la derecha de la cabecera
+    headerFloatingPositionImageRight?:IFloating;
+    
+    headerIndexLineImageFile?:string;//linea divisora de la cabecera
+    headerFloatingPositionLineImageFile?:IFloating;
+    
+    footerIndexLineImageFile?:string;//linea devisora del pie de pagina
+    footerFloatingPositionLineImageFile?:IFloating;
     textFooterIndex?:string//texto del pie de pagina
     //configuracion para los separadores
     backgroundSeparatorFile?:string; //imagen de fondo de los separadores

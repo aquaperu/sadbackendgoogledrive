@@ -11,14 +11,51 @@ export class ToolsDocsService  {
     setHeaderIndexImageFileRight(path:string){
         this.config.headerIndexImageFileRight = path
     }
+    numberingAndBullets(reference:string){
+        return {
+            config: [
+                {
+                    reference,
+                    levels: [
+                        {
+                            level: 0,
+                            format: LevelFormat.DECIMAL,
+                            text: "%1)",
+                            start: 50,
+                        },
+                    ],
+                },
+            ],
+        }
+
+    }
+    addParagraph(tabula:number = 1,texto:string){
+        const tabBase:number = 0.72
+        return  new Paragraph({
+            indent:{
+                left:`${tabBase*(tabula-1)}cm`
+            },
+            children: [
+                new TextRun({
+                    text: texto,
+                    //bold: true,
+                    allCaps: true,            
+                }),
+            ],
+            spacing: {
+                after: 200,
+            },
+            alignment: AlignmentType.JUSTIFIED,
+        })
+    }
     setFooter(textFooter:string){
     return {
         default: new Footer({ // The standard default footer on every page or footer on odd pages when the 'Different Odd & Even Pages' option is activated
             children: [
                 new Paragraph({//linea
                     children:[
-                        new ImageRun({data: fs.readFileSync(this.config.lineFooterIndexImageFile),transformation:{width:5,height:700,flip: {horizontal: true},rotation: 90},
-                        floating:this.config.footerLineFloatingPositionImage })]}
+                        new ImageRun({data: fs.readFileSync(this.config.footerIndexLineImageFile),transformation:{width:5,height:700,flip: {horizontal: true},rotation: 90},
+                        floating:this.config.footerFloatingPositionLineImageFile })]}
                 ),
                 new Paragraph({children:[
                     new TextRun({text:textFooter,color:"007aff",bold:true})
@@ -52,8 +89,8 @@ export class ToolsDocsService  {
                 ),
                 new Paragraph({//linea
                     children:[
-                        new ImageRun({data: fs.readFileSync(this.config.lineFooterIndexImageFile),transformation:{width:1,height:600,flip: {horizontal: true},rotation: 90},
-                        floating: this.config.footerLineFloatingPositionImage})]}
+                        new ImageRun({data: fs.readFileSync(this.config.headerIndexLineImageFile),transformation:{width:1,height:600,flip: {horizontal: true},rotation: 90},
+                        floating: this.config.headerFloatingPositionLineImageFile})]}
                 ),
                         
                         

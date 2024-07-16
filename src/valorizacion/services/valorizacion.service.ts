@@ -319,13 +319,13 @@ export class ValorizacionService {
              this.googleDriveService.descargaImagenArrayBuffer('1GQIxwW-AkRcBCYGuHv1eua7UNFcnEOaZ').then((cabeceraImagen:any)=>{
                 //el contenido
                 indices.map((val)=>{
-                    losparrafosDelIndice.push(addParagraf(val.columna,val.titulo))
+                    losparrafosDelIndice.push(this.toolsDoc.addParagraph(val.columna,val.titulo))
                 })
                 const doc = new Document({
                     sections: [
                         {  
-                            headers: this.toolsDoc.setHeader(nombreObra), //addHeaderTextAndShieldClientWordDocument(nombreObra,cabeceraImagen),
-                            footers: this.toolsDoc.setFooter(pieDePagina), //addFooterTextAndShieldClientWordDocument(pieDePagina),
+                            headers: this.toolsDoc.setHeader(nombreObra), 
+                            footers: this.toolsDoc.setFooter(pieDePagina),
                             properties: {
                                 page: {
                                     margin: {
@@ -666,130 +666,7 @@ export const contenido = {
         ]
 
 }
-export const addHeaderTextAndShieldClientWordDocument = (textoCabecera:string,buffer:any)=>{
-    const imagenIzquierda = fixPathAssets('escudofermin.png');
-    const imagenDerecha = fixPathAssets('escudo_pira.png')
-    const linea = fixPathAssets('linea.png')
-    const separadorK = 6
-    //1cm = 2.54 pulgadas
-    //1 wip = 1/1440 pulgadas
-    //en word = 0.01 cm
-    //17.64 μm
-    //const twip = convertMillimetersToTwip(50); // returns 2834
-    const posicionImagenDerecha = {
-        horizontal:5900000,
-//        5725000,
-        vertical:275000//-3500//-275000/2        //275000
-    }
-    const posicionImagenIzquierda = {
-        horizontal:950000,
-        vertical:275000//-3500//-275000/2
-    }
-    const lineaSeparador = {
-        horizontal:3700000,
-        vertical:-1900000
-    }
 
-    return  {
-        default: new Header({
-            children: [
-                new Paragraph({//IMAGEN DE LA IZQUIERDA
-                    children:[
-                        new ImageRun({data: fs.readFileSync(imagenIzquierda),transformation:{width: 73,height: 73,},
-                        floating: {horizontalPosition: {offset: posicionImagenIzquierda.horizontal },verticalPosition: {offset: posicionImagenIzquierda.vertical},
-                                    wrap:{type:TextWrappingType.SQUARE,side:TextWrappingSide.RIGHT}}})]}
-                ),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-                new Paragraph({children: [ new TextRun({text: textoCabecera})],alignment:'center'}),
-                
-                new Paragraph({//IMAGEN DE LA DERECHA
-                    children:[
-                        new ImageRun({data: fs.readFileSync(imagenDerecha),transformation:{width: 73,height: 73,},
-                        floating: {horizontalPosition: {offset: posicionImagenDerecha.horizontal },verticalPosition: {offset: posicionImagenDerecha.vertical},
-                                    wrap:{type:TextWrappingType.SQUARE,side:TextWrappingSide.LEFT}}})]}
-                ),
-                new Paragraph({//linea
-                    children:[
-                        new ImageRun({data: fs.readFileSync(linea),transformation:{width:1,height:600,flip: {horizontal: true},rotation: 90},
-                        floating: {horizontalPosition: {offset: lineaSeparador.horizontal },verticalPosition: {offset: lineaSeparador.vertical},
-                                    wrap:{type:TextWrappingType.TIGHT,side:TextWrappingSide.BOTH_SIDES}}})]}
-                ),
-                        
-                        
-            ],
-            
-        }),
-    }
-}
-export const addFooterTextAndShieldClientWordDocument=(textoHeader)=>{
-    const imagenLineaHeader = fixPathAssets('footer.png')
-    const lineaSeparador = {
-        horizontal:3500,
-        vertical:3500
-    }
-    return {
-        default: new Footer({ // The standard default footer on every page or footer on odd pages when the 'Different Odd & Even Pages' option is activated
-            children: [
-                new Paragraph({//linea
-                    children:[
-                        new ImageRun({data: fs.readFileSync(imagenLineaHeader),transformation:{width:5,height:700,flip: {horizontal: true},rotation: 90},
-                        floating: {horizontalPosition: {offset: lineaSeparador.horizontal },verticalPosition: {offset: lineaSeparador.vertical},
-                                    wrap:{type:TextWrappingType.TIGHT,side:TextWrappingSide.BOTH_SIDES}}})]}
-                ),
-                new Paragraph({children:[
-                    new TextRun({text:textoHeader,color:"007aff",bold:true})
-                ]
-
-                })
-                    
-                
-            ]
-        })
-       }
-    
-}
-export const addParagraf = (tabula:number,texto:string)=>{
-    const tabBase:number = 0.72
-    
-    //convertMillimetersToTwip()
-    
-    return  new Paragraph({
-        indent:{
-            left:`${tabBase*(tabula-1)}cm`
-        },
-        children: [
-            new TextRun({
-                text: texto,
-                //bold: true,
-                allCaps: true,
-            
-                
-            }),
-        ],
-        spacing: {
-            after: 200,
-        },
-        alignment: AlignmentType.JUSTIFIED,
-        
-    })
-
-}
-export const numbering=(reference:string)=>{
-    return {
-        config: [
-            {
-                reference,
-                levels: [
-                    {
-                        level: 0,
-                        format: LevelFormat.DECIMAL,
-                        text: "%1)",
-                        start: 50,
-                    },
-                ],
-            },
-        ],
-    }
-}
 export const styleHeaderIndexWord = ()=>{
     return {
         paragraphStyles: [
