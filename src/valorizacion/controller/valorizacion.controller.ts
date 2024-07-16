@@ -14,7 +14,20 @@ import { HttpService } from '@nestjs/axios';
 //import { compressIntereFolder } from 'src/toolbox/forValorizacion/comprimeCarpeta';
 
 // npm install googleapis@105 @google-cloud/local-auth@2.1.0 --save
-
+interface IEspecificacionesTecnicas{
+    idPartida:string;
+    partida:string;
+    descripcion:{
+        titulo_descripcion_partida:{descripcion_partida:"Descripcion de la Partida",detalle:""}
+        titulo_materiales_a_utilizar:{    materiales_a_utilizar:"Materiales a Utilizar en la Partida",detalle:""},
+        titulo_equipos:{equipos:"Equipos",detalle:""},
+        titulo_modo_ejecucion:{modo_ejecucion:"Modo de ejecución de Obra",detalle:""}
+            controles_ejecucion:"Controles de ejecución",
+            metodo_medicion:"Método de Medición",
+            forma_pago:"Forma de Pago"
+        
+    }
+}
 @Controller('valorizacion')
 export class ValorizacionController {
     
@@ -25,12 +38,20 @@ export class ValorizacionController {
     
     @Get('saludahijo')
     public saludaHijo(){
+        const especificacionesTecnicas:Array<IEspecificacionesTecnicas> = [
+            {idPartida:"01",partida:"MOVIMIENTO DE TIERRAS",descripcion:"Esta partida se trata de mover la tierra y se paga por metro cubico"}
+        ]
     
         this.valorizacionService.saludaHijo()
     }
+    
     public pathToImage:string
-    @Get('bookmark')
-    async bookmark(){
+
+    
+    
+    @Get('tablaDeContenidos')
+    async tablaDeContenidos(){
+        const especificacionesTecnicas=[]
         return this.valorizacionService.bookmark()
         
     }
