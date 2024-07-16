@@ -11,6 +11,27 @@ export class ToolsDocsService  {
     setHeaderIndexImageFileRight(path:string){
         this.config.headerIndexImageFileRight = path
     }
+    setFooter(textFooter:string){
+    return {
+        default: new Footer({ // The standard default footer on every page or footer on odd pages when the 'Different Odd & Even Pages' option is activated
+            children: [
+                new Paragraph({//linea
+                    children:[
+                        new ImageRun({data: fs.readFileSync(this.config.lineFooterIndexImageFile),transformation:{width:5,height:700,flip: {horizontal: true},rotation: 90},
+                        floating:this.config.footerLineFloatingPositionImage })]}
+                ),
+                new Paragraph({children:[
+                    new TextRun({text:textFooter,color:"007aff",bold:true})
+                ]
+
+                })
+                    
+                
+            ]
+        })
+       }
+    
+    }
 
     setHeader(textoCabecera:string){
         

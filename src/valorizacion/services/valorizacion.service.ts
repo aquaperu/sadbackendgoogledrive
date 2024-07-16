@@ -324,8 +324,8 @@ export class ValorizacionService {
                 const doc = new Document({
                     sections: [
                         {  
-                            headers:  this.toolsDoc.setHeader(nombreObra), //addHeaderTextAndShieldClientWordDocument(nombreObra,cabeceraImagen),
-                            footers:addFooterTextAndShieldClientWordDocument(pieDePagina),
+                            headers: this.toolsDoc.setHeader(nombreObra), //addHeaderTextAndShieldClientWordDocument(nombreObra,cabeceraImagen),
+                            footers: this.toolsDoc.setFooter(pieDePagina), //addFooterTextAndShieldClientWordDocument(pieDePagina),
                             properties: {
                                 page: {
                                     margin: {
