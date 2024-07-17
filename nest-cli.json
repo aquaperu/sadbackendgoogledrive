@@ -9,6 +9,11 @@
       "include": "/assets",
       "outDir": "dist/src",
       "watchAssets": true
+    },
+    {
+      "include": "/especificacionesTecnicas",
+      "outDir": "dist/src",
+      "watchAssets": true
     }
   ],
   "watchAssets": true

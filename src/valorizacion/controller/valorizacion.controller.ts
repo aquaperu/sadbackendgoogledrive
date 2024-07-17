@@ -9,6 +9,7 @@ import * as fs from 'fs'
 import { LoggingInterceptor } from 'src/auth/services/interceptortoken.service';
 import { JwtService } from '@nestjs/jwt';
 import { HttpService } from '@nestjs/axios';
+import { fixPathAssets, fixPathEspecificacionesTecnicas } from 'src/shared/toolbox/fixPath';
 //import { generaIndice } from 'src/toolbox/generaIndicePDF';
 //import { generateFoldersInFolderProjects, ISeparador } from 'src/toolbox/generaCarpetas';
 //import { compressIntereFolder } from 'src/toolbox/forValorizacion/comprimeCarpeta';
@@ -17,16 +18,15 @@ import { HttpService } from '@nestjs/axios';
 interface IEspecificacionesTecnicas{
     idPartida:string;
     partida:string;
-    descripcion:{
-        titulo_descripcion_partida:{descripcion_partida:"Descripcion de la Partida",detalle:""}
-        titulo_materiales_a_utilizar:{    materiales_a_utilizar:"Materiales a Utilizar en la Partida",detalle:""},
-        titulo_equipos:{equipos:"Equipos",detalle:""},
-        titulo_modo_ejecucion:{modo_ejecucion:"Modo de ejecución de Obra",detalle:""}
-            controles_ejecucion:"Controles de ejecución",
-            metodo_medicion:"Método de Medición",
-            forma_pago:"Forma de Pago"
+    titulo_descripcion_partida:{descripcion_partida:string,detalle:string}
+    titulo_materiales_a_utilizar:{materiales_a_utilizar:string,detalle:string},
+    titulo_equipos:{equipos:string,detalle:string},
+    titulo_modo_ejecucion:{modo_ejecucion:string,detalle:string}
+    titulo_controles_ejecucion:{controles_ejecucion:string,detalle:string},
+    titulo_metodo_medicion:{metodo_medicion:string,detalle:string}
+    titulo_forma_pago:{forma_pago:string,detalle:string}
         
-    }
+    
 }
 @Controller('valorizacion')
 export class ValorizacionController {
@@ -38,9 +38,31 @@ export class ValorizacionController {
     
     @Get('saludahijo')
     public saludaHijo(){
-        const especificacionesTecnicas:Array<IEspecificacionesTecnicas> = [
-            {idPartida:"01",partida:"MOVIMIENTO DE TIERRAS",descripcion:"Esta partida se trata de mover la tierra y se paga por metro cubico"}
+        const joder = [
+            [1,"OBRAS PROVINCIONALES","",""],
+            [1.01,"CARTEL DE OBRA 2.40x3.60 INC. TRANSP. Y COLOC."],
+            [1,"OBRAS PROVINCIONALES","",""],
+            [1.02,"CAMPAMENTO EN OBRA O ALQUILER DE AMBIENTE","MES",6],
+            [1.03,"MOVILIZACION Y DESMOBILIZACION DE EQUIPO TRANSPORTADO","GLB",1]
         ]
+        var jo = fixPathEspecificacionesTecnicas("excavacion.json")
+        const archivo = require(jo)
+        /**
+         *  new Paragraph({
+                        text: "Header #1",
+                        heading: HeadingLevel.HEADING_1,
+                        pageBreakBefore: true,
+                    }),
+         */
+        
+        const totales:Array<string> = 
+            joder.map((elem)=>{
+                let cho = elem.filter(String)
+                let nose = cho.join(' ')
+                return nose
+            })
+        
+        totales
     
         this.valorizacionService.saludaHijo()
     }
