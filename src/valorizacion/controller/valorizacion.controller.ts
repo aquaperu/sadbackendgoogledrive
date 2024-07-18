@@ -10,6 +10,7 @@ import { LoggingInterceptor } from 'src/auth/services/interceptortoken.service';
 import { JwtService } from '@nestjs/jwt';
 import { HttpService } from '@nestjs/axios';
 import { fixPathAssets, fixPathEspecificacionesTecnicas } from 'src/shared/toolbox/fixPath';
+import { HeadingLevel, Paragraph } from 'docx';
 //import { generaIndice } from 'src/toolbox/generaIndicePDF';
 //import { generateFoldersInFolderProjects, ISeparador } from 'src/toolbox/generaCarpetas';
 //import { compressIntereFolder } from 'src/toolbox/forValorizacion/comprimeCarpeta';
@@ -38,31 +39,9 @@ export class ValorizacionController {
     
     @Get('saludahijo')
     public saludaHijo(){
-        const joder = [
-            [1,"OBRAS PROVINCIONALES","",""],
-            [1.01,"CARTEL DE OBRA 2.40x3.60 INC. TRANSP. Y COLOC."],
-            [1,"OBRAS PROVINCIONALES","",""],
-            [1.02,"CAMPAMENTO EN OBRA O ALQUILER DE AMBIENTE","MES",6],
-            [1.03,"MOVILIZACION Y DESMOBILIZACION DE EQUIPO TRANSPORTADO","GLB",1]
-        ]
-        var jo = fixPathEspecificacionesTecnicas("excavacion.json")
-        const archivo = require(jo)
-        /**
-         *  new Paragraph({
-                        text: "Header #1",
-                        heading: HeadingLevel.HEADING_1,
-                        pageBreakBefore: true,
-                    }),
-         */
+       
         
-        const totales:Array<string> = 
-            joder.map((elem)=>{
-                let cho = elem.filter(String)
-                let nose = cho.join(' ')
-                return nose
-            })
         
-        totales
     
         this.valorizacionService.saludaHijo()
     }
@@ -73,8 +52,39 @@ export class ValorizacionController {
     
     @Get('tablaDeContenidos')
     async tablaDeContenidos(){
-        const especificacionesTecnicas=[]
-        return this.valorizacionService.bookmark()
+        const listaEspecificaciones:any[] = [
+            "campamento.json","excavacion.json"
+        ]
+        const resumenMetrado = [
+            [1,"OBRAS PROVINCIONALES","",""],
+            [1.01,"CARTEL DE OBRA 2.40x3.60 INC. TRANSP. Y COLOC."],
+            [1,"OBRAS PROVINCIONALES","",""],
+            [1.02,"CAMPAMENTO EN OBRA O ALQUILER DE AMBIENTE","MES",6],
+            [1.03,"MOVILIZACION Y DESMOBILIZACION DE EQUIPO TRANSPORTADO","GLB",1]
+        ]
+        const der = fixPathEspecificacionesTecnicas("excavacion.json")
+        let jo = require(der)
+        //console.log(jo["id"])
+        let joder :any[] = [] 
+        resumenMetrado.forEach((ele)=>{
+            joder[0] = ele.filter((e)=>{
+                e === "OBRAS PROVINCIONALES"
+            })
+
+        })
+        console.log(joder)
+
+
+        
+
+        
+        
+        
+        
+       
+        
+         
+      // return this.valorizacionService.tablaDeContenidos(resumenMetrado)
         
     }
     

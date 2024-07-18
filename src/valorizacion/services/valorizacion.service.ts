@@ -351,6 +351,88 @@ export class ValorizacionService {
                 }); 
             })
   }
+  public async tablaDeContenidos(parrafos:Array<any>){
+    var registraTitulosSubTitulos:any[] = []
+    var titulosSubtitulos:any[] = []
+    registraTitulosSubTitulos[0] = new TableOfContents("Summary", {
+            hyperlink: true,
+            headingStyleRange: "1-5",
+            stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
+        }),
+        
+        parrafos.forEach((especificacion,index)=>{
+            titulosSubtitulos[index] = especificacion[0] + " " + especificacion[1]
+            
+            registraTitulosSubTitulos[index + 1] = new Paragraph({
+                text: titulosSubtitulos[index],
+                heading: HeadingLevel.HEADING_1,
+                //pageBreakBefore: true,
+            })
+        })
+
+    const doc = new File({
+        features: {
+            updateFields: true,
+        },
+        styles: {
+            paragraphStyles: [
+                {
+                    id: "MySpectacularStyle",
+                    name: "My Spectacular Style",
+                    basedOn: "Heading1",
+                    next: "Heading1",
+                    quickFormat: true,
+                    run: {
+                        italics: true,
+                        color: "990000",
+                    },
+                },
+            ],
+            default:{
+                heading2:{
+                    run: {
+                        font: "Calibri",
+                        size: 26,
+                        bold: true,
+                    },
+                    paragraph: {
+                        spacing: { line: 340 },//espacio entre lineas de texto
+                        alignment: AlignmentType.JUSTIFIED,
+                        rightTabStop: TabStopPosition.MAX,
+                        leftTabStop: 453.543307087,
+                        indent: { left: convertInchesToTwip(0.5) },
+                    },
+                },
+                heading3:{
+                    run:{
+                        font: "Calibri",
+                        size: 26,//13 en word
+                        bold: true,
+                    },
+                    paragraph:{
+                        spacing: { line: 340 },//espacio entre lineas de texto
+                        alignment: AlignmentType.JUSTIFIED,
+                        rightTabStop: TabStopPosition.MAX,
+                        leftTabStop: 453.543307087,
+                        indent: { left: convertInchesToTwip(0.5) },
+                    }
+                }
+            }
+        },
+        sections: [
+            {
+                children: registraTitulosSubTitulos
+            },
+        ],
+    });
+    
+    
+    Packer.toBuffer(doc).then(async(buffer) => {
+        // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
+        this.generaIndiceEnWord(buffer,"mark",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
+     }); 
+
+  }
   public async bookmark(){
     const doc = new File({
         features: {
