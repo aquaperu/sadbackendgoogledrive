@@ -16,7 +16,7 @@ import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
 import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip } from "docx";
-import { fixPathAssets } from 'src/shared/toolbox/fixPath';
+import { fixPathAssets, fixPathEspecificacionesTecnicas } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
 import { Hijo } from './polimorfismo/hijo';
@@ -870,8 +870,13 @@ export interface IConf {
  }
 
  export const main = ()=>{
+    let partida1 = fixPathEspecificacionesTecnicas("datosPartida1.json")
+    let partida2 = fixPathEspecificacionesTecnicas("datosPartida2.json")
+    let partida1Convertido = require(partida1) 
+    let partida2Convertido = require(partida2)
+
     let parrafoCompleto :any[] = []
-    let totods = [datosPartida1,datosPartida2]
+    let totods = [partida1Convertido,partida2Convertido]
     totods.forEach((partidasYdefiniciones:IConf[])=>{
         partidasYdefiniciones.forEach((definiciones:IConf)=>{
             parrafoCompleto.push(veamos(definiciones))
