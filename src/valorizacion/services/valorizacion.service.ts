@@ -352,6 +352,9 @@ export class ValorizacionService {
             })
   }
   public async tablaDeContenidos(parrafos:Array<any>){
+    let ver ={
+        
+    }
     var registraTitulosSubTitulos:any[] = []
     var titulosSubtitulos:any[] = []
     registraTitulosSubTitulos[0] = new TableOfContents("Summary", {
@@ -421,7 +424,9 @@ export class ValorizacionService {
         },
         sections: [
             {
-                children: registraTitulosSubTitulos
+                children:[
+                    main()
+                ] 
             },
         ],
     });
@@ -434,6 +439,9 @@ export class ValorizacionService {
 
   }
   public async bookmark(){
+
+    let joder = new TextRun("unooo")
+
     const doc = new File({
         features: {
             updateFields: true,
@@ -502,7 +510,12 @@ export class ValorizacionService {
                         heading: HeadingLevel.HEADING_1,
                         pageBreakBefore: true,
                     }),
-                    new Paragraph("I'm a other text very nicely written.'"),
+                    new Paragraph({
+                        children:[
+                            new TextRun("unooo"),new TextRun("doosss")
+
+                        ]
+                    }),
                     new Paragraph({
                         text: "Header #2.1",
                         heading: HeadingLevel.HEADING_2,
@@ -821,6 +834,51 @@ export const partidas =
         }
     ]
 
+export const datosPartida1:IConf[] = [
+    {
+        text:"TITULO",
+        bold:true,
+        break:1
+    },
+    {
+        text:"Se trata de la definicion dein titulo",
+        break:1
+    },
+]
+export const datosPartida2:IConf[] = [
+    {
+        text:"TITULO",
+        bold:true,
+        break:1
+    },
+    {
+        text:"Se trata de la definicion dein titulo",
+        break:1
+    },
+] 
+export interface IConf {
+    text:string;
+    bold?:boolean;
+    break?:number;
+    //se pueden definir mas opciones para el texto
+    //dependerá de lo que se necesite
+}
 
+ export const veamos = (configuracion:IConf)=>{
+    
+    return new TextRun(configuracion)
+ }
 
- 
+ export const main = ()=>{
+    let parrafoCompleto :any[] = []
+    let totods = [datosPartida1,datosPartida2]
+    totods.forEach((partidasYdefiniciones:IConf[])=>{
+        partidasYdefiniciones.forEach((definiciones:IConf)=>{
+            parrafoCompleto.push(veamos(definiciones))
+
+        })
+    })
+    //el resultado de parrafo completo seria un array grande, donde se define el new TexRun
+    return new Paragraph({children:[new Paragraph({children:parrafoCompleto})]})
+    
+ }

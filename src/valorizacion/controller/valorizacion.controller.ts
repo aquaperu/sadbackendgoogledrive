@@ -84,7 +84,7 @@ export class ValorizacionController {
        
         
          
-      // return this.valorizacionService.tablaDeContenidos(resumenMetrado)
+      return this.valorizacionService.tablaDeContenidos(resumenMetrado)
         
     }
     
