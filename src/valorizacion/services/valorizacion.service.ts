@@ -879,6 +879,7 @@ export interface IConf {
         })
     })
     //el resultado de parrafo completo seria un array grande, donde se define el new TexRun
-    return new Paragraph({children:[new Paragraph({children:parrafoCompleto})]})
+    
+    return new Paragraph({children:parrafoCompleto})
     
  }
