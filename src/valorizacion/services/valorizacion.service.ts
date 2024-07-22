@@ -16,7 +16,7 @@ import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
 import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip } from "docx";
-import { fixPathAssets, fixPathEspecificacionesTecnicas } from 'src/shared/toolbox/fixPath';
+import { fixPathAssets, fixPathEspecificacionesTecnicas, pathEspecificacionesTecnicas, scanDirs } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
 import { Hijo } from './polimorfismo/hijo';
@@ -352,26 +352,16 @@ export class ValorizacionService {
             })
   }
   public async tablaDeContenidos(parrafos:Array<any>){
-    let ver ={
-        
-    }
+    
     var registraTitulosSubTitulos:any[] = []
-    var titulosSubtitulos:any[] = []
+    
     registraTitulosSubTitulos[0] = new TableOfContents("Summary", {
             hyperlink: true,
             headingStyleRange: "1-5",
             stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
-        }),
-        
-        parrafos.forEach((especificacion,index)=>{
-            titulosSubtitulos[index] = especificacion[0] + " " + especificacion[1]
-            
-            registraTitulosSubTitulos[index + 1] = new Paragraph({
-                text: titulosSubtitulos[index],
-                heading: HeadingLevel.HEADING_1,
-                //pageBreakBefore: true,
-            })
         })
+        
+        
 
     const doc = new File({
         features: {
@@ -834,28 +824,7 @@ export const partidas =
         }
     ]
 
-export const datosPartida1:IConf[] = [
-    {
-        text:"TITULO",
-        bold:true,
-        break:1
-    },
-    {
-        text:"Se trata de la definicion dein titulo",
-        break:1
-    },
-]
-export const datosPartida2:IConf[] = [
-    {
-        text:"TITULO",
-        bold:true,
-        break:1
-    },
-    {
-        text:"Se trata de la definicion dein titulo",
-        break:1
-    },
-] 
+ 
 export interface IConf {
     text:string;
     bold?:boolean;
@@ -870,13 +839,17 @@ export interface IConf {
  }
 
  export const main = ()=>{
-    let partida1 = fixPathEspecificacionesTecnicas("datosPartida1.json")
-    let partida2 = fixPathEspecificacionesTecnicas("datosPartida2.json")
-    let partida1Convertido = require(partida1) 
-    let partida2Convertido = require(partida2)
-
+    //lista todos los archivos encontrados en la carpeta especificaciones tecnicas
+    let rutascompletas = scanDirs(pathEspecificacionesTecnicas())
+    rutascompletas = rutascompletas.map(ruta => ruta.path)
+    rutascompletas = rutascompletas.map(ele => ele.split('\\').pop().split('/').pop())
+    //los nombres de los archivos encontrados
+    
+    rutascompletas = rutascompletas.map(e=>fixPathEspecificacionesTecnicas(e))
+    rutascompletas = rutascompletas.map(e=> require(e))
+    
     let parrafoCompleto :any[] = []
-    let totods = [partida1Convertido,partida2Convertido]
+    let totods = rutascompletas
     totods.forEach((partidasYdefiniciones:IConf[])=>{
         partidasYdefiniciones.forEach((definiciones:IConf)=>{
             parrafoCompleto.push(veamos(definiciones))

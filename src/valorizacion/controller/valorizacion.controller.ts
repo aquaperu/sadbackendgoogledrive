@@ -52,39 +52,8 @@ export class ValorizacionController {
     
     @Get('tablaDeContenidos')
     async tablaDeContenidos(){
-        const listaEspecificaciones:any[] = [
-            "campamento.json","excavacion.json"
-        ]
-        const resumenMetrado = [
-            [1,"OBRAS PROVINCIONALES","",""],
-            [1.01,"CARTEL DE OBRA 2.40x3.60 INC. TRANSP. Y COLOC."],
-            [1,"OBRAS PROVINCIONALES","",""],
-            [1.02,"CAMPAMENTO EN OBRA O ALQUILER DE AMBIENTE","MES",6],
-            [1.03,"MOVILIZACION Y DESMOBILIZACION DE EQUIPO TRANSPORTADO","GLB",1]
-        ]
-        const der = fixPathEspecificacionesTecnicas("excavacion.json")
-        let jo = require(der)
-        //console.log(jo["id"])
-        let joder :any[] = [] 
-        resumenMetrado.forEach((ele)=>{
-            joder[0] = ele.filter((e)=>{
-                e === "OBRAS PROVINCIONALES"
-            })
-
-        })
-        console.log(joder)
-
-
-        
-
-        
-        
-        
-        
-       
-        
-         
-      return this.valorizacionService.tablaDeContenidos(resumenMetrado)
+          
+      return this.valorizacionService.tablaDeContenidos(["resumenMetrado"])
         
     }
     
