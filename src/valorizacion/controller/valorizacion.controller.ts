@@ -52,8 +52,15 @@ export class ValorizacionController {
     
     @Get('tablaDeContenidos')
     async tablaDeContenidos(){
+        const listaResumenMetrado = [
+            [1,"OBRAS PROVINCIONALES","",""],
+            [1.01,"partida 1","MES",5],
+            [1,"LIMPIEZA DE TERRENO MANUAL","",""],
+            [1.02,"partida 2","MES",6],
+            [1.03,"partida 1","GLB",1]
+    ]
           
-      return this.valorizacionService.tablaDeContenidos(["resumenMetrado"])
+      return this.valorizacionService.tablaDeContenidos(listaResumenMetrado)
         
     }
     

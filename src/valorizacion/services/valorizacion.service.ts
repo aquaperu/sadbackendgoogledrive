@@ -22,6 +22,7 @@ import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts
 import { Hijo } from './polimorfismo/hijo';
 import { ToolsDocsService } from 'src/toolsdocx/services/tools.docs.service';
 
+let todosLosParrafos:any[] = []
 
 export interface INombreColumna{
     esNoCorresponde:number;
@@ -415,7 +416,7 @@ export class ValorizacionService {
         sections: [
             {
                 children:[
-                    main()
+                    main(parrafos)
                 ] 
             },
         ],
@@ -838,7 +839,7 @@ export interface IConf {
     return new TextRun(configuracion)
  }
 
- export const main = ()=>{
+ export const main = (parrafos:Array<any>)=>{
     //lista todos los archivos encontrados en la carpeta especificaciones tecnicas
     let rutascompletas = scanDirs(pathEspecificacionesTecnicas())
     rutascompletas = rutascompletas.map(ruta => ruta.path)
@@ -848,16 +849,78 @@ export interface IConf {
     rutascompletas = rutascompletas.map(e=>fixPathEspecificacionesTecnicas(e))
     rutascompletas = rutascompletas.map(e=> require(e))
     
-    let parrafoCompleto :any[] = []
-    let totods = rutascompletas
-    totods.forEach((partidasYdefiniciones:IConf[])=>{
-        partidasYdefiniciones.forEach((definiciones:IConf)=>{
-            parrafoCompleto.push(veamos(definiciones))
+let posiciones:any[] = [] 
+let elementosallenar:any[] = []
 
-        })
-    })
-    //el resultado de parrafo completo seria un array grande, donde se define el new TexRun
+for(let x=0;x<parrafos.length;x++) {
+    //identificar las posiciones de las partidas
+    if(esTitulo(parrafos[x])){
+      //combierte directmente a un parrafo y almacenalo en
+      //todosLosParrafos,
+      //en su misma posicion
+      todosLosParrafos[x] = combierteEnParrafo(parrafos[x])
+    }else{
+      //es una partida
+      //inserta la especificacion tecnica completa de esa partida
+      //busca la partida en el catalogo de partidas que tienen especificacion tecnica
+      for(let i = 0;i<rutascompletas.length;i++){
+        if(rutascompletas[i].find((ele:ImyParrafo) => ele.text === parrafos[x][1]) !== undefined){
+            elementosallenar.push(rutascompletas[i])
+            todosLosParrafos[x]=""
+            posiciones.push(x)
+        }
+      }      
+    }
+}
+let uno = elementosallenar[0].length
+rellenaArreglo(elementosallenar[0],posiciones[0])
+
+for(let i=1;i<posiciones.length;i++){
+  uno = posiciones[i] + uno
+  rellenaArreglo(elementosallenar[i],uno)//1
+
+}
+
+console.log(todosLosParrafos)
     
-    return new Paragraph({children:parrafoCompleto})
+    
+    return new Paragraph({children:combierteEnTexto(todosLosParrafos)})
     
  }
+     
+interface ImyParrafo {
+    text:string;
+    bold:boolean;
+
+    break:number;
+  
+  }
+  export const combierteEnParrafo = (titulo:Array<any>):ImyParrafo =>{
+    let parrafo:string = ""
+    titulo.forEach((elemento)=>{
+      parrafo = parrafo + elemento +" "
+  
+    })
+    return {text:parrafo,bold:true,break:1}
+  
+  }
+  export const combierteEnTexto = (parrafos:Array<any>)=>{
+    return parrafos.map(e => new TextRun(e) )
+  }
+
+  export const  esTitulo = (resumenMetrado:Array<any>) =>{
+    //es titulo cuando el ultimo elemento del resumen de metrado es  ""
+    if(resumenMetrado[3] === ""){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+  
+export const rellenaArreglo = (arrreglo_a_rellenar:Array<any>,posicion_inicio:number)=>{
+    const elementos_a_agregar = arrreglo_a_rellenar.length
+    for(let i=0;i<elementos_a_agregar;i++){
+        todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
+    }
+  }
