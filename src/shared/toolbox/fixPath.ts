@@ -20,15 +20,16 @@ export const fixPathEspecificacionesTecnicas = (recursoEspecificacionesTecnicas:
 export const pathEspecificacionesTecnicas = ()=>{
     return `${path.join(process.cwd(),'/','dist/src/especificacionesTecnicas/')}`
 }
-var data=[];
+
 /**
  * 
  * @param directoryPath Directorio en donde hará la busqueda de archivos
  * @returns retorna una matriz con todos los archivos encontrados
  */
 export const scanDirs = (directoryPath) =>{
+   var data=[];
     try{
-       var ls=fs.readdirSync(directoryPath);
+       var ls:Array<any>=fs.readdirSync(directoryPath);
  
        for (let index = 0; index < ls.length; index++) {
           const file = path.join(directoryPath, ls[index]);

@@ -847,8 +847,10 @@ export interface IConf {
     //los nombres de los archivos encontrados
     
     rutascompletas = rutascompletas.map(e=>fixPathEspecificacionesTecnicas(e))
+    
     rutascompletas = rutascompletas.map(e=> require(e))
     
+
 let posiciones:any[] = [] 
 let elementosallenar:any[] = []
 
@@ -872,6 +874,7 @@ for(let x=0;x<parrafos.length;x++) {
       }      
     }
 }
+
 let uno = elementosallenar[0].length
 rellenaArreglo(elementosallenar[0],posiciones[0])
 
@@ -881,10 +884,11 @@ for(let i=1;i<posiciones.length;i++){
 
 }
 
-console.log(todosLosParrafos)
+let jo = todosLosParrafos
+todosLosParrafos = []
     
     
-    return new Paragraph({children:combierteEnTexto(todosLosParrafos)})
+    return new Paragraph({children:combierteEnTexto(jo)})
     
  }
      
