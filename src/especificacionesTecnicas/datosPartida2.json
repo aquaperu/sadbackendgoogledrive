@@ -1,10 +1,39 @@
 [{
-    "text":"partida 2",
-    "bold":true,
-    "break":1
+    "data":{
+        "text":"partida 1"
+    },
+    "config":{"heading":"Heading1"}    
 },
 {
-    "text":"Se trata de la definicion del titulo de la partida 2",
-    
-    "break":1
-}]
+    "data":{
+        "text":"Se trata de la definicion del titulo de la partida 1","break":1
+    },
+    "config":{
+        "indent":60
+    }
+},
+{
+    "data":{
+        "text":"lista 1"
+    },
+    "config":{"numbering":{"reference":"mynumeracion","level": 2}}
+},
+{
+    "data":{
+        "text":"lista 2"
+    },
+    "config":{"numbering":{"reference":"mynumeracion","level": 3}}
+},
+{
+    "data":{
+        "text":"lista 3"
+    },
+    "config":{"numbering":{"reference":"mynumeracion","level": 2}}
+},
+{
+    "data":{
+        "text":"lista 4"
+    },
+    "config":{"numbering":{"reference":"mynumeracion","level": 3}}
+}
+]

@@ -15,12 +15,14 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip } from "docx";
+import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions } from "docx";
 import { fixPathAssets, fixPathEspecificacionesTecnicas, pathEspecificacionesTecnicas, scanDirs } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
 import { Hijo } from './polimorfismo/hijo';
 import { ToolsDocsService } from 'src/toolsdocx/services/tools.docs.service';
+
+
 
 let todosLosParrafos:any[] = []
 
@@ -365,6 +367,61 @@ export class ValorizacionService {
         
 
     const doc = new File({
+        numbering:{
+            config:[
+                {
+                    reference: "mynumeracion",
+                    levels: [
+                        {
+                            level: 0,
+                            format: LevelFormat.UPPER_LETTER,
+                            text: "%1)",
+                            alignment: AlignmentType.START,
+                            style: {
+                                paragraph: {
+                                    indent: { left: 2880, hanging: 2420 },
+                                },
+                            },
+                        },
+                        {
+                            level: 1,
+                            format: LevelFormat.LOWER_LETTER,
+                            text: "%1.",
+                            alignment: AlignmentType.START,
+                            style: {
+                                paragraph: {
+                                    indent: { left: convertInchesToTwip(1), hanging: convertInchesToTwip(0.68) },
+                                },
+                            },
+                        },
+                        {
+                            
+                                level: 2,
+                                format: LevelFormat.BULLET,
+                                text: "\u1F60",
+                                alignment: AlignmentType.LEFT,
+                                style: {
+                                    paragraph: {
+                                        indent: { left: convertInchesToTwip(0.5), hanging: convertInchesToTwip(0.25) },
+                                    },
+                                },
+                            
+                        },
+                        {
+                            level: 3,
+                                format: LevelFormat.BULLET,
+                                text: "\u221A",
+                                alignment: AlignmentType.LEFT,
+                                style: {
+                                    paragraph: {
+                                        indent: { left: convertInchesToTwip(0.5), hanging: convertInchesToTwip(0.25) },
+                                    },
+                                },
+                        },
+                    ],
+                },
+            ],
+        },
         features: {
             updateFields: true,
         },
@@ -383,7 +440,23 @@ export class ValorizacionService {
                 },
             ],
             default:{
-                heading2:{
+                heading1:{ //titulos y sub titulos
+                    run: {
+                        font: "Calibri",
+                        size: 26,
+                        bold: true,
+                        color:"ff2d55"
+                    },
+                    paragraph: {
+                        spacing: { line: 340 },//espacio entre lineas de texto
+                        //alignment: AlignmentType.JUSTIFIED,
+                        //rightTabStop: TabStopPosition.MAX,
+                        //leftTabStop: 453.543307087,
+                        //indent: { left: convertInchesToTwip(0.5) },
+                        
+                    },
+                },
+                heading2:{//titulos de la partida en si
                     run: {
                         font: "Calibri",
                         size: 26,
@@ -391,13 +464,13 @@ export class ValorizacionService {
                     },
                     paragraph: {
                         spacing: { line: 340 },//espacio entre lineas de texto
-                        alignment: AlignmentType.JUSTIFIED,
-                        rightTabStop: TabStopPosition.MAX,
-                        leftTabStop: 453.543307087,
-                        indent: { left: convertInchesToTwip(0.5) },
+                        //alignment: AlignmentType.JUSTIFIED,
+                        //rightTabStop: TabStopPosition.MAX,
+                        //leftTabStop: 453.543307087,
+                        indent: { left: 190 },
                     },
                 },
-                heading3:{
+                heading3:{//definicion de cada partida
                     run:{
                         font: "Calibri",
                         size: 26,//13 en word
@@ -405,22 +478,23 @@ export class ValorizacionService {
                     },
                     paragraph:{
                         spacing: { line: 340 },//espacio entre lineas de texto
-                        alignment: AlignmentType.JUSTIFIED,
-                        rightTabStop: TabStopPosition.MAX,
-                        leftTabStop: 453.543307087,
-                        indent: { left: convertInchesToTwip(0.5) },
+                        //alignment: AlignmentType.JUSTIFIED,
+                        //rightTabStop: TabStopPosition.MAX,
+                        //leftTabStop: 453.543307087,
+                        indent: { left: 260 },
                     }
                 }
             }
         },
         sections: [
             {
-                children:[
-                    main(parrafos)
-                ] 
+                children: main(parrafos),
+                    
+                
             },
         ],
     });
+    
     
     
     Packer.toBuffer(doc).then(async(buffer) => {
@@ -860,18 +934,26 @@ for(let x=0;x<parrafos.length;x++) {
       //combierte directmente a un parrafo y almacenalo en
       //todosLosParrafos,
       //en su misma posicion
-      todosLosParrafos[x] = combierteEnParrafo(parrafos[x])
+      todosLosParrafos[x] = combierteTituloEnParrafo(parrafos[x])
     }else{
       //es una partida
       //inserta la especificacion tecnica completa de esa partida
       //busca la partida en el catalogo de partidas que tienen especificacion tecnica
+      //for(let i = 0;i<rutascompletas.length;i++){
+      // if(rutascompletas[i].find((ele:ImyParrafo) => ele.text === parrafos[x][1]) !== undefined){
+      //      elementosallenar.push(rutascompletas[i])
+      //      todosLosParrafos[x]=""
+      //      posiciones.push(x)
+      //  }
+      //}
       for(let i = 0;i<rutascompletas.length;i++){
-        if(rutascompletas[i].find((ele:ImyParrafo) => ele.text === parrafos[x][1]) !== undefined){
+        console.log(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined)
+        if(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined){
             elementosallenar.push(rutascompletas[i])
             todosLosParrafos[x]=""
             posiciones.push(x)
         }
-      }      
+      }
     }
 }
 
@@ -881,31 +963,44 @@ rellenaArreglo(elementosallenar[0],posiciones[0])
 for(let i=1;i<posiciones.length;i++){
   uno = posiciones[i] + uno
   rellenaArreglo(elementosallenar[i],uno)//1
-
 }
 
+
 let jo = todosLosParrafos
+console.log(JSON.stringify(rutascompletas, null, "\t"))
+new Paragraph({
+    children:[
+        new TextRun({text:"",color:""})
+    ]
+    
+})
+
+//jo = jo.map((e)=>{
+    
+/*    let parrafo:IAddParagraph ={
+        children:[new TextRun({text:e.text,bold:})]
+    } 
+    return agregaParrafo(e)
+})*/
 todosLosParrafos = []
+
+
+//let joder = agregaParrafo({coleccionLineasTexto:[new TextRun({text:"MY TITULO",bold:true,color:"007AFF"})]})
     
     
-    return new Paragraph({children:combierteEnTexto(jo)})
+    return jo//joder//new Paragraph({children:combierteEnTexto(jo)})
     
  }
      
-interface ImyParrafo {
-    text:string;
-    bold:boolean;
 
-    break:number;
-  
-  }
-  export const combierteEnParrafo = (titulo:Array<any>):ImyParrafo =>{
+  export const combierteTituloEnParrafo = (titulo:Array<any>) =>{
     let parrafo:string = ""
+    //[1,"OBRAS PROVINCIONALES","",""],
     titulo.forEach((elemento)=>{
       parrafo = parrafo + elemento +" "
-  
     })
-    return {text:parrafo,bold:true,break:1}
+    
+    return {data:{text:parrafo},config:{heading:"Heading1"}}
   
   }
   export const combierteEnTexto = (parrafos:Array<any>)=>{
@@ -922,9 +1017,59 @@ interface ImyParrafo {
     }
   }
   
+  
 export const rellenaArreglo = (arrreglo_a_rellenar:Array<any>,posicion_inicio:number)=>{
     const elementos_a_agregar = arrreglo_a_rellenar.length
     for(let i=0;i<elementos_a_agregar;i++){
         todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
     }
   }
+  export const rellenaArregloV1 = (arrreglo_a_rellenar:Array<any>,posicion_inicio:number)=>{
+    const elementos_a_agregar = arrreglo_a_rellenar.length
+    for(let i=0;i<elementos_a_agregar;i++){
+        todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
+    }
+  }
+
+  enum Eheading{
+    HEADING_1 = "Heading1",
+    HEADING_2 = "Heading2",
+    HEADING_3 = "Heading3",
+    HEADING_4 = "Heading4",
+    HEADING_5 = "Heading5",
+    HEADING_6 = "Heading6",
+  }
+  //sirve para agregar parrafos, del tipo
+  //titulo, sub titulo
+  //texto con firefentes combinaciones de formatos
+interface IConfigurationParagraph extends IParagraphOptions{
+    heading?:Eheading,
+    numbering?:{
+        reference: string,
+        level: number
+    },
+    indent?:{
+        left:number,
+        hanging:number
+    }
+}
+  interface IAddParagraph {
+    children: ParagraphChild[],
+    options: IConfigurationParagraph
+}
+
+export const agregaParrafo = (parrafo:IAddParagraph) => {
+    return new Paragraph(parrafo)
+}
+
+export const convertToParagraph = ()=>{
+    todosLosParrafos.map((e,index)=>{
+        if(e.bullet){
+            delete todosLosParrafos[index].bullet
+        }
+        if(e.numbering){
+            delete todosLosParrafos[index].numbering
+        }
+
+    })
+}
