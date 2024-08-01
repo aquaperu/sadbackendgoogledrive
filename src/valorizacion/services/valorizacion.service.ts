@@ -947,7 +947,6 @@ for(let x=0;x<parrafos.length;x++) {
       //  }
       //}
       for(let i = 0;i<rutascompletas.length;i++){
-        console.log(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined)
         if(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined){
             elementosallenar.push(rutascompletas[i])
             todosLosParrafos[x]=""
@@ -956,7 +955,6 @@ for(let x=0;x<parrafos.length;x++) {
       }
     }
 }
-
 let uno = elementosallenar[0].length
 rellenaArreglo(elementosallenar[0],posiciones[0])
 
@@ -967,13 +965,8 @@ for(let i=1;i<posiciones.length;i++){
 
 
 let jo = todosLosParrafos
-console.log(JSON.stringify(rutascompletas, null, "\t"))
-new Paragraph({
-    children:[
-        new TextRun({text:"",color:""})
-    ]
-    
-})
+//console.log(JSON.stringify(jo, null, "\t"))
+
 
 //jo = jo.map((e)=>{
     
@@ -1024,12 +1017,7 @@ export const rellenaArreglo = (arrreglo_a_rellenar:Array<any>,posicion_inicio:nu
         todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
     }
   }
-  export const rellenaArregloV1 = (arrreglo_a_rellenar:Array<any>,posicion_inicio:number)=>{
-    const elementos_a_agregar = arrreglo_a_rellenar.length
-    for(let i=0;i<elementos_a_agregar;i++){
-        todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
-    }
-  }
+  
 
   enum Eheading{
     HEADING_1 = "Heading1",
@@ -1072,4 +1060,10 @@ export const convertToParagraph = ()=>{
         }
 
     })
+}
+export const extraeConfigDeJson =(unTextLineaJson:any) => {
+    return unTextLineaJson.config
+}
+export const extraeDataDeJson =(unTextLineaJson:any) => {
+    return unTextLineaJson.data
 }
