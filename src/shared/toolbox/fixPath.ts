@@ -7,6 +7,13 @@ export const fixPathAssets = (recursoAssets:string)=>{
    
     return `${path.join(process.cwd(),'/','dist/src/assets/',recursoAssets)}`
 }
+export const fixPathFromSRC = (nameFile:string)=>{
+   console.log(`Starting directory: ${process.cwd()}`);
+   //process.chdir()
+  
+  
+   return `${path.join(process.cwd(),'/','dist/src/',nameFile)}`
+}
 
 export const fixPathEspecificacionesTecnicas = (recursoEspecificacionesTecnicas:string)=>{
     console.log(`Starting directory: ${process.cwd()}`);

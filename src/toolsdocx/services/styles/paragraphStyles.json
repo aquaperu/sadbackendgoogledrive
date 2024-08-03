@@ -1,0 +1,13 @@
+[
+    {
+        "id": "MySpectacularStyle",
+        "name": "My Spectacular Style",
+        "basedOn": "Heading1",
+        "next": "Heading1",
+        "quickFormat": true,
+        "run": {
+            "italics": true,
+            "color": "990000"
+        }
+    }
+]

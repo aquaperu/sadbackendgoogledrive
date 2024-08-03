@@ -1,0 +1,54 @@
+{
+    "config":[
+        {
+            "reference": "mynumeracion",
+            "levels": [
+                {
+                    "level": 0,
+                    "format": "LevelFormat.UPPER_LETTER",
+                    "text": "%1)",
+                    "alignment": "AlignmentType.START",
+                    "style": {
+                        "paragraph": {
+                            "indent": { "left": 2880, "hanging": 2420 }
+                        }
+                    }
+                },
+                {
+                    "level": 1,
+                    "format": "LevelFormat.LOWER_LETTER",
+                    "text": "%1.",
+                    "alignment": "AlignmentType.START",
+                    "style": {
+                        "paragraph": {
+                            "indent": { "left": 190, "hanging": 150 }
+                        }
+                    }
+                },
+                {
+                    "level": 2,
+                    "format": "LevelFormat.BULLET",
+                    "text": "\u1F60",
+                    "alignment": "AlignmentType.LEFT",
+                    "style": {
+                        "paragraph": {
+                            "indent": { "left": 90, "hanging": 45 }
+                            }
+                        }
+                    
+                },
+                {
+                    "level": 3,
+                    "format": "LevelFormat.BULLET",
+                    "text": "\u221A",
+                    "alignment": "AlignmentType.LEFT",
+                    "style": {
+                        "paragraph": {
+                            "indent": { "left": 90, "hanging": 45 }
+                            }
+                        }
+                }
+            ]
+        }
+    ]
+}

@@ -14,6 +14,11 @@
       "include": "/especificacionesTecnicas",
       "outDir": "dist/src",
       "watchAssets": true
+    },
+    {
+      "include": "toolsdocx/services/styles",
+      "outDir": "dist/src",
+      "watchAssets": true
     }
   ],
   "watchAssets": true

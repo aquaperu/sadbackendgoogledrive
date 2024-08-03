@@ -15,12 +15,13 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier } from "docx";
-import { fixPathAssets, fixPathEspecificacionesTecnicas, pathEspecificacionesTecnicas, scanDirs } from 'src/shared/toolbox/fixPath';
+import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier, INumberingOptions, ICharacterStyleOptions, IParagraphStyleOptions } from "docx";
+import { fixPathAssets, fixPathEspecificacionesTecnicas, fixPathFromSRC, pathEspecificacionesTecnicas, scanDirs } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
 import { Hijo } from './polimorfismo/hijo';
 import { ToolsDocsService } from 'src/toolsdocx/services/tools.docs.service';
+import { IDefaultStylesOptions } from 'docx/build/file/styles/factory';
 
 
 
@@ -355,162 +356,17 @@ export class ValorizacionService {
             })
   }
   public async tablaDeContenidos(parrafos:Array<any>){
-     
+    let numbering:INumberingOptions = require(fixPathFromSRC("toolsdocx/services/styles/numberingBullets.json"))
+    let characterStyles:ICharacterStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/characterStyles.json"))
+    let paragraphStyles:IParagraphStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/paragraphStyles.json"))
+    let default1:IDefaultStylesOptions = require(fixPathFromSRC("toolsdocx/services/styles/headingDefault.json")) 
+    
     const doc = new File({
-        numbering:{
-            config:[
-                {
-                    reference: "mynumeracion",
-                    levels: [
-                        {
-                            level: 0,
-                            format: LevelFormat.UPPER_LETTER,
-                            text: "%1)",
-                            alignment: AlignmentType.START,
-                            style: {
-                                paragraph: {
-                                    indent: { left: 2880, hanging: 2420 },
-                                },
-                            },
-                        },
-                        {
-                            level: 1,
-                            format: LevelFormat.LOWER_LETTER,
-                            text: "%1.",
-                            alignment: AlignmentType.START,
-                            style: {
-                                paragraph: {
-                                    indent: { left: convertInchesToTwip(1), hanging: convertInchesToTwip(0.68) },
-                                },
-                            },
-                        },
-                        {
-                            
-                                level: 2,
-                                format: LevelFormat.BULLET,
-                                text: "\u1F60",
-                                alignment: AlignmentType.LEFT,
-                                style: {
-                                    paragraph: {
-                                        indent: { left: convertInchesToTwip(0.5), hanging: convertInchesToTwip(0.25) },
-                                    },
-                                },
-                            
-                        },
-                        {
-                            level: 3,
-                                format: LevelFormat.BULLET,
-                                text: "\u221A",
-                                alignment: AlignmentType.LEFT,
-                                style: {
-                                    paragraph: {
-                                        indent: { left: convertInchesToTwip(0.5), hanging: convertInchesToTwip(0.25) },
-                                    },
-                                },
-                        },
-                    ],
-                },
-            ],
-        },
-        features: {
-            updateFields: true,
-        },
-        styles: {
-            characterStyles: [
-                {
-                    id: "myRedStyle",
-                    name: "My Wonky Style",
-                    basedOn: "Normal",
-                    run: {
-                        color: "4CD964",
-                        italics: true,
-                    },
-                },
-                {
-                    id: "strong",
-                    name: "Strong",
-                    basedOn: "Normal",
-                    run: {
-                        bold: true,
-                    },
-                },
-            ],
-            paragraphStyles: [
-                {
-                    id: "MySpectacularStyle",
-                    name: "My Spectacular Style",
-                    basedOn: "Heading1",
-                    next: "Heading1",
-                    quickFormat: true,
-                    run: {
-                        italics: true,
-                        color: "990000",
-                    },
-                },
-            ],
-            
-            default:{
-
-                heading1:{ //titulos y sub titulos
-                    run: {
-                        font: "Calibri",
-                        size: 26,
-                        bold: true,
-                        color:"ff2d55"
-                    },
-                    paragraph: {
-                        spacing: { line: 0 },//espacio entre lineas de texto
-                        //alignment: AlignmentType.JUSTIFIED,
-                        //rightTabStop: TabStopPosition.MAX,
-                        //leftTabStop: 453.543307087,
-                        //indent: { left: convertInchesToTwip(0.5) },
-                        
-                    },
-                },
-                heading2:{//titulos de la partida en si
-                    run: {
-                        font: "Calibri",
-                        size: 26,
-                        bold: true,
-                        
-                    },
-                    paragraph: {
-                        spacing: { line: 130},//espacio entre lineas de texto
-                        //alignment: AlignmentType.JUSTIFIED,
-                        //rightTabStop: TabStopPosition.MAX,
-                        //leftTabStop: 453.543307087,
-                        indent: { left: 190},
-
-                    },
-                },
-                heading3:{//definicion de cada partida
-                    run:{
-                        font: "Calibri",
-                        size: 26,//13 en word
-                        bold: true,
-                    },
-                    paragraph:{
-                        spacing: { line: 120 },//espacio entre lineas de texto
-                        //alignment: AlignmentType.JUSTIFIED,
-                        //rightTabStop: TabStopPosition.MAX,
-                        //leftTabStop: 453.543307087,
-                        indent: { left: 190 },
-
-                    }
-                }
-            }
-        },
-        sections: [
-            {
-                children: 
-                main(parrafos),
-                
-            },
-        ],
+        numbering,
+        features: {updateFields: true},styles: {characterStyles,paragraphStyles,default:default1},
+        sections: [{children:main(parrafos)}],
     });
-    
-    
-    
+
     Packer.toBuffer(doc).then(async(buffer) => {
         // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
         this.generaIndiceEnWord(buffer,"mark",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    

@@ -1,0 +1,40 @@
+{
+
+    "heading1":{ 
+    "run": {
+        "font": "Calibri",
+        "size": 26,
+        "bold": true,
+        "color":"ff2d55"
+        },
+        "paragraph": {
+            "spacing": { "line": 0 }
+            
+        }
+    },
+    "heading2":{
+    "run": {
+        "font": "Calibri",
+        "size": 26,
+        "bold": true
+            
+        },
+        "paragraph": {
+            "spacing": { "line": 130},
+            "indent": { "left": 190}
+
+        }
+    },
+    "heading3":{
+    "run":{
+        "font": "Calibri",
+        "size": 26,
+        "bold": true
+        },
+        "paragraph":{
+            "spacing": { "line": 120 },
+            "indent": { "left": 190 }
+
+        }
+    }
+}

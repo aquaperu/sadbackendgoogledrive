@@ -1,0 +1,19 @@
+[
+    {
+        "id": "myRedStyle",
+        "name": "My Wonky Style",
+        "basedOn": "Normal",
+        "run": {
+            "color": "4CD964",
+            "italics": true
+        }
+    },
+    {
+        "id": "strong",
+        "name": "Strong",
+        "basedOn": "Normal",
+        "run": {
+            "bold": true
+        }
+    }
+]
