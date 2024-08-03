@@ -1,40 +1,19 @@
 [
     {
-    "data":{
-        "text":"partida 1"
+        "data":{"text":"partida 1"},
+        "config":{"heading":"Heading2"}
     },
-    "config":{"heading":"Heading1"}    
-},
-{
-    "data":{
-        "text":"Se trata de la definicion del titulo de la partida 1","break":1
-    },
-    "config":{
-        "indent":60
+    {
+        "data":{"text":"Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1","style": "myRedStyle"},
+        "config":{
+            "indent":{
+                "left":190
+                
+            },
+            "spacing": { "line": 240 },
+            "alignment":"distribute"
+            
+        }
     }
-},
-{
-    "data":{
-        "text":"lista 1"
-    },
-    "config":{"numbering":{"reference":"mynumeracion","level": 2}}
-},
-{
-    "data":{
-        "text":"lista 2"
-    },
-    "config":{"numbering":{"reference":"mynumeracion","level": 3}}
-},
-{
-    "data":{
-        "text":"lista 3"
-    },
-    "config":{"numbering":{"reference":"mynumeracion","level": 2}}
-},
-{
-    "data":{
-        "text":"lista 4"
-    },
-    "config":{"numbering":{"reference":"mynumeracion","level": 3}}
-}
+
 ]

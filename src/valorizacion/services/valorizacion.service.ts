@@ -15,7 +15,7 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions } from "docx";
+import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier } from "docx";
 import { fixPathAssets, fixPathEspecificacionesTecnicas, pathEspecificacionesTecnicas, scanDirs } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
@@ -355,17 +355,7 @@ export class ValorizacionService {
             })
   }
   public async tablaDeContenidos(parrafos:Array<any>){
-    
-    var registraTitulosSubTitulos:any[] = []
-    
-    registraTitulosSubTitulos[0] = new TableOfContents("Summary", {
-            hyperlink: true,
-            headingStyleRange: "1-5",
-            stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
-        })
-        
-        
-
+     
     const doc = new File({
         numbering:{
             config:[
@@ -426,6 +416,25 @@ export class ValorizacionService {
             updateFields: true,
         },
         styles: {
+            characterStyles: [
+                {
+                    id: "myRedStyle",
+                    name: "My Wonky Style",
+                    basedOn: "Normal",
+                    run: {
+                        color: "4CD964",
+                        italics: true,
+                    },
+                },
+                {
+                    id: "strong",
+                    name: "Strong",
+                    basedOn: "Normal",
+                    run: {
+                        bold: true,
+                    },
+                },
+            ],
             paragraphStyles: [
                 {
                     id: "MySpectacularStyle",
@@ -439,7 +448,9 @@ export class ValorizacionService {
                     },
                 },
             ],
+            
             default:{
+
                 heading1:{ //titulos y sub titulos
                     run: {
                         font: "Calibri",
@@ -448,7 +459,7 @@ export class ValorizacionService {
                         color:"ff2d55"
                     },
                     paragraph: {
-                        spacing: { line: 340 },//espacio entre lineas de texto
+                        spacing: { line: 0 },//espacio entre lineas de texto
                         //alignment: AlignmentType.JUSTIFIED,
                         //rightTabStop: TabStopPosition.MAX,
                         //leftTabStop: 453.543307087,
@@ -461,13 +472,15 @@ export class ValorizacionService {
                         font: "Calibri",
                         size: 26,
                         bold: true,
+                        
                     },
                     paragraph: {
-                        spacing: { line: 340 },//espacio entre lineas de texto
+                        spacing: { line: 130},//espacio entre lineas de texto
                         //alignment: AlignmentType.JUSTIFIED,
                         //rightTabStop: TabStopPosition.MAX,
                         //leftTabStop: 453.543307087,
-                        indent: { left: 190 },
+                        indent: { left: 190},
+
                     },
                 },
                 heading3:{//definicion de cada partida
@@ -477,19 +490,20 @@ export class ValorizacionService {
                         bold: true,
                     },
                     paragraph:{
-                        spacing: { line: 340 },//espacio entre lineas de texto
+                        spacing: { line: 120 },//espacio entre lineas de texto
                         //alignment: AlignmentType.JUSTIFIED,
                         //rightTabStop: TabStopPosition.MAX,
                         //leftTabStop: 453.543307087,
-                        indent: { left: 260 },
+                        indent: { left: 190 },
+
                     }
                 }
             }
         },
         sections: [
             {
-                children: main(parrafos),
-                    
+                children: 
+                main(parrafos),
                 
             },
         ],
@@ -504,6 +518,7 @@ export class ValorizacionService {
 
   }
   public async bookmark(){
+    
 
     let joder = new TextRun("unooo")
 
@@ -939,23 +954,24 @@ for(let x=0;x<parrafos.length;x++) {
       //es una partida
       //inserta la especificacion tecnica completa de esa partida
       //busca la partida en el catalogo de partidas que tienen especificacion tecnica
-      //for(let i = 0;i<rutascompletas.length;i++){
-      // if(rutascompletas[i].find((ele:ImyParrafo) => ele.text === parrafos[x][1]) !== undefined){
-      //      elementosallenar.push(rutascompletas[i])
-      //      todosLosParrafos[x]=""
-      //      posiciones.push(x)
-      //  }
-      //}
       for(let i = 0;i<rutascompletas.length;i++){
-        if(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined){
+       if(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined){
             elementosallenar.push(rutascompletas[i])
             todosLosParrafos[x]=""
             posiciones.push(x)
         }
       }
+      /*for(let i = 0;i<rutascompletas.length;i++){
+        if(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined){
+            elementosallenar.push(rutascompletas[i])
+            todosLosParrafos[x]=""
+            posiciones.push(x)
+        }
+      }*/
     }
 }
 let uno = elementosallenar[0].length
+
 rellenaArreglo(elementosallenar[0],posiciones[0])
 
 for(let i=1;i<posiciones.length;i++){
@@ -963,25 +979,31 @@ for(let i=1;i<posiciones.length;i++){
   rellenaArreglo(elementosallenar[i],uno)//1
 }
 
-
 let jo = todosLosParrafos
-//console.log(JSON.stringify(jo, null, "\t"))
+let llena:any[] = []
+
+jo.map((texSimple)=>{
+    if(extraeConfigDeJson(texSimple) !== undefined || extraeDataDeJson(texSimple) !== undefined){
+        let options = extraeConfigDeJson(texSimple)
+        let children:any[] = [new TextRun(extraeDataDeJson(texSimple)) ]
+        let parrafo:IAddParagraph = {children,...options}
+        llena.push(agregaParrafo(parrafo))
+       
+        
+    }
+})
+//new Paragraph({indent:{left:1},spacing:{lineRule:'exactly'})
 
 
-//jo = jo.map((e)=>{
-    
-/*    let parrafo:IAddParagraph ={
-        children:[new TextRun({text:e.text,bold:})]
-    } 
-    return agregaParrafo(e)
-})*/
 todosLosParrafos = []
-
-
-//let joder = agregaParrafo({coleccionLineasTexto:[new TextRun({text:"MY TITULO",bold:true,color:"007AFF"})]})
+    llena.unshift(new Paragraph({text:"",pageBreakBefore:true}))
+    llena.unshift(new TableOfContents("Summary", {
+        hyperlink: true,
+        headingStyleRange: "1-5",
+        stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
+    }),)
     
-    
-    return jo//joder//new Paragraph({children:combierteEnTexto(jo)})
+    return llena
     
  }
      
@@ -1017,7 +1039,12 @@ export const rellenaArreglo = (arrreglo_a_rellenar:Array<any>,posicion_inicio:nu
         todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
     }
   }
-  
+  export const rellenaArregloV1 = (arrreglo_a_rellenar:Array<any>,posicion_inicio:number)=>{
+    const elementos_a_agregar = arrreglo_a_rellenar.length
+    for(let i=0;i<elementos_a_agregar;i++){
+        todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
+    }
+  }
 
   enum Eheading{
     HEADING_1 = "Heading1",
@@ -1027,10 +1054,14 @@ export const rellenaArreglo = (arrreglo_a_rellenar:Array<any>,posicion_inicio:nu
     HEADING_5 = "Heading5",
     HEADING_6 = "Heading6",
   }
+  enum EAlignment {
+
+  }
   //sirve para agregar parrafos, del tipo
   //titulo, sub titulo
   //texto con firefentes combinaciones de formatos
-interface IConfigurationParagraph extends IParagraphOptions{
+interface IAddParagraph {
+    children: ParagraphChild[],
     heading?:Eheading,
     numbering?:{
         reference: string,
@@ -1039,12 +1070,12 @@ interface IConfigurationParagraph extends IParagraphOptions{
     indent?:{
         left:number,
         hanging:number
-    }
+    },
+    pageBreakBefore?: boolean,
+    spacing?: { line: number,before?:number,after?:number },
+    alignment?:'distribute'
 }
-  interface IAddParagraph {
-    children: ParagraphChild[],
-    options: IConfigurationParagraph
-}
+
 
 export const agregaParrafo = (parrafo:IAddParagraph) => {
     return new Paragraph(parrafo)
