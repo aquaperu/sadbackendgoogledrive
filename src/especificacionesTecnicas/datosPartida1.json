@@ -1,10 +1,10 @@
 [
     {
-        "data":{"text":"partida 1"},
+        "data":[{"text":"partida 1"}] ,
         "config":{"heading":"Heading2"}
     },
     {
-        "data":{"text":"Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1","style": "myRedStyle"},
+        "data":[{"text":"Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1" ,"style": "myRedStyle"},{"text":"my nuevo estilo","bold":true}],
         "config":{
             "indent":{
                 "left":190

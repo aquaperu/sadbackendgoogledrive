@@ -811,7 +811,8 @@ for(let x=0;x<parrafos.length;x++) {
       //inserta la especificacion tecnica completa de esa partida
       //busca la partida en el catalogo de partidas que tienen especificacion tecnica
       for(let i = 0;i<rutascompletas.length;i++){
-       if(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined){
+       
+        if(rutascompletas[i].find((ele:any) => ele.data[0].text === parrafos[x][1]) !== undefined){
             elementosallenar.push(rutascompletas[i])
             todosLosParrafos[x]=""
             posiciones.push(x)
@@ -838,10 +839,18 @@ for(let i=1;i<posiciones.length;i++){
 let jo = todosLosParrafos
 let llena:any[] = []
 
+
+
 jo.map((texSimple)=>{
     if(extraeConfigDeJson(texSimple) !== undefined || extraeDataDeJson(texSimple) !== undefined){
         let options = extraeConfigDeJson(texSimple)
-        let children:any[] = [new TextRun(extraeDataDeJson(texSimple)) ]
+        
+        let children:any[] =  extraeDataDeJson(texSimple)
+        console.log(children)
+         children = children.map((el)=>{
+            return new TextRun(el)
+        })
+        
         let parrafo:IAddParagraph = {children,...options}
         llena.push(agregaParrafo(parrafo))
        
@@ -871,7 +880,7 @@ todosLosParrafos = []
       parrafo = parrafo + elemento +" "
     })
     
-    return {data:{text:parrafo},config:{heading:"Heading1"}}
+    return {data:[{text:parrafo}] ,config:{heading:"Heading1"}}
   
   }
   export const combierteEnTexto = (parrafos:Array<any>)=>{
@@ -951,6 +960,6 @@ export const convertToParagraph = ()=>{
 export const extraeConfigDeJson =(unTextLineaJson:any) => {
     return unTextLineaJson.config
 }
-export const extraeDataDeJson =(unTextLineaJson:any) => {
+export const extraeDataDeJson =(unTextLineaJson:any):any[] => {
     return unTextLineaJson.data
 }
