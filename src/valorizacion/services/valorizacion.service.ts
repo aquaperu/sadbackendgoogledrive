@@ -369,6 +369,14 @@ export class ValorizacionService {
         return this.toolsDoc.addParagraph(element)
 
     })
+    
+    children.unshift(new Paragraph({text:"",pageBreakBefore:true}))
+    children.unshift(new TableOfContents("Summary", {
+        hyperlink: true,
+        headingStyleRange: "1-5",
+        stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
+    }),)
+
     const doc = new File({
         numbering,
         features: {updateFields: true},styles: {characterStyles,paragraphStyles,default:default1},
