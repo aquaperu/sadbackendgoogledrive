@@ -1,7 +1,39 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ToolsDocsConfig } from "../types/tools.docs.config";
-import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip } from "docx";
+import { Footer, Header, ImageRun, LevelFormat, Paragraph, TextRun, ParagraphChild, UniversalMeasure, PositiveUniversalMeasure } from "docx";
 import * as fs from 'fs'
+
+export interface IIndentAttributesProperties {
+    readonly start?: number | UniversalMeasure;
+    readonly end?: number | UniversalMeasure;
+    readonly left?: number | UniversalMeasure;
+    readonly right?: number | UniversalMeasure;
+    readonly hanging?: number | PositiveUniversalMeasure;
+    readonly firstLine?: number | PositiveUniversalMeasure;
+}
+enum Eheading{
+    HEADING_1 = "Heading1",
+    HEADING_2 = "Heading2",
+    HEADING_3 = "Heading3",
+    HEADING_4 = "Heading4",
+    HEADING_5 = "Heading5",
+    HEADING_6 = "Heading6",
+  }
+  enum EAlignment {
+
+  }
+interface IAddParagraph {
+    children: ParagraphChild[],
+    heading?:Eheading,
+    numbering?:{
+        reference: string,
+        level: number
+    },
+    indent?:IIndentAttributesProperties,
+    pageBreakBefore?: boolean,
+    spacing?: { line: number,before?:number,after?:number },
+    alignment?:'distribute'
+}
 
 @Injectable()
 export class ToolsDocsService  {
@@ -29,24 +61,8 @@ export class ToolsDocsService  {
         }
 
     }
-    addParagraph(tabula:number = 1,texto:string){
-        const tabBase:number = 0.72
-        return  new Paragraph({
-            indent:{
-                left:`${tabBase*(tabula-1)}cm`
-            },
-            children: [
-                new TextRun({
-                    text: texto,
-                    //bold: true,
-                    allCaps: true,            
-                }),
-            ],
-            spacing: {
-                after: 200,
-            },
-            alignment: AlignmentType.JUSTIFIED,
-        })
+    addParagraph(parrafo:IAddParagraph){
+        return new Paragraph(parrafo)
     }
     setFooter(textFooter:string){
     return {

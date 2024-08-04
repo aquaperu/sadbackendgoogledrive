@@ -22,10 +22,11 @@ import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts
 import { Hijo } from './polimorfismo/hijo';
 import { ToolsDocsService } from 'src/toolsdocx/services/tools.docs.service';
 import { IDefaultStylesOptions } from 'docx/build/file/styles/factory';
+import { prepareToParagraphsChildren } from '../functions/herramientas';
 
 
 
-let todosLosParrafos:any[] = []
+
 
 export interface INombreColumna{
     esNoCorresponde:number;
@@ -323,8 +324,10 @@ export class ValorizacionService {
              this.googleDriveService.descargaImagenArrayBuffer('1GQIxwW-AkRcBCYGuHv1eua7UNFcnEOaZ').then((cabeceraImagen:any)=>{
                 //el contenido
                 indices.map((val)=>{
-                    losparrafosDelIndice.push(this.toolsDoc.addParagraph(val.columna,val.titulo))
+                    //losparrafosDelIndice.push(this.toolsDoc.addParagraph(val.columna,val.titulo))
+                    losparrafosDelIndice.push(this.toolsDoc.addParagraph({children:[new TextRun({text:val.titulo})],indent:{left:`${0.72*(val.columna-1)}cm`}}))
                 })
+                
                 const doc = new Document({
                     sections: [
                         {  
@@ -361,10 +364,15 @@ export class ValorizacionService {
     let paragraphStyles:IParagraphStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/paragraphStyles.json"))
     let default1:IDefaultStylesOptions = require(fixPathFromSRC("toolsdocx/services/styles/headingDefault.json")) 
     
+    let children = prepareToParagraphsChildren(parrafos)
+    children = children.map((element)=>{
+        return this.toolsDoc.addParagraph(element)
+
+    })
     const doc = new File({
         numbering,
         features: {updateFields: true},styles: {characterStyles,paragraphStyles,default:default1},
-        sections: [{children:main(parrafos)}],
+        sections: [{children}],
     });
 
     Packer.toBuffer(doc).then(async(buffer) => {
@@ -784,182 +792,4 @@ export interface IConf {
     return new TextRun(configuracion)
  }
 
- export const main = (parrafos:Array<any>)=>{
-    //lista todos los archivos encontrados en la carpeta especificaciones tecnicas
-    let rutascompletas = scanDirs(pathEspecificacionesTecnicas())
-    rutascompletas = rutascompletas.map(ruta => ruta.path)
-    rutascompletas = rutascompletas.map(ele => ele.split('\\').pop().split('/').pop())
-    //los nombres de los archivos encontrados
-    
-    rutascompletas = rutascompletas.map(e=>fixPathEspecificacionesTecnicas(e))
-    
-    rutascompletas = rutascompletas.map(e=> require(e))
-    
-
-let posiciones:any[] = [] 
-let elementosallenar:any[] = []
-
-for(let x=0;x<parrafos.length;x++) {
-    //identificar las posiciones de las partidas
-    if(esTitulo(parrafos[x])){
-      //combierte directmente a un parrafo y almacenalo en
-      //todosLosParrafos,
-      //en su misma posicion
-      todosLosParrafos[x] = combierteTituloEnParrafo(parrafos[x])
-    }else{
-      //es una partida
-      //inserta la especificacion tecnica completa de esa partida
-      //busca la partida en el catalogo de partidas que tienen especificacion tecnica
-      for(let i = 0;i<rutascompletas.length;i++){
-       
-        if(rutascompletas[i].find((ele:any) => ele.data[0].text === parrafos[x][1]) !== undefined){
-            elementosallenar.push(rutascompletas[i])
-            todosLosParrafos[x]=""
-            posiciones.push(x)
-        }
-      }
-      /*for(let i = 0;i<rutascompletas.length;i++){
-        if(rutascompletas[i].find((ele:any) => ele.data.text === parrafos[x][1]) !== undefined){
-            elementosallenar.push(rutascompletas[i])
-            todosLosParrafos[x]=""
-            posiciones.push(x)
-        }
-      }*/
-    }
-}
-let uno = elementosallenar[0].length
-
-rellenaArreglo(elementosallenar[0],posiciones[0])
-
-for(let i=1;i<posiciones.length;i++){
-  uno = posiciones[i] + uno
-  rellenaArreglo(elementosallenar[i],uno)//1
-}
-
-let jo = todosLosParrafos
-let llena:any[] = []
-
-
-
-jo.map((texSimple)=>{
-    if(extraeConfigDeJson(texSimple) !== undefined || extraeDataDeJson(texSimple) !== undefined){
-        let options = extraeConfigDeJson(texSimple)
-        
-        let children:any[] =  extraeDataDeJson(texSimple)
-        console.log(children)
-         children = children.map((el)=>{
-            return new TextRun(el)
-        })
-        
-        let parrafo:IAddParagraph = {children,...options}
-        llena.push(agregaParrafo(parrafo))
-       
-        
-    }
-})
-//new Paragraph({indent:{left:1},spacing:{lineRule:'exactly'})
-
-
-todosLosParrafos = []
-    llena.unshift(new Paragraph({text:"",pageBreakBefore:true}))
-    llena.unshift(new TableOfContents("Summary", {
-        hyperlink: true,
-        headingStyleRange: "1-5",
-        stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
-    }),)
-    
-    return llena
-    
- }
-     
-
-  export const combierteTituloEnParrafo = (titulo:Array<any>) =>{
-    let parrafo:string = ""
-    //[1,"OBRAS PROVINCIONALES","",""],
-    titulo.forEach((elemento)=>{
-      parrafo = parrafo + elemento +" "
-    })
-    
-    return {data:[{text:parrafo}] ,config:{heading:"Heading1"}}
-  
-  }
-  export const combierteEnTexto = (parrafos:Array<any>)=>{
-    return parrafos.map(e => new TextRun(e) )
-  }
-
-  export const  esTitulo = (resumenMetrado:Array<any>) =>{
-    //es titulo cuando el ultimo elemento del resumen de metrado es  ""
-    if(resumenMetrado[3] === ""){
-      return true
-    }
-    else{
-      return false
-    }
-  }
-  
-  
-export const rellenaArreglo = (arrreglo_a_rellenar:Array<any>,posicion_inicio:number)=>{
-    const elementos_a_agregar = arrreglo_a_rellenar.length
-    for(let i=0;i<elementos_a_agregar;i++){
-        todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
-    }
-  }
-  export const rellenaArregloV1 = (arrreglo_a_rellenar:Array<any>,posicion_inicio:number)=>{
-    const elementos_a_agregar = arrreglo_a_rellenar.length
-    for(let i=0;i<elementos_a_agregar;i++){
-        todosLosParrafos.splice(posicion_inicio + i,0,arrreglo_a_rellenar[i])
-    }
-  }
-
-  enum Eheading{
-    HEADING_1 = "Heading1",
-    HEADING_2 = "Heading2",
-    HEADING_3 = "Heading3",
-    HEADING_4 = "Heading4",
-    HEADING_5 = "Heading5",
-    HEADING_6 = "Heading6",
-  }
-  enum EAlignment {
-
-  }
-  //sirve para agregar parrafos, del tipo
-  //titulo, sub titulo
-  //texto con firefentes combinaciones de formatos
-interface IAddParagraph {
-    children: ParagraphChild[],
-    heading?:Eheading,
-    numbering?:{
-        reference: string,
-        level: number
-    },
-    indent?:{
-        left:number,
-        hanging:number
-    },
-    pageBreakBefore?: boolean,
-    spacing?: { line: number,before?:number,after?:number },
-    alignment?:'distribute'
-}
-
-
-export const agregaParrafo = (parrafo:IAddParagraph) => {
-    return new Paragraph(parrafo)
-}
-
-export const convertToParagraph = ()=>{
-    todosLosParrafos.map((e,index)=>{
-        if(e.bullet){
-            delete todosLosParrafos[index].bullet
-        }
-        if(e.numbering){
-            delete todosLosParrafos[index].numbering
-        }
-
-    })
-}
-export const extraeConfigDeJson =(unTextLineaJson:any) => {
-    return unTextLineaJson.config
-}
-export const extraeDataDeJson =(unTextLineaJson:any):any[] => {
-    return unTextLineaJson.data
-}
+ 
