@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { diskStorage } from 'multer';
 import { AgregaevidenciafotograficaDto } from '../dtos/crud.valorizacion.dto';
 import { ValorizacionEntity } from '../entity/valorizacion.entity';
-import { INombreColumna, ValorizacionService } from '../services/valorizacion.service';
+import { IIndice, ISeparador, ValorizacionService } from '../services/valorizacion.service';
 import * as fs from 'fs'
 import { LoggingInterceptor } from 'src/auth/services/interceptortoken.service';
 import { JwtService } from '@nestjs/jwt';
@@ -258,24 +258,32 @@ export class ValorizacionController {
        return "comprimido"
        
     }*/
-
-
-    @Get('generaseparadoresconindice')
-    async createFoldersInWindows(@Req() req:Request){
-        const indices:Array<INombreColumna> = [
-            {esSeparador:1,titulo:'0. INDICE ENUMERADO',columna:1,esNoCorresponde:0},
-            {esSeparador:1,titulo:'1. AGUA Y SANEAMIENTO',columna:1,esNoCorresponde:0},
-            {esSeparador:1,titulo:'1.1 ASPECTOS GENERALES',columna:2,esNoCorresponde:0},
-            {esSeparador:1,titulo:'1.1.1 Resumen Ejecutivo',columna:3,esNoCorresponde:0},
-            /**/
-            
-
+    @Get('generaIndice')
+    async generaIndice(@Req() req:Request){
+        const indices:Array<IIndice> = [
+            {tituloSubtitulo:'0. INDICE ENUMERADO',indent:1},
+            {tituloSubtitulo:'1. AGUA Y SANEAMIENTO',indent:1},
+            {tituloSubtitulo:'1.1 ASPECTOS GENERALES',indent:2},
+            {tituloSubtitulo:'1.1.1 Resumen Ejecutivo',indent:3},
         ]
 
         const nombreObra = "MEJORAMIENTO Y AMPLIACION DEL SERVICIO DE AGUA POTABLE RURAL Y MEJORAMIENTO Y AMPLIACION DEL SERVICIO ALCANTARILLADO U OTRAS FORMAS DE DISPOSICION SANITARIA DE EXCRETAS EN LA LOCALIDAD DE COLTAO QUITAFLOR DEL DISTRITL DE PIRA DE LA PROVINCIA DE HUARAZ DEL DEPARTAMENTO DE ANCASH"
         const pieDePagina = "INDICE GENERAL - MUNICIPALIDAD DISTRITAL DE PIRA"
+        this.valorizacionService.generaIndiceEnDriveWord(indices,nombreObra,pieDePagina)
 
-        return this.valorizacionService.generaSeparadoresConIndice (indices,nombreObra,pieDePagina)
+    }
+
+
+    @Get('generaseparadores')
+    async createFoldersInWindows(@Req() req:Request){
+        const indices:Array<ISeparador> = [
+            {esSeparador:1,titulo:'0. MEJORAMIENTO Y AMPLIACION DEL SERVICIO DE AGUA POTABLE RURAL Y MEJORAMIENTO Y AMPLIACION DEL SERVICIO ALCANTARILLADO U OTRAS FORMAS DE DISPOSICION SANITARIA DE EXCRETAS EN LA LOCALIDAD DE COLTAO QUITAFLOR DEL DISTRITL DE PIRA DE LA PROVINCIA DE HUARAZ DEL DEPARTAMENTO DE ANCASH',columna:1},
+            {esSeparador:1,titulo:'1. AGUA Y SANEAMIENTO',columna:1},
+            {esSeparador:1,titulo:'1.1 ASPECTOS GENERALES',columna:2},
+            {esSeparador:1,titulo:'1.1.1 Resumen Ejecutivo',columna:3},
+
+        ]
+        return this.valorizacionService.generaSeparadores(indices)
     }
     
 

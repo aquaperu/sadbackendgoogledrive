@@ -15,7 +15,7 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier, INumberingOptions, ICharacterStyleOptions, IParagraphStyleOptions } from "docx";
+import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier, INumberingOptions, ICharacterStyleOptions, IParagraphStyleOptions, ISectionPropertiesOptions, ISectionOptions } from "docx";
 import { fixPathAssets, fixPathEspecificacionesTecnicas, fixPathFromSRC, pathEspecificacionesTecnicas, scanDirs } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
@@ -23,17 +23,18 @@ import { Hijo } from './polimorfismo/hijo';
 import { ToolsDocsService } from 'src/toolsdocx/services/tools.docs.service';
 import { IDefaultStylesOptions } from 'docx/build/file/styles/factory';
 import { prepareToParagraphsChildren } from '../functions/herramientas';
+import { serial } from 'src/shared/toolbox/promiseInSerial';
 
-
-
-
-
-export interface INombreColumna{
-    esNoCorresponde:number;
-    esSeparador:number
+export interface IIndice {
+    tituloSubtitulo: string;
+    indent: number;
+}
+export interface ISeparador{
+    esSeparador:number;
     titulo:string;
-    columna:number
-  }
+    columna:number;
+}
+
 @Injectable()
 export class ValorizacionService {
     googleFileId:string
@@ -224,145 +225,127 @@ export class ValorizacionService {
     
     }
   
-    public async generaSeparadoresConIndice(indices:INombreColumna[],nombreObra:string,pieDePagina:string){ 
+    public async generaSeparadores(indices){ 
 
         const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
-        const myseparador = fixPathAssets('separadorv4.png')  
-
-        let listaSeparadores =[];
-        let listaNoCorresponde = [];
+        const myseparador = fixPathAssets('separadorv4.png')
+        let listaSeparadores = [];
         let misarchivosSeparadores = [];
-        let misArchivosNoCorresponde:any;
 
-        listaSeparadores = indices.filter((val)=>{
+        listaSeparadores = indices.filter((val) => {
             return val.esSeparador === 1
         })
-        listaNoCorresponde = indices.filter((val)=>{
-            return val.esNoCorresponde === 1
-        })
-       
-        
-        
-        
-        for(let i=0;i<listaSeparadores.length;i++){
-            misarchivosSeparadores[i] = new PDFDocument({
-                size:"A4"
-            })
+
+        for (let i = 0; i < listaSeparadores.length; i++) {
+            misarchivosSeparadores[i] = new PDFDocument({ size: "A4" })
         }
-        //ES UN UNICO ARCHIVO SIEMPRE CON EL MISMO CONTENIDO, NO LLEVA IMAGEN
-        misArchivosNoCorresponde = new PDFDocument({
-                size:"A4"
-        })
-        
-        for(let j=0;j<misarchivosSeparadores.length;j++){
-            misarchivosSeparadores[j].image(myseparador,0,0,{width:594, height:841})//ancho y largo
+
+
+        for (let j = 0; j < misarchivosSeparadores.length; j++) {
+            misarchivosSeparadores[j].image(myseparador, 0, 0, { width: 594, height: 841 })//ancho y largo
             misarchivosSeparadores[j].moveDown();
             misarchivosSeparadores[j]
-             .font(fuentedeletra)
-             .fontSize(25)
-             .text(`${listaSeparadores[j].titulo}`,150,200,{align:'justify'})//150,265
+                .font(fuentedeletra)
+                .fontSize(25)
+                .text(`${listaSeparadores[j].titulo}`, 150, 200, { align: 'justify' })//150,265
         }
 
+        for (let k = 0; k < misarchivosSeparadores.length; k++) {
+            misarchivosSeparadores[k].end()
+        }
+
+        //para que funcione perfectamente tiene que tener esto: url => () => flecha gruesa dos veces.
+        //validar que el nombre de las carpetas no superen el 255/2 caracteres
         
-            //la hora de no corresponde no lleva imagen y la hoja en la que se imprime es de color blanco
-           
-            misArchivosNoCorresponde.moveDown();
-            misArchivosNoCorresponde
-             .font(fuentedeletra)
-             .fontSize(25)
-             .text(`NO CORRESPONDE`,200,200,{align:'justify'})//150,265
-        
-
-
-       for(let k =0;k<misarchivosSeparadores.length;k++){
-        misarchivosSeparadores[k].end()
-       }
-
-       
-        misArchivosNoCorresponde.end()
-       
-       
-       //para que funcione perfectamente tiene que tener esto: url => () => flecha gruesa dos veces.
-       const promiseCarpetas = listaSeparadores.map(separador => () =>this.googleDriveService.crearCarpetav1("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t",separador.titulo))
-       const serial = funcs =>
+        const promiseCarpetas = listaSeparadores.map(separador => () => this.googleDriveService.crearCarpetav1("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t", separador.titulo))
+        /*const serial = funcs =>
             funcs.reduce((promise, func) =>
-            promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
-            serial(promiseCarpetas)
-            .then(async(val:any[])=>{
-                
-                val.forEach((folderId,index)=>{
+                promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
+        */
+       
+        serial(promiseCarpetas)
+            .then(async (promiseFolders: any[]) => {
+
+                promiseFolders.forEach((folderId, index) => {
                     const carpetaContenedoraId = folderId.data.id
-                    console.log(carpetaContenedoraId)
-                    if(listaSeparadores[index].esNoCorresponde === 1){//cuando es no corresponde, entonces en la carpeta debe haber el nombre del separador y tambien el no corresponde
-                        console.log({"no correspnde el titulo":listaSeparadores[index].titulo})  
-                        this.generaSeparadoresEnPDF(`${listaSeparadores[index].titulo}-NC`,misArchivosNoCorresponde,carpetaContenedoraId)
-                       
+                    //validar que el numero de caracteres de la carpeta a crear no supere los 255/2 caracteres
+                    let nuevoTitulo:string = listaSeparadores[index].titulo
+                    if(nuevoTitulo.length > 254/2){
+                        nuevoTitulo = nuevoTitulo.substring(1,nuevoTitulo.length - 2)
                     }
-                    console.log({"correspnde al titulo":listaSeparadores[index].titulo}) 
-                        this.generaSeparadoresEnPDF(listaSeparadores[index].titulo,misarchivosSeparadores[index],carpetaContenedoraId)
-                        
-                       
+                    console.log(nuevoTitulo)
+
+                    this.generaSeparadoresEnPDF(nuevoTitulo, misarchivosSeparadores[index], carpetaContenedoraId)
+
+
                 })
             })
-            //gnera el indice en word
-                        //agregando los paragragraf
-                        let losparrafosDelIndice=[]
-                        //primer paraffo INDICE
-                        losparrafosDelIndice.push(new Paragraph({
-                            children: [
-                                new TextRun({
-                                text: "INDICE",
-                                bold: true,
-                                allCaps: true,
-                            })],
-                            spacing: {
-                                after: 200,
-                            },
-                            alignment:'center'
-                        }))
-             //insertando la cabecera
-             this.googleDriveService.descargaImagenArrayBuffer('1GQIxwW-AkRcBCYGuHv1eua7UNFcnEOaZ').then((cabeceraImagen:any)=>{
-                //el contenido
-                indices.map((val)=>{
-                    //losparrafosDelIndice.push(this.toolsDoc.addParagraph(val.columna,val.titulo))
-                    losparrafosDelIndice.push(this.toolsDoc.addParagraph({children:[new TextRun({text:val.titulo})],indent:{left:`${0.72*(val.columna-1)}cm`}}))
-                })
-                
-                const doc = new Document({
-                    sections: [
-                        {  
-                            headers: this.toolsDoc.setHeader(nombreObra), 
-                            footers: this.toolsDoc.setFooter(pieDePagina),
-                            properties: {
-                                page: {
-                                    margin: {
-                                        header:`0.5cm`,
-                                        footer:`0.50cm`,
-                                        //top: 137500/800,
-                                        //right: 137500/100,
-                                        bottom: `0.5cm`,
-                                        //left: 137500/100,
-                                    },
-                                },
-                            },
-                            children: losparrafosDelIndice,
-                        },
-                    ],
-                    //fonts: [{ name: "Pacifico", data: font, characterSet: CharacterSet.ANSI }],
-                });
-                 
-                //consolidando
-                Packer.toBuffer(doc).then(async(buffer) => {
-                   // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
-                   this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
-                }); 
-            })
+  }
+  public generaIndiceEnDriveWord(indices:Array<IIndice>,textoCabecera:string,textoPiePagina:string) {
+      let children = []
+      //primer paraffo INDICE
+      children.push(new Paragraph({
+        children: [
+            new TextRun({
+                text: "INDICE",
+                bold: true,
+                allCaps: true,
+            })],
+        spacing: {
+            after: 200,
+        },
+        alignment: 'center'
+    }))
+   
+      indices.forEach((parrafo)=>{
+        children.push(this.toolsDoc.addParagraph({children:[new TextRun({text:parrafo.tituloSubtitulo})],indent:{left:`${0.72*(parrafo.indent-1)}cm`}}))
+      })
+      let headers = this.toolsDoc.setHeader(textoCabecera)
+      let footers = this.toolsDoc.setFooter(textoPiePagina)
+      let properties: ISectionPropertiesOptions = {
+          page: {
+              margin: {
+                  header: `0.5cm`,
+                  footer: `0.5cm`,
+                  //top: 137500/800,
+                  //right: 137500/100,
+                  bottom: `0.5cm`,
+                  //left: 137500/100,
+              },
+          },
+      }
+
+      const doc = new File({
+        sections: [{children,footers,headers,properties}],
+        
+    });
+    //consolidando
+    Packer.toBuffer(doc).then(async(buffer) => {
+        // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
+        this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
+     }); 
+
   }
   public async tablaDeContenidos(parrafos:Array<any>){
     let numbering:INumberingOptions = require(fixPathFromSRC("toolsdocx/services/styles/numberingBullets.json"))
     let characterStyles:ICharacterStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/characterStyles.json"))
     let paragraphStyles:IParagraphStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/paragraphStyles.json"))
-    let default1:IDefaultStylesOptions = require(fixPathFromSRC("toolsdocx/services/styles/headingDefault.json")) 
+    let default1:IDefaultStylesOptions = require(fixPathFromSRC("toolsdocx/services/styles/headingDefault.json"))
+    
+    /*let headers = this.toolsDoc.setHeader(nombreObra)
+    let footers = this.toolsDoc.setFooter(pieDePagina)
+    let properties:ISectionPropertiesOptions = {
+        page: {
+            margin: {
+                header:`0.5cm`,
+                footer:`0.50cm`,
+                //top: 137500/800,
+                //right: 137500/100,
+                bottom: `0.5cm`,
+                //left: 137500/100,
+            },
+        },
+    }*/
     
     let children = prepareToParagraphsChildren(parrafos)
     children = children.map((element)=>{
@@ -384,113 +367,9 @@ export class ValorizacionService {
     });
 
     Packer.toBuffer(doc).then(async(buffer) => {
-        // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
-        this.generaIndiceEnWord(buffer,"mark",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
+        this.generaIndiceEnWord(buffer,"especificaciones tecnicas",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
      }); 
 
-  }
-  public async bookmark(){
-    
-
-    let joder = new TextRun("unooo")
-
-    const doc = new File({
-        features: {
-            updateFields: true,
-        },
-        styles: {
-            paragraphStyles: [
-                {
-                    id: "MySpectacularStyle",
-                    name: "My Spectacular Style",
-                    basedOn: "Heading1",
-                    next: "Heading1",
-                    quickFormat: true,
-                    run: {
-                        italics: true,
-                        color: "990000",
-                    },
-                },
-            ],
-            default:{
-                heading2:{
-                    run: {
-                        font: "Calibri",
-                        size: 26,
-                        bold: true,
-                    },
-                    paragraph: {
-                        spacing: { line: 340 },//espacio entre lineas de texto
-                        alignment: AlignmentType.JUSTIFIED,
-                        rightTabStop: TabStopPosition.MAX,
-                        leftTabStop: 453.543307087,
-                        indent: { left: convertInchesToTwip(0.5) },
-                    },
-                },
-                heading3:{
-                    run:{
-                        font: "Calibri",
-                        size: 26,//13 en word
-                        bold: true,
-                    },
-                    paragraph:{
-                        spacing: { line: 340 },//espacio entre lineas de texto
-                        alignment: AlignmentType.JUSTIFIED,
-                        rightTabStop: TabStopPosition.MAX,
-                        leftTabStop: 453.543307087,
-                        indent: { left: convertInchesToTwip(0.5) },
-                    }
-                }
-            }
-        },
-        sections: [
-            {
-                children: [
-                    new TableOfContents("Summary", {
-                        hyperlink: true,
-                        headingStyleRange: "1-5",
-                        stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
-                    }),
-                    new Paragraph({
-                        text: "Header #1",
-                        heading: HeadingLevel.HEADING_1,
-                        pageBreakBefore: true,
-                    }),
-                    new Paragraph("I'm a little text very nicely written.'"),
-                    new Paragraph({
-                        text: "Header #2",
-                        heading: HeadingLevel.HEADING_1,
-                        pageBreakBefore: true,
-                    }),
-                    new Paragraph({
-                        children:[
-                            new TextRun("unooo"),new TextRun("doosss")
-
-                        ]
-                    }),
-                    new Paragraph({
-                        text: "Header #2.1",
-                        heading: HeadingLevel.HEADING_2,
-                    }),
-                    new Paragraph({
-                        text:"I'm a another text very nicely written.'",
-                        heading:HeadingLevel.HEADING_2
-                    }),
-                    new Paragraph({
-                        text: "My Spectacular Style #1",
-                        style: "MySpectacularStyle",
-                        pageBreakBefore: true,
-                    }),
-                ],
-            },
-        ],
-    });
-    
-    
-    Packer.toBuffer(doc).then(async(buffer) => {
-        // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
-        this.generaIndiceEnWord(buffer,"mark",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
-     }); 
   }
   
 
@@ -714,38 +593,6 @@ export const contenido = {
 
 }
 
-export const styleHeaderIndexWord = ()=>{
-    return {
-        paragraphStyles: [
-        {
-            id: "normalPara",
-            name: "Normal Para",
-            basedOn: "Normal",
-            next: "Normal",
-            quickFormat: true,
-            run: {
-                color: "34aadc",
-                font: "Calibri",
-                size: 26,
-                bold: true,
-                //italics: true,
-            },
-            paragraph: {
-                alignment: AlignmentType.CENTER,
-                //spacing: { line: 276, before: 20 * 72 * 0.1, after: 20 * 72 * 0.05 },
-                //rightTabStop: TabStopPosition.MAX,
-                //leftTabStop: 453.543307087,
-                //indent: { left: convertInchesToTwip(0.5) },
-                /*numbering: {
-                    reference: "ref1",
-                    instance: 0,
-                    level: 0,
-                }*/
-            },
-        }]}
-
-}
-
 export const partidas = 
     [
         {
@@ -785,19 +632,5 @@ export const partidas =
             cantidad:""
         }
     ]
-
- 
-export interface IConf {
-    text:string;
-    bold?:boolean;
-    break?:number;
-    //se pueden definir mas opciones para el texto
-    //dependerá de lo que se necesite
-}
-
- export const veamos = (configuracion:IConf)=>{
-    
-    return new TextRun(configuracion)
- }
 
  

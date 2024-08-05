@@ -23,6 +23,7 @@ enum Eheading{
 
   }
 interface IAddParagraph {
+    
     children: ParagraphChild[],
     heading?:Eheading,
     numbering?:{
