@@ -253,7 +253,6 @@ export class ValorizacionService {
        
         serial(promiseCarpetas)
             .then(async (promiseFolders: any[]) => {
-
                 promiseFolders.forEach((folderId, index) => {
                     const carpetaContenedoraId = folderId.data.id
                     //validar que el numero de caracteres de la carpeta a crear no supere los 255/2 caracteres
@@ -316,22 +315,7 @@ export class ValorizacionService {
     let characterStyles:ICharacterStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/characterStyles.json"))
     let paragraphStyles:IParagraphStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/paragraphStyles.json"))
     let default1:IDefaultStylesOptions = require(fixPathFromSRC("toolsdocx/services/styles/headingDefault.json"))
-    
-    /*let headers = this.toolsDoc.setHeader(nombreObra)
-    let footers = this.toolsDoc.setFooter(pieDePagina)
-    let properties:ISectionPropertiesOptions = {
-        page: {
-            margin: {
-                header:`0.5cm`,
-                footer:`0.50cm`,
-                //top: 137500/800,
-                //right: 137500/100,
-                bottom: `0.5cm`,
-                //left: 137500/100,
-            },
-        },
-    }*/
-    
+        
     let children = prepareToParagraphsChildren(parrafos)
     children = children.map((element)=>{
         return this.toolsDoc.addParagraph(element)
@@ -364,29 +348,18 @@ export class ValorizacionService {
         let carpetaContenedoraId:string
         let evidenciasFotograficasId:any[]=[]
         try {
-          
             payload = await this.buscaMesSeleccionadoFolderIdPorMesSeleccionado('65d91ea6cc44ee97bd625b0d','Diciembre')
             carpetaContenedoraId = payload.periodos[0].mesSeleccionadoFolderId;
             evidenciasFotograficasId = payload.periodos[0].panelFotografico.map((evidenciaFotografica:any,index:number)=>
                     {
                         return evidenciaFotografica.urlFoto.split('&id=',2)[1];
                     })
-         
-
             const funcs = evidenciasFotograficasId.map(url => () => this.googleDriveService.descargaImagenArrayBuffer(url))
-            /*
-            * serial executes Promises sequentially.
-            * @param {funcs} An array of funcs that return promises.
-            * @example
-            * const urls = ['/url1', '/url2', '/url3']
-            * serial(urls.map(url => () => $.ajax(url)))
-            *     .then(console.log.bind(console))
-            */
             const serial = funcs =>
             funcs.reduce((promise, func) =>
             promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
             //fin de la funcion
-
+-
             serial(funcs)
             .then(async(val:any[])=>{
                 
@@ -438,11 +411,7 @@ export class ValorizacionService {
       }
       private async generaBookmarkEnWord(buffer:Uint8Array,nombreArchivo:string,carpetaContenedoraId:string){
         const docid = await this.googleDocService.creaDocumento(buffer,nombreArchivo,carpetaContenedoraId)//crea un nuevo archivo en google
-
       }
-      
-  
-
 }
 
 
