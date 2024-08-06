@@ -226,42 +226,30 @@ export class ValorizacionService {
     }
   
     public async generaSeparadores(indices){ 
-
         const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
         const myseparador = fixPathAssets('separadorv4.png')
         let listaSeparadores = [];
         let misarchivosSeparadores = [];
-
         listaSeparadores = indices.filter((val) => {
             return val.esSeparador === 1
         })
+        misarchivosSeparadores = listaSeparadores.map((ele)=>{
+            let jo =  new PDFDocument({ size: "A4" })
+            jo.image(myseparador, 0, 0, { width: 594, height: 841 }).moveDown().font(fuentedeletra)
+            .fontSize(25)
+            .text(`${ele.titulo}`, 150, 200, { align: 'justify' }).end()
+        return jo
+        })    
+                    
+        const promiseCarpetas = listaSeparadores.map(separador => () => 
+            {
+                if(separador.titulo.length > 254/2){
+                    separador.titulo = separador.titulo.substring(0,separador.titulo.length - 255/3)
+                }
 
-        for (let i = 0; i < listaSeparadores.length; i++) {
-            misarchivosSeparadores[i] = new PDFDocument({ size: "A4" })
-        }
-
-
-        for (let j = 0; j < misarchivosSeparadores.length; j++) {
-            misarchivosSeparadores[j].image(myseparador, 0, 0, { width: 594, height: 841 })//ancho y largo
-            misarchivosSeparadores[j].moveDown();
-            misarchivosSeparadores[j]
-                .font(fuentedeletra)
-                .fontSize(25)
-                .text(`${listaSeparadores[j].titulo}`, 150, 200, { align: 'justify' })//150,265
-        }
-
-        for (let k = 0; k < misarchivosSeparadores.length; k++) {
-            misarchivosSeparadores[k].end()
-        }
-
-        //para que funcione perfectamente tiene que tener esto: url => () => flecha gruesa dos veces.
-        //validar que el nombre de las carpetas no superen el 255/2 caracteres
-        
-        const promiseCarpetas = listaSeparadores.map(separador => () => this.googleDriveService.crearCarpetav1("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t", separador.titulo))
-        /*const serial = funcs =>
-            funcs.reduce((promise, func) =>
-                promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
-        */
+            return this.googleDriveService.crearCarpetav1("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t", separador.titulo)
+            } 
+    )
        
         serial(promiseCarpetas)
             .then(async (promiseFolders: any[]) => {
@@ -270,14 +258,11 @@ export class ValorizacionService {
                     const carpetaContenedoraId = folderId.data.id
                     //validar que el numero de caracteres de la carpeta a crear no supere los 255/2 caracteres
                     let nuevoTitulo:string = listaSeparadores[index].titulo
+                    //validamos que el titulo de la parpeta asi como la del archivo no superes enre los dos los 255 caracteres
                     if(nuevoTitulo.length > 254/2){
-                        nuevoTitulo = nuevoTitulo.substring(1,nuevoTitulo.length - 2)
-                    }
+                        nuevoTitulo = nuevoTitulo.substring(0,nuevoTitulo.length - 255/3)}
                     console.log(nuevoTitulo)
-
                     this.generaSeparadoresEnPDF(nuevoTitulo, misarchivosSeparadores[index], carpetaContenedoraId)
-
-
                 })
             })
   }

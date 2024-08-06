@@ -23,7 +23,6 @@ enum Eheading{
 
   }
 interface IAddParagraph {
-    
     children: ParagraphChild[],
     heading?:Eheading,
     numbering?:{
@@ -77,10 +76,7 @@ export class ToolsDocsService  {
                 new Paragraph({children:[
                     new TextRun({text:textFooter,color:"007aff",bold:true})
                 ]
-
-                })
-                    
-                
+                })               
             ]
         })
        }
