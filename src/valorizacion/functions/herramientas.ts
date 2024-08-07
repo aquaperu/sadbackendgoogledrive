@@ -1,5 +1,7 @@
-import { Paragraph, StyleLevel, TableOfContents, TextRun } from "docx"
-import { fixPathEspecificacionesTecnicas, pathEspecificacionesTecnicas, scanDirs } from "src/shared/toolbox/fixPath"
+import { HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, Paragraph, StyleLevel, TableOfContents, TextRun, TextWrappingSide, TextWrappingType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertMillimetersToTwip } from "docx"
+import { fixPathAssets, fixPathEspecificacionesTecnicas, pathEspecificacionesTecnicas, scanDirs } from "src/shared/toolbox/fixPath"
+import * as fs from 'fs'
+import { OutlineOptions } from "docx/build/file/drawing/inline/graphic/graphic-data/pic/shape-properties/outline/outline"
 
 let todosLosParrafos:any[] = []
 export function prepareToParagraphsChildren (parrafos:Array<any>):Array<any> {
@@ -50,17 +52,27 @@ let jo = todosLosParrafos
 let llena:any[] = []
 
 
-
+let joder = fixPathAssets("logo_ferminv1.png")
 jo.map((texSimple)=>{
     if(extraeConfigDeJson(texSimple) !== undefined || extraeDataDeJson(texSimple) !== undefined){
         let options = extraeConfigDeJson(texSimple) 
         let children:any[] =  extraeDataDeJson(texSimple)
-        console.log(children)
+        
          children = children.map((el)=>{
-            return new TextRun(el)
+        if(el.text === "imagen"){
+          let img = fixPathAssets(el.img)
+          let data = fs.readFileSync(img)
+          let transformation = el.transformation;
+          let outline = el.outline
+          return new ImageRun({data,transformation,outline})
+        } else{
+          return new TextRun(el)
+        }  
+          
         })
         let parrafo = {children,...options}
         //llena.push(agregaParrafo(parrafo))
+       // console.log(children)
         llena.push(parrafo)
     }
 })

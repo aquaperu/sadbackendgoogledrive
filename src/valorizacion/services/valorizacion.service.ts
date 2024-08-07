@@ -15,7 +15,7 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier, INumberingOptions, ICharacterStyleOptions, IParagraphStyleOptions, ISectionPropertiesOptions, ISectionOptions } from "docx";
+import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier, INumberingOptions, ICharacterStyleOptions, IParagraphStyleOptions, ISectionPropertiesOptions, ISectionOptions, convertMillimetersToTwip } from "docx";
 import { fixPathAssets, fixPathEspecificacionesTecnicas, fixPathFromSRC, pathEspecificacionesTecnicas, scanDirs } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
@@ -328,7 +328,26 @@ export class ValorizacionService {
         headingStyleRange: "1-5",
         stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
     }),)
+    let jo = fixPathAssets("logo_ferminv1.png")
+    children.push(new Paragraph({
+        children:[new ImageRun({
+            data:fs.readFileSync(jo),
+            transformation:{
+                height:100,
+                width:100
+            },
+            
+                            outline: {
+                                cap:"SQUARE",
+                                type: "solidFill",
+                                solidFillType: "rgb",
+                                value: "0000FF",
+                                width: convertMillimetersToTwip(600),
 
+                            }
+        })]
+    }))
+//console.log(children)
     const doc = new File({
         numbering,
         features: {updateFields: true},styles: {characterStyles,paragraphStyles,default:default1},

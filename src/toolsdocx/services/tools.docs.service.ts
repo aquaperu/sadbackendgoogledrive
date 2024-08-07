@@ -64,6 +64,7 @@ export class ToolsDocsService  {
     addParagraph(parrafo:IAddParagraph){
         return new Paragraph(parrafo)
     }
+    
     setFooter(textFooter:string){
     return {
         default: new Footer({ // The standard default footer on every page or footer on odd pages when the 'Different Odd & Even Pages' option is activated
