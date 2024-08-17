@@ -13,7 +13,9 @@
         "name": "Strong",
         "basedOn": "Normal",
         "run": {
-            "bold": true
+            "bold": true,
+            "color": "ffcc00",
+            "italics": true
         }
     }
 ]

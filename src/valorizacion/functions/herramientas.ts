@@ -52,7 +52,7 @@ let jo = todosLosParrafos
 let llena:any[] = []
 
 
-let joder = fixPathAssets("logo_ferminv1.png")
+
 jo.map((texSimple)=>{
     if(extraeConfigDeJson(texSimple) !== undefined || extraeDataDeJson(texSimple) !== undefined){
         let options = extraeConfigDeJson(texSimple) 

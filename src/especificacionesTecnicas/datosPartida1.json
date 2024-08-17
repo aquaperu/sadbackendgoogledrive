@@ -5,21 +5,19 @@
     },
     {
         "data":[
-            {"text":"Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 corta","break":1 },{"text":"imagen","img":"logo_ferminv1.png",
-        "transformation":{
-            "height":100,
-            "width":100    
-        },
-        "outline": {
-            "cap":"FLAT",
-            "type": "solidFill",
-            "solidFillType": "rgb",
-            "value": "0000FF",
-            "width": 3000
+            {"text":" ","break":1},
+            {"text":"imagen","img":"logo_ferminv1.png","transformation": {
+                "width": 25,
+                "height": 25
+            },"break":1},
+            {"text":"Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1 Se trata de la definicion del titulo de la partida 1","break":2},
+            {"text":"imagen","img":"logo_ferminv1.png","transformation": {
+                "width": 50,
+                "height": 50
+            },"break":1},
 
-        }
-        
-        }, {"text":"my nuevo estilo","bold":true}],
+            {"text":"machazo","style":"strong","break":1}
+        ],
         "config":{
             "indent":{
                 "left":190
