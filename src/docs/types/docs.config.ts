@@ -21,7 +21,7 @@ interface IFloating{
 }
 
 @Injectable()
-export class ToolsDocsConfig {
+export class DocsConfig {
     //configuracion global para los documentos en word
     fontFile?:string; //estilo de fuente
     

@@ -305,14 +305,8 @@ public async crearCarpeta(idForGoogleElement:string,nameForGoogleElement:string)
         } catch (error) {
           console.error('Failed to export PDF', error);
         }
-
-       
-
-
-
-
-        
   }
+  
   
     
    

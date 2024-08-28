@@ -1,30 +1,30 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { DynamicModule } from '@nestjs/common';
-import { ToolsDocsService } from './services/tools.docs.service';
-import { ToolsDocsConfig } from './types/tools.docs.config';
+import { DocsService } from './services/docs.service';
+import { DocsConfig } from './types/docs.config';
 
 @Module({
     imports: [HttpModule],
 })
-export class ToolsDocsModule {
+export class DocsModule {
     /**
    *
-   * @param googleDriveConfig your config file/all config fields
+   * @param docsConfig your config file/all config fields
    * @param googleDriveFolderId your Google Drive folder id
    */
   static register(
-    docsConfig: ToolsDocsConfig,
+    docsConfig: DocsConfig,
   ): DynamicModule {
     return {
-      module: ToolsDocsModule,
+      module: DocsModule,
       global: true,
       providers: [
-        ToolsDocsService,
+        DocsService,
         { provide: "CONFIG", useValue: docsConfig },
       ],
       exports: [
-        ToolsDocsService,
+        DocsService,
         { provide: "CONFIG", useValue: docsConfig },
       ],
     };

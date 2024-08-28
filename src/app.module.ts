@@ -17,9 +17,9 @@ import { GoogleDriveConfig } from './googledrivecasa/types/googledriveconfig';
 import { ObraModule } from './obra/obra.module';
 import { ValorizacionModule } from './valorizacion/valorizacion.module';
 import { PresupuestoModule } from './presupuesto/presupuesto.module';
-import { ToolsDocsModule } from './toolsdocx/tools.docs.module';
+import { DocsModule } from './docs/docs.module';
 import { fixPathAssets } from './shared/toolbox/fixPath';
-import { ToolsDocsConfig } from './toolsdocx/types/tools.docs.config';
+import { DocsConfig } from './docs/types/docs.config';
 
 @Module({
   imports: [
@@ -55,7 +55,8 @@ import { ToolsDocsConfig } from './toolsdocx/types/tools.docs.config';
     }as GoogleDriveConfig,
     '1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t',//carpeta base SAD
     ),
-    ToolsDocsModule.register({
+    DocsModule.register({
+      //configuracion por defecto
       fontFile:fixPathAssets('AmoeraRegular.otf'),
       backgroundSeparatorFile:fixPathAssets('separadorv4.png'),
       headerIndexImageFileLeft:fixPathAssets('escudofermin.png'),
@@ -72,7 +73,7 @@ import { ToolsDocsConfig } from './toolsdocx/types/tools.docs.config';
 
       footerFloatingPositionLineImageFile:{horizontalPosition:{offset:3500},verticalPosition:{offset:3500},wrap:{side:"bothSides",type:2}}
     
-    }as ToolsDocsConfig,
+    }as DocsConfig,
   
   ),
     ConfigModule.forRoot(),

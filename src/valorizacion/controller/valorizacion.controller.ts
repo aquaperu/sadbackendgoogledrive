@@ -104,6 +104,23 @@ export class ValorizacionController {
 
         return priodoValoRegistro
     }
+    @UseInterceptors(
+        FileInterceptor('file')
+      )
+    @Post('subearchivo')
+    async subeArchivo(@UploadedFile() file:Express.Multer.File,
+    @Body() agregaEvidenciaFotografica:any,
+    @Headers('authorization') autorization:string){
+        //: Promise<CreateCatDto>
+                   
+              
+        if(!file){
+            throw new BadRequestException("file is not a imagen")
+        }
+        this.valorizacionService
+
+    }
+    
   
       @UseInterceptors(
         FileInterceptor('file')

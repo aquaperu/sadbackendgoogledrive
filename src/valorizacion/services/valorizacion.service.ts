@@ -20,7 +20,7 @@ import { fixPathAssets, fixPathEspecificacionesTecnicas, fixPathFromSRC, pathEsp
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
 import { Hijo } from './polimorfismo/hijo';
-import { ToolsDocsService } from 'src/toolsdocx/services/tools.docs.service';
+import { DocsService } from 'src/docs/services/docs.service';
 import { IDefaultStylesOptions } from 'docx/build/file/styles/factory';
 import { prepareToParagraphsChildren } from '../functions/herramientas';
 import { serial } from 'src/shared/toolbox/promiseInSerial';
@@ -49,7 +49,7 @@ export class ValorizacionService {
         //probando directamente como servicio
         @Inject(IPADRE_REPOSITORY) private iPadreRepository:IPadreRepository,
         private myhijo:Hijo,
-        private toolsDoc:ToolsDocsService
+        private toolsDoc:DocsService
 
     ){}
     async saludaHijo(){

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ToolsDocsConfig } from "../types/tools.docs.config";
+import { DocsConfig } from "../types/docs.config";
 import { Footer, Header, ImageRun, LevelFormat, Paragraph, TextRun, ParagraphChild, UniversalMeasure, PositiveUniversalMeasure } from "docx";
 import * as fs from 'fs'
 
@@ -36,12 +36,17 @@ interface IAddParagraph {
 }
 
 @Injectable()
-export class ToolsDocsService  {
+export class DocsService  {
     constructor(
-        @Inject("CONFIG") private config: ToolsDocsConfig,
+        @Inject("CONFIG") private config: DocsConfig,
     ){}
-    setHeaderIndexImageFileRight(path:string){
-        this.config.headerIndexImageFileRight = path
+    /**
+     * @description Setea la imagen de la derecha de la hoja
+     * @param fileImageName El nombre del archivo con el que fue subido
+     */
+    setHeaderIndexImageFileRight(fileImageName:string){
+        
+        this.config.headerIndexImageFileRight = fileImageName
     }
     numberingAndBullets(reference:string){
         return {
