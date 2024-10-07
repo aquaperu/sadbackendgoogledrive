@@ -6,6 +6,7 @@ import { GoogleDocService } from './services/googledoc.service';
 import { GoogleDriveService } from './services/googledrive.service';
 
 import { GoogleDriveConfig } from './types/googledriveconfig';
+import { GoogleXlsxService } from './services/googlexlsx.service';
 
 export const enum EFOLDERSIDS {
   CONFIG = "CONFIG",
@@ -40,6 +41,7 @@ export class GoogledrivecasaModule {
         GoogleAutenticarService,
         GoogleDriveService,
         GoogleDocService,
+        GoogleXlsxService,
         { provide: EFOLDERSIDS.CONFIG, useValue: googleDriveConfig },
        
         { provide: EFOLDERSIDS.FOLDERBASEID, useValue: googleDriveBaseFolderId },
@@ -49,6 +51,8 @@ export class GoogledrivecasaModule {
         GoogleAutenticarService,
         GoogleDriveService,
         GoogleDocService,
+        GoogleXlsxService,
+
         { provide: EFOLDERSIDS.CONFIG, useValue: googleDriveConfig },
      
         { provide: EFOLDERSIDS.FOLDERBASEID, useValue: googleDriveBaseFolderId },

@@ -13,6 +13,7 @@ export class GoogleAutenticarService{
   public drive;
   public docs;
   public script;
+  public xlsx;
   constructor(
     @Inject(EFOLDERSIDS.CONFIG) private config: GoogleDriveConfig,
     @Inject(EFOLDERSIDS.FOLDERBASEID) private googleDriveFolderBaseId: string,
@@ -28,12 +29,15 @@ export class GoogleAutenticarService{
         'https://www.googleapis.com/auth/documents',
         'https://www.googleapis.com/auth/documents.readonly',
         'https://www.googleapis.com/auth/drive.file',
-        'https://www.googleapis.com/auth/drive.metadata.readonly'
+        'https://www.googleapis.com/auth/drive.metadata.readonly',
+        'https://www.googleapis.com/auth/spreadsheets',
+        'https://www.googleapis.com/auth/spreadsheets.readonly'
        
       ],
     });
     this.drive = google.drive({ version: 'v3', auth });
     this.docs = google.docs({ version: 'v1', auth })
+    this.xlsx =  google.sheets({version:'v4',auth})
     
     
     
