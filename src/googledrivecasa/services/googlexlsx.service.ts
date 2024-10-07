@@ -1,4 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { GoogleAutenticarService } from './googleautenticar.service';
+import { Observable, catchError, from, map, throwError } from 'rxjs';
 
 interface GeneralObject{
     [key:string]:any
@@ -12,7 +14,7 @@ export class GoogleXlsxService extends GoogleAutenticarService {
         const spreadsheetId = '13EvM-Q8-lCkVKHaxf8a_oxr_Um7A4sFbFarIdomhJTM'
         const range ='Characters'
         try {
-            const res:Observable<any> = this.spreadsheetsxls.spreadsheets.values.get({spreadsheetId,range})
+            const res:Observable<any> = this.xlsx.spreadsheets.values.get({spreadsheetId,range})
             
             return res
           } catch (err) {
@@ -28,7 +30,7 @@ export class GoogleXlsxService extends GoogleAutenticarService {
   
         const resource = {values: dataInput};
           try {
-            const res = await this.spreadsheetsxls.spreadsheets.values.append({
+            const res = await this.xlsx.spreadsheets.values.append({
               spreadsheetId,range,valueInputOption,resource
             })
             return res.status
