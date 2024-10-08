@@ -20,6 +20,7 @@ import { PresupuestoModule } from './presupuesto/presupuesto.module';
 import { DocsModule } from './docs/docs.module';
 import { fixPathAssets } from './shared/toolbox/fixPath';
 import { DocsConfig } from './docs/types/docs.config';
+import { AsistenciaModule } from './asistencia/asistencia.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { DocsConfig } from './docs/types/docs.config';
        
     }as GoogleDriveConfig,
     '1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t',//carpeta base SAD
+    '13EvM-Q8-lCkVKHaxf8a_oxr_Um7A4sFbFarIdomhJTM'//spreadsheetId
     ),
     DocsModule.register({
       //configuracion por defecto
@@ -81,6 +83,7 @@ import { DocsConfig } from './docs/types/docs.config';
     ObraModule,
     ValorizacionModule,
     PresupuestoModule,
+    AsistenciaModule,
     
 
 

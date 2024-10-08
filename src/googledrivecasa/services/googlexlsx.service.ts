@@ -9,6 +9,30 @@ interface GeneralObject{
 @Injectable()
 export class GoogleXlsxService extends GoogleAutenticarService {
     
+  public createSheet(spreadsheetId:string,nameSheet:string){
+    
+    try {
+            const res:Observable<any> = this.xlsx.spreadsheets.batchUpdate({
+              spreadsheetId: spreadsheetId,
+              requestBody: {
+                requests: [{
+                  addSheet: {
+                    properties: {
+                      title: nameSheet,
+                    }
+                  }
+                }]
+              }
+            })
+            console.log(this.googleXlsxSpreadSheetId)
+            
+            return res
+        
+          } catch (err) {
+            // TODO (developer) - Handle exception
+            throw err;
+          }
+    }
     public getRow():Observable<string[][]>  {
         //const service = this.spreadsheetsxls
         const spreadsheetId = '13EvM-Q8-lCkVKHaxf8a_oxr_Um7A4sFbFarIdomhJTM'
@@ -61,8 +85,8 @@ export class GoogleXlsxService extends GoogleAutenticarService {
   public getActive<T>(
     spreadsheetId: string,
     worksheetName: string,
-    attributesMapping: object | string[],
-    isActiveColumnName: string = 'is_active',
+    attributesMapping: GeneralObject | string[],
+    isActiveColumnName: string = 'Active',
     activeValues: string[] | string = null
   ): Observable<T[]>  {
 
@@ -75,12 +99,12 @@ export class GoogleXlsxService extends GoogleAutenticarService {
     return this.getRows(spreadsheetId, worksheetName).pipe(
       map((rows: any) =>
         this.rowsToEntries(rows.data.values) 
-          .filter((obj: object) =>
+          .filter((obj: GeneralObject) =>
             
-            activeValues.includes(obj[isActiveColumnName].toLowerCase()
+            activeValues.includes(obj[isActiveColumnName]//.toLowerCase()
           ))
           .map(
-            (entry: object) =>
+            (entry: GeneralObject) =>
               this.getObjectFromEntry(entry, attributesMapping) as T
           )
          
@@ -101,10 +125,10 @@ export class GoogleXlsxService extends GoogleAutenticarService {
     );
   }
 
-  public rowsToEntries(rows: string[][]): object[] {
+  public rowsToEntries(rows: string[][]): GeneralObject[] {
     const columns: Array<string> = rows[0].map(this.cleanColumnName);
     return rows.slice(1).map((row: Array<string>) =>
-      columns.reduce((entry: object, columnName: string, idx: number) => {
+      columns.reduce((entry: GeneralObject, columnName: string, idx: number) => {
         entry[columnName] = row.length > idx ? row[idx] : '';
         return entry;
       }, {})
@@ -115,7 +139,7 @@ export class GoogleXlsxService extends GoogleAutenticarService {
     return columnName.trim();
   }
 
-  private arrayToObject(array: string[]): object {
+  private arrayToObject(array: string[]): GeneralObject {
     return array.reduce((acc, cur) => {
       acc[cur] = cur;
       return acc;
@@ -123,8 +147,8 @@ export class GoogleXlsxService extends GoogleAutenticarService {
   }
 
   private getObjectFromEntry(
-    entry: object,
-    attributesMapping: object | string[]
+    entry: GeneralObject,
+    attributesMapping: GeneralObject | string[]
   ): unknown {
     if (Array.isArray(attributesMapping)) {
       attributesMapping = this.arrayToObject(attributesMapping);
@@ -134,11 +158,11 @@ export class GoogleXlsxService extends GoogleAutenticarService {
   }
 
   private getObjectFromEntryObject(
-    entry: object,
-    attributesMapping: object,
+    entry: GeneralObject,
+    attributesMapping: GeneralObject,
     columnNamePrefix: string = ''
-  ): object {
-    const obj: object = {};
+  ): GeneralObject {
+    const obj: GeneralObject = {};
     for (const attr in Object(attributesMapping)) {
       if (
         attributesMapping.hasOwnProperty(attr) &&
@@ -176,16 +200,16 @@ export class GoogleXlsxService extends GoogleAutenticarService {
     return obj;
   }
 
-  private getValueFromEntry(entry: object, attribute: string): string {
+  private getValueFromEntry(entry: GeneralObject, attribute: string): string {
     attribute = this.cleanColumnName(attribute);
-    if (entry.hasOwnProperty(attribute)) {
+   // if (entry.hasOwnProperty(attribute)) {
       return entry[attribute];
-    } else {
+    /*} else {
       return null;
-    }
+    }*/
   }
 
-  private getListFromEntry(entry: object, attribute: string): string[] {
+  private getListFromEntry(entry: GeneralObject, attribute: string): string[] {
     const list: string[] = [];
 
     let i = 1;

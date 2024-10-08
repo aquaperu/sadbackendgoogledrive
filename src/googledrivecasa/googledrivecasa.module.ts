@@ -12,7 +12,8 @@ export const enum EFOLDERSIDS {
   CONFIG = "CONFIG",
   FOLDERBASEID = "FOLDERBASEID",
   FOLDERLOGOSID = "FOLDERLOGOSID", 
-  FOLDERARCHIVOSID = "FOLDERARCHIVOSID"
+  FOLDERARCHIVOSID = "FOLDERARCHIVOSID",
+  CONFIG_SHEETID_FILE="CONFIG_SHEETID_FILE"
 
 }
 
@@ -33,6 +34,7 @@ export class GoogledrivecasaModule {
     googleDriveBaseFolderId: string,//carpeta base en donde se lojara todos los archivos de los usuarios
     //googleDriveLogosFolderId: string,//carpeta donde se alojará el logo del usuario
     //googleDriveArchivosFolderId: string,//carpeta donde se alojara toda la gestion documentaria del usuario
+    googleSpreadsheetId:string,
   ): DynamicModule {
     return {
       module: GoogledrivecasaModule,
@@ -45,6 +47,7 @@ export class GoogledrivecasaModule {
         { provide: EFOLDERSIDS.CONFIG, useValue: googleDriveConfig },
        
         { provide: EFOLDERSIDS.FOLDERBASEID, useValue: googleDriveBaseFolderId },
+        {provide:EFOLDERSIDS.CONFIG_SHEETID_FILE,useValue:googleSpreadsheetId}
         
       ],
       exports: [
@@ -56,6 +59,7 @@ export class GoogledrivecasaModule {
         { provide: EFOLDERSIDS.CONFIG, useValue: googleDriveConfig },
      
         { provide: EFOLDERSIDS.FOLDERBASEID, useValue: googleDriveBaseFolderId },
+        {provide:EFOLDERSIDS.CONFIG_SHEETID_FILE,useValue:googleSpreadsheetId}
       
       ],
     };

@@ -17,6 +17,7 @@ export class GoogleAutenticarService{
   constructor(
     @Inject(EFOLDERSIDS.CONFIG) private config: GoogleDriveConfig,
     @Inject(EFOLDERSIDS.FOLDERBASEID) private googleDriveFolderBaseId: string,
+    @Inject(EFOLDERSIDS.CONFIG_SHEETID_FILE) public googleXlsxSpreadSheetId: string,
   ) {
     const auth = new google.auth.GoogleAuth({
       credentials: {
