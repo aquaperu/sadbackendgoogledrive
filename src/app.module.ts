@@ -61,7 +61,7 @@ import { AsistenciaModule } from './asistencia/asistencia.module';
       //configuracion por defecto
       fontFile:fixPathAssets('AmoeraRegular.otf'),
       backgroundSeparatorFile:fixPathAssets('separadorv4.png'),
-      headerIndexImageFileLeft:fixPathAssets('escudofermin.png'),
+      headerIndexImageFileLeft:fixPathAssets('logo_aquaperu.png'),
       headerIndexImageFileRight: fixPathAssets('escudo_pira.png'),
       
       headerIndexLineImageFile:fixPathAssets('linea.png'),
