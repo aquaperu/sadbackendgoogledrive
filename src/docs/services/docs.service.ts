@@ -108,7 +108,7 @@ export class DocsService  {
                 ),
                 new Paragraph({//linea
                     children:[
-                        new ImageRun({data: fs.readFileSync(this.config.headerIndexLineImageFile),transformation:{width:1,height:600,flip: {horizontal: true},rotation: 90},
+                        new ImageRun({data: fs.readFileSync(this.config.headerIndexLineImageFile),transformation:{width:2,height:600,flip: {horizontal: true},rotation: 90},
                         floating: this.config.headerFloatingPositionLineImageFile})]}
                 ),
                         
