@@ -54,8 +54,8 @@ import { AsistenciaModule } from './asistencia/asistencia.module';
       "universe_domain": "googleapis.com"
        
     }as GoogleDriveConfig,
-    '1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t',//carpeta base SAD
-    '13EvM-Q8-lCkVKHaxf8a_oxr_Um7A4sFbFarIdomhJTM'//spreadsheetId
+    '1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt',//carpeta base SAD 1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt
+    '1VF7VElO8qSTAWaxIv5ovY8cOhSPr0oZ2O6wYIKp2QBQ'//spreadsheetId
     ),
     DocsModule.register({
       //configuracion por defecto

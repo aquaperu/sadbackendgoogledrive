@@ -186,7 +186,7 @@ export class ValorizacionService {
                     .then(
                         async(patch)=>{
                             //creara un documento el google con los patch definidos y reemplazados anteriormente
-                            this.googleFileId = await this.googleDocService.creaDocumento(patch,"tmp informe","1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")//crea un nuevo archivo en google, con la plantilla reemplazada
+                            this.googleFileId = await this.googleDocService.creaDocumento(patch,"tmp informe","1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt")//crea un nuevo archivo en google, con la plantilla reemplazada
                            
                         })                             
                               //inicio del reemplazo utilizando docx-template
@@ -211,7 +211,7 @@ export class ValorizacionService {
 
                                 });
                     
-                                this.googleDocService.creaDocumento(buffer1,"informe residente","1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t")//crea un nuevo archivo en google, con la plantilla reemplazada
+                                this.googleDocService.creaDocumento(buffer1,"informe residente","1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt")//crea un nuevo archivo en google, con la plantilla reemplazada
                                 this.googleDocService.eliminaDocumentoCarpeta(this.googleFileId)
             
                                 })
@@ -247,7 +247,7 @@ export class ValorizacionService {
                     separador.titulo = separador.titulo.substring(0,separador.titulo.length - 255/3)
                 }
 
-            return this.googleDriveService.crearCarpetav1("1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t", separador.titulo)
+            return this.googleDriveService.crearCarpetav1("1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt", separador.titulo)
             } 
     )
        
@@ -305,8 +305,8 @@ export class ValorizacionService {
     });
     //consolidando
     Packer.toBuffer(doc).then(async(buffer) => {
-        // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')//crea un nuevo archivo en google
-        this.generaIndiceEnWord(buffer,"indice",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
+        // const docid = await this.googleDocService.creaDocumento(buffer,"indice",'1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt')//crea un nuevo archivo en google
+        this.generaIndiceEnWord(buffer,"indice",'1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt')    
      }); 
 
   }
@@ -355,7 +355,7 @@ export class ValorizacionService {
     });
 
     Packer.toBuffer(doc).then(async(buffer) => {
-        this.generaIndiceEnWord(buffer,"especificaciones tecnicas",'1VDf6sK9Whc3SMwRgPMP9jl8KQ1b5lf7t')    
+        this.generaIndiceEnWord(buffer,"especificaciones tecnicas",'1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt')    
      }); 
 
   }
