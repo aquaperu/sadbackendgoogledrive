@@ -227,7 +227,8 @@ export class ValorizacionService {
   
     public async generaSeparadores(indices){ 
         const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
-        const myseparador = fixPathAssets('separadorv4.png')
+        const logo_entidad = fixPathAssets('logo_eps.jpg');
+        const myseparador = fixPathAssets('separadores_eps.png')
         let listaSeparadores = [];
         let misarchivosSeparadores = [];
         listaSeparadores = indices.filter((val) => {
@@ -235,9 +236,18 @@ export class ValorizacionService {
         })
         misarchivosSeparadores = listaSeparadores.map((ele)=>{
             let jo =  new PDFDocument({ size: "A4" })
-            jo.image(myseparador, 0, 0, { width: 594, height: 841 }).moveDown().font(fuentedeletra)
+            jo
+            .image(myseparador, 0, 0, { width: 594, height: 841 })
+            
+            .moveDown()
+            .image(logo_entidad, 90, 30, { width: 100, height: 100 })
+            .font(fuentedeletra)
+            
             .fontSize(25)
-            .text(`${ele.titulo}`, 150, 200, { align: 'justify' }).end()
+             
+            .text(`${ele.titulo}`, 90, 370, { align: 'justify' })
+            .end()
+
         return jo
         })    
                     
@@ -282,7 +292,7 @@ export class ValorizacionService {
     }))
    
       indices.forEach((parrafo)=>{
-        children.push(this.toolsDoc.addParagraph({children:[new TextRun({text:parrafo.tituloSubtitulo})],indent:{left:`${0.72*(parrafo.indent-1)}cm`}}))
+        children.push(this.toolsDoc.addParagraph({children:[new TextRun({text:parrafo.tituloSubtitulo})],indent:{left:`${0.72*(parrafo.indent-1)}cm`},alignment: 'distribute'}))
       })
       let headers = this.toolsDoc.setHeader(textoCabecera)
       let footers = this.toolsDoc.setFooter(textoPiePagina)

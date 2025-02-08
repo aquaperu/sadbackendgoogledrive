@@ -420,11 +420,11 @@ export class ValorizacionController {
 {tituloSubtitulo:'* ACTA DE COMPROMISO DE OPERACIÓN Y MANTENIMIENTO',indent:2},
 {tituloSubtitulo:'* PADRÓN DE BENEFICIARIOS',indent:2},
 {tituloSubtitulo:'* FICHA DE COMPATIBILIDAD DEL ESTUDIO, A NIVEL DE PERFIL CON EL EXPEDIENTE TÉCNICO Y/O FORMATO 08-A DEL INVIERTE.PE.',indent:2},
-{tituloSubtitulo:'FICHA INVIERTE.PE.',indent:2},
+{tituloSubtitulo:'* FICHA INVIERTE.PE.',indent:2},
         ]
 
-        const nombreObra = "MEJORAMIENTO Y AMPLIACION DEL SERVICIO DE AGUA POTABLE RURAL Y MEJORAMIENTO Y AMPLIACION DEL SERVICIO ALCANTARILLADO U OTRAS FORMAS DE DISPOSICION SANITARIA DE EXCRETAS EN LA LOCALIDAD DE COLTAO QUITAFLOR DEL DISTRITL DE PIRA DE LA PROVINCIA DE HUARAZ DEL DEPARTAMENTO DE ANCASH"
-        const pieDePagina = "INDICE GENERAL - MUNICIPALIDAD DISTRITAL DE PIRA"
+        const nombreObra = "MEJORAMIENTO DEL SERVICIO DE PROVISIÓN DE AGUA PARA RIEGO EN EL SISTEMA DE RIEGO PARCELARIO DEL GRUPO DE GESTIÓN EMPRESARIAL PAMPACANCHA-RECUAY DE LA LOCALIDAD DE PAMPACANCHA DISTRITO DE RECUAY DE LA PROVINCIA DE RECUAY DEL DEPARTAMENTO DE ANCASH” CON CUI N° 2606880"
+        const pieDePagina = "INDICE GENERAL - MUNICIPALIDAD DISTRITAL DE RECUAY"
         this.valorizacionService.generaIndiceEnDriveWord(indices,nombreObra,pieDePagina)
 
     }
@@ -432,14 +432,32 @@ export class ValorizacionController {
 
     @Get('generaseparadores')
     async createFoldersInWindows(@Req() req:Request){
-        const indices:Array<ISeparador> = [
-            {esSeparador:1,titulo:'0. MEJORAMIENTO Y AMPLIACION DEL SERVICIO DE AGUA POTABLE RURAL Y MEJORAMIENTO Y AMPLIACION DEL SERVICIO ALCANTARILLADO U OTRAS FORMAS DE DISPOSICION SANITARIA DE EXCRETAS EN LA LOCALIDAD DE COLTAO QUITAFLOR DEL DISTRITL DE PIRA DE LA PROVINCIA DE HUARAZ DEL DEPARTAMENTO DE ANCASH',columna:1},
-            {esSeparador:1,titulo:'1. AGUA Y SANEAMIENTO',columna:1},
-            {esSeparador:1,titulo:'1.1 ASPECTOS GENERALES',columna:2},
-            {esSeparador:1,titulo:'1.1.1 Resumen Ejecutivo',columna:3},
-            
-
-        ]
+        const indices: Array<ISeparador> = [
+          { esSeparador: 1, titulo: "Caratula", columna: 1 },
+          { esSeparador: 1, titulo: "Indice", columna: 1 },
+          { esSeparador: 1, titulo: "Hoja de resumen de pago al supervisor", columna: 1,},
+          { esSeparador: 1, titulo: "Factura o Recibo por Honorarios", columna: 1,},
+          { esSeparador: 1, titulo: "Copia de contrato del Consultor",columna: 1,},
+          { esSeparador: 1, titulo: "Copia de RNP vigente (consultor de obra)",columna: 1,},
+          { esSeparador: 1, titulo: "Certificado de Habilidad del supervisor en original vigente",columna: 1,},
+          { esSeparador: 1, titulo: "Informe del supervisor dando su conformidad", columna: 1,},
+          { esSeparador: 1, titulo: "Ficha de Identificacion de la Obra	",columna: 1,},
+          { esSeparador: 1, titulo: "Resumen de Valorizacion Mensual",columna: 1,},
+          { esSeparador: 1, titulo: "Resumen de Metrados Ejecutados",columna: 1,},
+          { esSeparador: 1, titulo: "Valorizacion Mensual de Avance de Obra, Firmado por el Supervisor y Residente",columna: 1,},
+          { esSeparador: 1, titulo: 'Control de Avance de Obra (Curva "S")',columna: 1,},
+          { esSeparador: 1,titulo:  "Cuadro de Reajuste de Precios",columna: 1,},
+          { esSeparador: 1, titulo: "Indices Unificados", columna: 1 },
+          { esSeparador: 1,titulo:  "Copia de la Formula Polinomica Del Expediente Tecnico",columna: 1,},
+          { esSeparador: 1, titulo: "Copia del Cuaderno de Obra", columna: 1 },
+          { esSeparador: 1,titulo:  "Calendario de Avance de Obra Programado Fechado o Calendario de Avance de Obra Valorizado Actualizado",columna: 1,},
+          { esSeparador: 1,titulo: "Calendario de Avance de Obra Programado Vs Ejecutado",columna: 1,},
+          { esSeparador: 1, titulo: "Copia de Actas", columna: 1 },
+          { esSeparador: 1,titulo: "Ensayos y Protocolos de Prueba",columna: 1,},
+          { esSeparador: 1,titulo: "Certificados de Calidad de Materiales",columna: 1,},
+          { esSeparador: 1,titulo: "Panel Fotografico (Partidas Ejecutadas)",columna: 1,},
+          { esSeparador: 1,titulo: "Informacion en Digital del Informe Mensual Del Supervisor",columna: 1,},
+        ];
         return this.valorizacionService.generaSeparadores(indices)
     }
     
