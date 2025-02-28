@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleXlsxService } from './googledrivecasa/services/googlexlsx.service';
 import { Observable, from } from 'rxjs';
+import { GoogleDriveService } from './googledrivecasa/services/googledrive.service';
 export interface GeneralObject{
   [key:string]:any
 }
 @Injectable()
 export class AppService {
   constructor(
-    private readonly googleXlsxService:GoogleXlsxService
+    private readonly googleXlsxService:GoogleXlsxService,
+    private readonly googleDriveService:GoogleDriveService
   ){  }
   getHello(): string {
     return 'Hello World! bienvenido al deploy';
@@ -40,5 +42,9 @@ export class AppService {
   }
   agregaRegistro(data:GeneralObject){
     this.googleXlsxService.setRow<GeneralObject>(data)
+  }
+  async getUrl(){
+    return await this.googleDriveService.obtenerwebViewLink("1hlN1lAZBY-fFuS4Cc57nyzfq4qE0sWTz")
+    
   }
 }
