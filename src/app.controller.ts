@@ -6,8 +6,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get("geturl")
-  geturl(): string {
-    return this.appService.getHello();
+  async geturl(): Promise<string>  {
+    return await this.appService.getUrl();
   }
 
   @Get()

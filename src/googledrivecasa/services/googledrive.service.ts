@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { FileValidator, Inject, Injectable } from '@nestjs/common';
 import { google } from 'googleapis';
 import { Buffer } from 'buffer';
 import { Readable } from 'stream';
@@ -120,6 +120,23 @@ public async crearCarpeta(idForGoogleElement:string,nameForGoogleElement:string)
     } catch (e) {
       throw new Error(e);
     }
+  }
+
+  public async obtenerwebViewLinkv1(fileId:string): Promise<string> {
+    await this.drive.permissions.create(
+      {
+        fileId:fileId,
+        requestBody:{
+          role:"reader",
+          type:"anyone"
+        }
+      }
+    )
+    const result = await this.drive.files.get({
+      fileId:fileId,
+      fields:"webViewLink, webContentLink"
+    })
+    return result.data.webViewLink
   }
 
   /**

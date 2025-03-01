@@ -43,8 +43,9 @@ export class AppService {
   agregaRegistro(data:GeneralObject){
     this.googleXlsxService.setRow<GeneralObject>(data)
   }
-  async getUrl(){
-    return await this.googleDriveService.obtenerwebViewLink("1hlN1lAZBY-fFuS4Cc57nyzfq4qE0sWTz")
+  async getUrl(){//https://drive.google.com/file/d/1apcedvtB9l4vC4nYhxi5z1LWKqVHT1TG/view?usp=drive_link
+    return await this.googleDriveService.obtenerwebViewLinkv1("1apcedvtB9l4vC4nYhxi5z1LWKqVHT1TG")
+    
     
   }
 }
