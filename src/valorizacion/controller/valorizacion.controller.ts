@@ -11,9 +11,20 @@ import { JwtService } from '@nestjs/jwt';
 import { HttpService } from '@nestjs/axios';
 import { fixPathAssets, fixPathEspecificacionesTecnicas } from 'src/shared/toolbox/fixPath';
 import { HeadingLevel, Paragraph } from 'docx';
+import { of, map } from 'rxjs';
 //import { generaIndice } from 'src/toolbox/generaIndicePDF';
 //import { generateFoldersInFolderProjects, ISeparador } from 'src/toolbox/generaCarpetas';
 //import { compressIntereFolder } from 'src/toolbox/forValorizacion/comprimeCarpeta';
+
+import ffmpeg from 'fluent-ffmpeg';
+import * as path from 'path';
+import { Observable } from 'rxjs';
+import { templateAudio } from 'src/shared/configGobal';
+import { arrayBuffer } from 'stream/consumers';
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
+var ffmpeg = require('fluent-ffmpeg')
+
+  ffmpeg.setFfmpegPath(ffmpegPath)
 
 // npm install googleapis@105 @google-cloud/local-auth@2.1.0 --save
 interface IEspecificacionesTecnicas{
@@ -29,21 +40,55 @@ interface IEspecificacionesTecnicas{
         
     
 }
+
 @Controller('valorizacion')
 export class ValorizacionController {
     
     constructor(
-        private valorizacionService:ValorizacionService,  
+        private valorizacionService:ValorizacionService, 
+        private readonly httpService: HttpService, 
     ){}
     public au:string
     
-    @Get('saludahijo')
-    public saludaHijo(){
-       
+    @Get('convierteamp3')
+    async saludaHijo(){
         
+
+        //return res.download(`${templateAudio().recurso}`)
+        
+        const writer = fs.createWriteStream('./image.ogx');
+        const merged = fs.readFileSync("/Users/emfive/Downloads/mergedData.dat", "utf-8");
+
+        const decoded = Buffer.from(merged, "base64");
+
+        console.log("original: " + merged.length);
+
+        console.log("decoded: " + decoded.length);
+
+        fs.writeFileSync("foo.ogx", decoded);
+
+
+        //fs.appendFileSync('D:\\sistema actualizado sad\\sadbackendgoogledrive\\image.ogx',Buffer.from('arraybuffer'))
+
+        /*return new Promise((resolve, reject) => {
+            writer.on('finish', resolve);
+            writer.on('error', reject);
+        });*/
+        /*const fileBuffer = Buffer.from(response.data, 'base64').toString('base64');
+        console.log(fileBuffer)
+       */
+     /*   const inputOgxFile = path.join('D:\\sistema actualizado sad\\sadbackendgoogledrive\\image.ogx'); // Reemplaza 'audio.ogx' con la ruta real de tu archivo .ogx
+        const outputMp3File = path.join('D:\\sistema actualizado sad\\sadbackendgoogledrive\\audio.mp3');
+
+    try {
+        await convertOgxToMp3(inputOgxFile, outputMp3File);
+        console.log(`Archivo convertido guardado en: ${outputMp3File}`);
+    } catch (error) {
+        console.error('La conversión falló:', error);
+    }*/
         
     
-        this.valorizacionService.saludaHijo()
+        
     }
     
     public pathToImage:string
@@ -585,6 +630,47 @@ export class ValorizacionController {
 
     }
 }
+/**
+ * Convierte un archivo de audio .ogx a .mp3 utilizando fluent-ffmpeg.
+ *
+ * @param inputFilePath La ruta completa al archivo .ogx de entrada.
+ * @param outputFilePath La ruta completa donde se guardará el archivo .mp3 de salida.
+ * @returns Una promesa que se resuelve cuando la conversión es exitosa o se rechaza con un error.
+ */
+async function convertOgxToMp3(inputFilePath: string, outputFilePath: string): Promise<void> {
+    var outStream = fs.createWriteStream(outputFilePath);
+
+ffmpeg()
+  .input(inputFilePath)
+  .audioQuality(96)
+  .toFormat("mp3")
+  .on('error', error => console.log(`Encoding Error: ${error.message}`))
+  .on('exit', () => console.log('Audio recorder exited'))
+  .on('close', () => console.log('Audio recorder closed'))
+  .on('end', () => console.log('Audio Transcoding succeeded !'))
+  .pipe(outStream, { end: true });
+    /*return new Promise((resolve, reject) => {
+      ffmpeg(inputFilePath)
+        .output(outputFilePath)
+        .audioCodec('libmp3lame') // Especifica el códec MP3 (requiere que ffmpeg esté configurado con libmp3lame)
+        .on('start', (commandLine) => {
+          console.log(`Iniciando conversión con el comando: ${commandLine}`);
+        })
+        .on('progress', (progress) => {
+          console.log(`Procesando: ${Math.round(progress.percent)}%`);
+        })
+        .on('end', () => {
+          console.log('Conversión a MP3 completada exitosamente.');
+          resolve();
+        })
+        .on('error', (err) => {
+          console.error(`Error durante la conversión: ${err.message}`);
+          reject(err);
+        })
+        .run();
+    });*/
+  }
+
 function metradoMensualAcumulado(metradoDiario:Array<any[]>):any[]{
     let tmp2:number[] = []
     let tmp3:number = 0

@@ -321,10 +321,10 @@ export class ValorizacionService {
 
   }
   public async tablaDeContenidos(parrafos:Array<any>){
-    let numbering:INumberingOptions = require(fixPathFromSRC("toolsdocx/services/styles/numberingBullets.json"))
-    let characterStyles:ICharacterStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/characterStyles.json"))
-    let paragraphStyles:IParagraphStyleOptions[] = require(fixPathFromSRC("toolsdocx/services/styles/paragraphStyles.json"))
-    let default1:IDefaultStylesOptions = require(fixPathFromSRC("toolsdocx/services/styles/headingDefault.json"))
+    let numbering:INumberingOptions = require(fixPathFromSRC("docs/services/styles/numberingBullets.json"))
+    let characterStyles:ICharacterStyleOptions[] = require(fixPathFromSRC("docs/services/styles/characterStyles.json"))
+    let paragraphStyles:IParagraphStyleOptions[] = require(fixPathFromSRC("docs/services/styles/paragraphStyles.json"))
+    let default1:IDefaultStylesOptions = require(fixPathFromSRC("docs/services/styles/headingDefault.json"))
         
     let children = prepareToParagraphsChildren(parrafos)
     children = children.map((element)=>{

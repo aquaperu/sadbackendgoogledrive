@@ -19,6 +19,16 @@
       "include": "toolsdocx/services/styles",
       "outDir": "dist/src",
       "watchAssets": true
+    },
+    {
+      "include": "docs/services/styles",
+      "outDir": "dist/src",
+      "watchAssets": true
+    },
+    {
+      "include": "/audio",
+      "outDir": "dist/src",
+      "watchAssets": true
     }
   ],
   "watchAssets": true

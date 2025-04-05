@@ -1,5 +1,11 @@
 import  * as path from 'path';
 import * as fs from 'fs';
+
+export const fixPathAudio = (recursoAssets:string)=>{
+   console.log(`Starting directory: ${process.cwd()}`);
+   return `${path.join(process.cwd(),'/','dist/src/audio/',recursoAssets)}`
+}
+
 export const fixPathAssets = (recursoAssets:string)=>{
     console.log(`Starting directory: ${process.cwd()}`);
     //process.chdir()

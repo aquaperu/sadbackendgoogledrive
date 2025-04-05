@@ -1,0 +1,18 @@
+[
+    {
+        "data":[{"text":"partida 2"}],
+        "config":{"heading":"Heading2"}
+    },
+    {
+        "data": [{"text":"Se trata de la definicion del titulo de la partida 2","break":1},{"text":"macho","style":"strong","break":1}] ,
+        "config":{
+            "indent":{
+                "left":190
+                
+            },
+            "spacing": { "line": 240 },
+            "alignment":"distribute"
+        }
+    }
+
+]

@@ -28,6 +28,10 @@ const templatesFilesNames =
             nombreArchivo:"plantilla_valorizacion_calculos.xlsx",
             hoja:nombreHojasPlantillaCalculos
 
+        },
+        audios:{
+            nombreArchivo:"audio.ogx",
+
         }
     }
 export const templateValorizacionURL = ()=>{
@@ -39,5 +43,10 @@ export const templateValorizacionURL = ()=>{
 export const templateCalculosURL = ()=>{
     const recurso = fixPathAssets(templatesFilesNames.calculos.nombreArchivo)
     return {recurso,hojas:templatesFilesNames.calculos.hoja}
+}
+
+export const templateAudio = ()=>{
+    const recurso = fixPathAssets(templatesFilesNames.audios.nombreArchivo)
+    return {recurso}
 }
  
