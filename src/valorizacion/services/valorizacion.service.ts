@@ -227,7 +227,7 @@ export class ValorizacionService {
   
     public async generaSeparadores(indices){ 
         const fuentedeletra = fixPathAssets('AmoeraRegular.otf')
-        const logo_entidad = fixPathAssets('logo_eps.jpg');
+        const logo_entidad = fixPathAssets('escudo_recuay.png');
         const myseparador = fixPathAssets('separadores_eps.png')
         let listaSeparadores = [];
         let misarchivosSeparadores = [];
@@ -244,6 +244,8 @@ export class ValorizacionService {
             .font(fuentedeletra)
             
             .fontSize(25)
+            .fillColor('#00BF5B')
+            
              
             .text(`${ele.titulo}`, 90, 370, { align: 'justify' })
             .end()
@@ -616,4 +618,134 @@ export const partidas =
         }
     ]
 
- 
+    function numeroATextoSoles(numero) {
+        if (isNaN(numero)) {
+          return "Entrada no válida";
+        }
+      
+        const unidades = [
+          "",
+          "uno",
+          "dos",
+          "tres",
+          "cuatro",
+          "cinco",
+          "seis",
+          "siete",
+          "ocho",
+          "nueve",
+        ];
+        const decenas = [
+          "",
+          "diez",
+          "veinte",
+          "treinta",
+          "cuarenta",
+          "cincuenta",
+          "sesenta",
+          "setenta",
+          "ochenta",
+          "noventa",
+        ];
+        const centenas = [
+          "",
+          "ciento",
+          "doscientos",
+          "trescientos",
+          "cuatrocientos",
+          "quinientos",
+          "seiscientos",
+          "setecientos",
+          "ochocientos",
+          "novecientos",
+        ];
+      
+        function convertirGrupo(numero) {
+          if (numero === 0) {
+            return "";
+          }
+      
+          if (numero >= 100) {
+            const centena = Math.floor(numero / 100);
+            const resto = numero % 100;
+            if (resto === 0) {
+              return centenas[centena];
+            } else {
+              return `${centenas[centena]} ${convertirGrupo(resto)}`;
+            }
+          } else if (numero >= 20) {
+            const decena = Math.floor(numero / 10);
+            const unidad = numero % 10;
+            if (unidad === 0) {
+              return decenas[decena];
+            } else {
+              return `${decenas[decena]} y ${unidades[unidad]}`;
+            }
+          } else if (numero >= 10) {
+            if (numero === 10){
+              return "diez";
+            } else if (numero === 11){
+              return "once";
+            } else if (numero === 12){
+              return "doce";
+            } else if (numero === 13){
+              return "trece";
+            } else if (numero === 14){
+              return "catorce";
+            } else if (numero === 15){
+              return "quince";
+            } else if (numero === 16){
+              return "dieciséis";
+            } else if (numero === 17){
+              return "diecisiete";
+            } else if (numero === 18){
+              return "dieciocho";
+            } else if (numero === 19){
+              return "diecinueve";
+            }
+          } else {
+            return unidades[numero];
+          }
+        }
+      
+        if (numero === 0) {
+          return "cero soles";
+        }
+      
+        const parteEntera = Math.floor(numero);
+        const parteDecimal = Math.round((numero - parteEntera) * 100);
+      
+        let textoEntero = "";
+        if (parteEntera > 0) {
+          textoEntero = convertirGrupo(parteEntera);
+        }
+      
+        let textoDecimal = "";
+        if (parteDecimal > 0) {
+          if (numero < 1) {
+            textoDecimal = `con ${parteDecimal}/100 soles`;
+          } else {
+            textoDecimal = `con ${parteDecimal}/100 soles`;
+          }
+        } else if (Number.isInteger(numero)){
+          textoDecimal = "con 00/100 soles";
+        }
+      
+        if (numero < 1 && parteEntera === 0) {
+          return `cero ${textoDecimal}`;
+        } else if (textoEntero && textoDecimal) {
+          return `${textoEntero} ${textoDecimal}`;
+        } else if (textoEntero) {
+          return `${textoEntero} soles`;
+        } else {
+          return textoDecimal;
+        }
+      }
+      
+      // Ejemplos de uso
+      //console.log(numeroATextoSoles(0.30)); // cero con 30/100 soles
+      //console.log(numeroATextoSoles(12.5)); // doce con 50/100 soles
+      //console.log(numeroATextoSoles(56)); // cincuenta y seis con 00/100 soles
+      //console.log(numeroATextoSoles(101)); // ciento un con 00/100 soles
+      //console.log(numeroATextoSoles(115.25)); // ciento quince con 25/100 soles
+      //console.log(numeroATextoSoles(12)); // doce con 00/100 soles

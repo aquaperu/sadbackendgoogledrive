@@ -48,49 +48,7 @@ export class ValorizacionController {
         private valorizacionService:ValorizacionService, 
         private readonly httpService: HttpService, 
     ){}
-    public au:string
-    
-    @Get('convierteamp3')
-    async saludaHijo(){
-        
-
-        //return res.download(`${templateAudio().recurso}`)
-        
-        const writer = fs.createWriteStream('./image.ogx');
-        const merged = fs.readFileSync("/Users/emfive/Downloads/mergedData.dat", "utf-8");
-
-        const decoded = Buffer.from(merged, "base64");
-
-        console.log("original: " + merged.length);
-
-        console.log("decoded: " + decoded.length);
-
-        fs.writeFileSync("foo.ogx", decoded);
-
-
-        //fs.appendFileSync('D:\\sistema actualizado sad\\sadbackendgoogledrive\\image.ogx',Buffer.from('arraybuffer'))
-
-        /*return new Promise((resolve, reject) => {
-            writer.on('finish', resolve);
-            writer.on('error', reject);
-        });*/
-        /*const fileBuffer = Buffer.from(response.data, 'base64').toString('base64');
-        console.log(fileBuffer)
-       */
-     /*   const inputOgxFile = path.join('D:\\sistema actualizado sad\\sadbackendgoogledrive\\image.ogx'); // Reemplaza 'audio.ogx' con la ruta real de tu archivo .ogx
-        const outputMp3File = path.join('D:\\sistema actualizado sad\\sadbackendgoogledrive\\audio.mp3');
-
-    try {
-        await convertOgxToMp3(inputOgxFile, outputMp3File);
-        console.log(`Archivo convertido guardado en: ${outputMp3File}`);
-    } catch (error) {
-        console.error('La conversión falló:', error);
-    }*/
-        
-    
-        
-    }
-    
+    public au:string   
     public pathToImage:string
 
     
@@ -480,28 +438,19 @@ export class ValorizacionController {
         const indices: Array<ISeparador> = [
           { esSeparador: 1, titulo: "Caratula", columna: 1 },
           { esSeparador: 1, titulo: "Indice", columna: 1 },
-          { esSeparador: 1, titulo: "Hoja de resumen de pago al supervisor", columna: 1,},
-          { esSeparador: 1, titulo: "Factura o Recibo por Honorarios", columna: 1,},
-          { esSeparador: 1, titulo: "Copia de contrato del Consultor",columna: 1,},
-          { esSeparador: 1, titulo: "Copia de RNP vigente (consultor de obra)",columna: 1,},
-          { esSeparador: 1, titulo: "Certificado de Habilidad del supervisor en original vigente",columna: 1,},
-          { esSeparador: 1, titulo: "Informe del supervisor dando su conformidad", columna: 1,},
-          { esSeparador: 1, titulo: "Ficha de Identificacion de la Obra	",columna: 1,},
-          { esSeparador: 1, titulo: "Resumen de Valorizacion Mensual",columna: 1,},
-          { esSeparador: 1, titulo: "Resumen de Metrados Ejecutados",columna: 1,},
-          { esSeparador: 1, titulo: "Valorizacion Mensual de Avance de Obra, Firmado por el Supervisor y Residente",columna: 1,},
-          { esSeparador: 1, titulo: 'Control de Avance de Obra (Curva "S")',columna: 1,},
-          { esSeparador: 1,titulo:  "Cuadro de Reajuste de Precios",columna: 1,},
-          { esSeparador: 1, titulo: "Indices Unificados", columna: 1 },
-          { esSeparador: 1,titulo:  "Copia de la Formula Polinomica Del Expediente Tecnico",columna: 1,},
-          { esSeparador: 1, titulo: "Copia del Cuaderno de Obra", columna: 1 },
-          { esSeparador: 1,titulo:  "Calendario de Avance de Obra Programado Fechado o Calendario de Avance de Obra Valorizado Actualizado",columna: 1,},
-          { esSeparador: 1,titulo: "Calendario de Avance de Obra Programado Vs Ejecutado",columna: 1,},
-          { esSeparador: 1, titulo: "Copia de Actas", columna: 1 },
-          { esSeparador: 1,titulo: "Ensayos y Protocolos de Prueba",columna: 1,},
-          { esSeparador: 1,titulo: "Certificados de Calidad de Materiales",columna: 1,},
-          { esSeparador: 1,titulo: "Panel Fotografico (Partidas Ejecutadas)",columna: 1,},
-          { esSeparador: 1,titulo: "Informacion en Digital del Informe Mensual Del Supervisor",columna: 1,},
+          /*{ esSeparador: 1, titulo: "Resumen Ejecutivo", columna: 1,},
+          { esSeparador: 1, titulo: "Memoria Descriptiva", columna: 1,},
+          { esSeparador: 1, titulo: "Planilla de Metrados",columna: 1,},
+          { esSeparador: 1, titulo: "Gastos Generales",columna: 1,},
+          { esSeparador: 1, titulo: "Cálculo Flete",columna: 1,},
+          { esSeparador: 1, titulo: "Presupuesto", columna: 1,},
+          { esSeparador: 1, titulo: "Acu",columna: 1,},
+          { esSeparador: 1, titulo: "Insumos",columna: 1,},
+          { esSeparador: 1, titulo: "Fórmula Polinomica",columna: 1,},
+          { esSeparador: 1, titulo: "Especificaciones Técnicas",columna: 1,},
+          { esSeparador: 1, titulo: 'Cronogramas',columna: 1,},
+          { esSeparador: 1,titulo:  "Planos",columna: 1,},*/
+          
         ];
         return this.valorizacionService.generaSeparadores(indices)
     }
