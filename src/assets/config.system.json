@@ -1,0 +1,83 @@
+{
+    "headerConfigImageTextImagePosition": {
+        "ImageLeft": {
+            "horizontalPosition": {
+                "offset": 950000
+            },
+            "verticalPosition": {
+                "offset": 275000
+            },
+            "wrap": {
+                "side": "right",
+                "type": 1
+            }
+        },
+        "ImageRight": {
+            "horizontalPosition": {
+                "offset": 5900000
+            },
+            "verticalPosition": {
+                "offset": 275000
+            },
+            "wrap": {
+                "side": "left",
+                "type": 1
+            }
+        }
+    },
+    "headerConfigImagePosition": {
+        "ImageLeft": {
+            "transformation":{ "width": 273, "height": 65 },
+            "horizontalPosition": {
+                "offset": 700000
+            },
+            "verticalPosition": {
+                "offset": 275000
+            },
+            "wrap": {
+                "side": "right",
+                "type": 1
+            }
+        },
+        "ImageRight": {
+            "horizontalPosition": {
+                "offset": 5900000
+            },
+            "verticalPosition": {
+                "offset": 275000
+            },
+            "wrap": {
+                "side": "left",
+                "type": 1
+            }
+        }
+    },
+    "footerAndHeaderLineImagePosition": {
+        "footer": {
+            "LineImageFile": {
+                "horizontalPosition": {
+                    "offset": 3500
+                },
+                "verticalPosition": {
+                    "offset": 3500
+                },
+                "wrap": {
+                    "side": "bothSides",
+                    "type": 2
+                }
+            }
+        },
+        "header": {
+            "horizontalPosition": {
+                "offset": 3700000
+            },
+            "verticalPosition": {
+                "offset": -1900000
+            },
+            "wrap": {
+                "side": "bothSides",
+                "type": 2
+            }
+        }
+    }
+}

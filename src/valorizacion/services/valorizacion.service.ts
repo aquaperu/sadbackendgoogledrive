@@ -25,6 +25,8 @@ import { IDefaultStylesOptions } from 'docx/build/file/styles/factory';
 import { prepareToParagraphsChildren } from '../functions/herramientas';
 import { serial } from 'src/shared/toolbox/promiseInSerial';
 
+import { EHeaderPositionImage } from 'src/docs/services/docs.service';
+import { ICfgDataImageHeaderPosition, ITypeConfigParamsHeaderAndFooter } from '../controller/valorizacion.controller';
 export interface IIndice {
     tituloSubtitulo: string;
     indent: number;
@@ -277,7 +279,7 @@ export class ValorizacionService {
                 })
             })
   }
-  public generaIndiceEnDriveWord(indices:Array<IIndice>,textoCabecera:string,textoPiePagina:string) {
+  public generaIndiceEnDriveWord(configuracion:ITypeConfigParamsHeaderAndFooter) {
       let children = []
       //primer paraffo INDICE
       children.push(new Paragraph({
@@ -292,12 +294,29 @@ export class ValorizacionService {
         },
         alignment: 'center'
     }))
+    const indices = configuracion.indices
    
       indices.forEach((parrafo)=>{
         children.push(this.toolsDoc.addParagraph({children:[new TextRun({text:parrafo.tituloSubtitulo})],indent:{left:`${0.72*(parrafo.indent-1)}cm`},alignment: 'distribute'}))
       })
-      let headers = this.toolsDoc.setHeader(textoCabecera)
-      let footers = this.toolsDoc.setFooter(textoPiePagina)
+      const position:any = {}
+      if('imageLeft' in configuracion){
+        position['imageLeft'] = configuracion.imageLeft
+      }
+      if('imageRight' in configuracion){
+        position['imageRight'] = configuracion.imageRight
+      }
+      if('textHeader' in configuracion){
+        position['textHeader'] = configuracion.textHeader
+      }
+      if('lineImage' in configuracion){
+        position['lineImage'] = configuracion.lineImage
+      }
+            
+      let headers = this.toolsDoc.setHeaderv1(position)
+      //let headers = this.toolsDoc.setHeader(textoCabecera)
+      
+      let footers = this.toolsDoc.setFooter(configuracion.textFooter.text)
       let properties: ISectionPropertiesOptions = {
           page: {
               margin: {
