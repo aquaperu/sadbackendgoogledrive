@@ -3,10 +3,15 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 import { NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
+import * as fs from 'fs'
+const httpsOptions = {
+  key:fs.readFileSync('./private.pem'),
+  cert:fs.readFileSync('certificate.crt')
+}
 
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{cors:true});
+  const app = await NestFactory.create(AppModule,{cors:true,httpsOptions});
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist:true,
@@ -20,6 +25,7 @@ async function bootstrap() {
     "http://localhost:4200/*",
    // "https://192.168.1.86:4444/*",
     "https://192.168.1.86:4444",
+    "https://192.168.1.86:3033",
     "https://legendary-space-fiesta-69vxg6jqp77xf49rg-5000.app.github.dev/",
     "https://legendary-space-fiesta-69vxg6jqp77xf49rg-5000.app.github.dev",
     "https://legendary-space-fiesta-69vxg6jqp77xf49rg-5000.app.github.dev/*",
@@ -58,8 +64,8 @@ async function bootstrap() {
   app.enableCors(corsOptions);
   
   useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
-  await app.listen(process.env.PORT || 3000 || 8000,()=>{
-    console.log(`Launching NestJS app on port ${process.env.PORT}, URL: http://0.0.0.0:${process.env.PORT}`)
+  await app.listen(process.env.PORT || 3000 || 8000,'192.168.1.86',()=>{
+    console.log(`Launching NestJS app on port ${process.env.PORT}, URL: http://192.168.1.86:${process.env.PORT}`)
   });
 }
 bootstrap();
