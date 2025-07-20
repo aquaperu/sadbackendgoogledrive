@@ -63,7 +63,7 @@ async function bootstrap() {
   app.enableCors(corsOptions);
   
   useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
-  await app.listen(process.env.PORT || 3000 || 8000,'192.168.1.86',()=>{
+  await app.listen(process.env.PORT || 3000 || 8000,()=>{
     console.log(`Launching NestJS app on port ${process.env.PORT}, URL: http://192.168.1.86:${process.env.PORT}`)
   });
   /*useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
