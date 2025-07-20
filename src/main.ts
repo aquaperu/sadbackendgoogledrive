@@ -11,7 +11,7 @@ const httpsOptions = {
 
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{cors:true,httpsOptions});
+  const app = await NestFactory.create(AppModule,{cors:true});
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist:true,
@@ -46,7 +46,6 @@ async function bootstrap() {
     "https://4200-idx-sadfrontenddrive17-1717632774583.cluster-kc2r6y3mtba5mswcmol45orivs.cloudworkstations.dev",
     "https://9000-idx-sadfrontenddrive17-1717632774583.cluster-kc2r6y3mtba5mswcmol45orivs.cloudworkstations.dev/*",
     "https://9000-idx-sadfrontenddrive17-1717632774583.cluster-kc2r6y3mtba5mswcmol45orivs.cloudworkstations.dev",
-    
     "*"
   ]
   const corsOptions: CorsOptions = {
@@ -63,14 +62,14 @@ async function bootstrap() {
   };
   app.enableCors(corsOptions);
   
-  /*useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
+  useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
   await app.listen(process.env.PORT || 3000 || 8000,'192.168.1.86',()=>{
     console.log(`Launching NestJS app on port ${process.env.PORT}, URL: http://192.168.1.86:${process.env.PORT}`)
-  });*/
-  useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
+  });
+  /*useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
   await app.listen(process.env.PORT || 3000,()=>{
     console.log(`on port: ${process.env.PORT}`)
-  });
+  });*/
 
 }
 bootstrap();
