@@ -68,8 +68,8 @@ async function bootstrap() {
     console.log(`Launching NestJS app on port ${process.env.PORT}, URL: http://192.168.1.86:${process.env.PORT}`)
   });*/
   useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
-  await app.listen(process.env.PORT || 3000 || 8000,()=>{
-    console.log(`Launching NestJS app on port ${process.env.PORT}, URL: http://0.0.0.0:${process.env.PORT}`)
+  await app.listen(process.env.PORT || 3000,()=>{
+    console.log(`on port: ${process.env.PORT}`)
   });
 
 }
