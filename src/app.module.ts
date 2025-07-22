@@ -84,9 +84,6 @@ import { AsistenciaModule } from './asistencia/asistencia.module';
     ValorizacionModule,
     PresupuestoModule,
     AsistenciaModule,
-    
-
-
   ],
   controllers: [AppController],
   providers: [AppService,ConfigModule],

@@ -122,5 +122,6 @@ export function extraeConfigDeJson (unTextLineaJson:any)  {
     return unTextLineaJson.config
 }
 export function extraeDataDeJson (unTextLineaJson:any):any[]  {
+  console.log(unTextLineaJson)
     return unTextLineaJson.data
 }

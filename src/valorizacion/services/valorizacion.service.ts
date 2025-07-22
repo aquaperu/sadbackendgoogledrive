@@ -15,7 +15,7 @@ import { FilterQuery } from 'mongoose';
 import { ObraEntity } from 'src/obra/entity/obra.entity';
 import { firstValueFrom } from 'rxjs';
 import { GoogleDocService } from 'src/googledrivecasa/services/googledoc.service';
-import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier, INumberingOptions, ICharacterStyleOptions, IParagraphStyleOptions, ISectionPropertiesOptions, ISectionOptions, convertMillimetersToTwip } from "docx";
+import { Alignment, AlignmentType, Bookmark, Document, Footer, Header, HeadingLevel, HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, InternalHyperlink, LevelFormat, Packer, PageBreak, PageReference, Paragraph, ShadingType, TableOfContents, TextRun, TextWrappingSide, TextWrappingType,File, StyleLevel, TabStopPosition, convertInchesToTwip, IRunOptions, ParagraphChild, IParagraphOptions, SequentialIdentifier, INumberingOptions, ICharacterStyleOptions, IParagraphStyleOptions, ISectionPropertiesOptions, ISectionOptions, convertMillimetersToTwip, NumberFormat, PageNumber } from "docx";
 import { fixPathAssets, fixPathEspecificacionesTecnicas, fixPathFromSRC, pathEspecificacionesTecnicas, scanDirs } from 'src/shared/toolbox/fixPath';
 import { NumerosALetrasPeruano } from 'src/shared/toolbox/numeroALetras';
 import { IPADRE_REPOSITORY, IPadreRepository } from '../patronAdapter/adapter.ts';
@@ -341,6 +341,10 @@ export class ValorizacionService {
      }); 
 
   }
+  /**
+   * @description para su correcto funcionamiento asegurarse de darle clik en la cabecera del documento y precionar el boton de actualizar. se mostrara el indice
+   * @param parrafos 
+   */
   public async tablaDeContenidos(parrafos:Array<any>){
     let numbering:INumberingOptions = require(fixPathFromSRC("docs/services/styles/numberingBullets.json"))
     let characterStyles:ICharacterStyleOptions[] = require(fixPathFromSRC("docs/services/styles/characterStyles.json"))
@@ -359,30 +363,60 @@ export class ValorizacionService {
         headingStyleRange: "1-5",
         stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
     }),)
-    let jo = fixPathAssets("logo_ferminv1.png")
-    children.push(new Paragraph({
-        children:[new ImageRun({
-            data:fs.readFileSync(jo),
-            transformation:{
-                height:100,
-                width:100
+    let jo = fixPathAssets("logo_ferminv1.png");
+    children.push(
+      new Paragraph({
+        children: [
+          new ImageRun({
+            data: fs.readFileSync(jo),
+            transformation: {
+              height: 100,
+              width: 100,
             },
-            
-                            outline: {
-                                cap:"SQUARE",
-                                type: "solidFill",
-                                solidFillType: "rgb",
-                                value: "0000FF",
-                                width: convertMillimetersToTwip(600),
 
-                            }
-        })]
-    }))
-//console.log(children)
+            outline: {
+              cap: "SQUARE",
+              type: "solidFill",
+              solidFillType: "rgb",
+              value: "0000FF",
+              width: convertMillimetersToTwip(600),
+            },
+          }),
+        ],
+      })
+    );
+    const properties = {
+      
+                page: {
+                    pageNumbers: {
+                        start: 1,
+                        formatType: NumberFormat.DECIMAL,
+                    },
+                },
+    }
+    const footers = {
+                default: new Footer({
+                    children: [
+                        new Paragraph({
+                            alignment: AlignmentType.RIGHT,
+                            children: [
+                                
+                                new TextRun({
+                                    children: ["Numero de Pagina: ", PageNumber.CURRENT],
+                                }),
+                                new TextRun({
+                                    children: [new TextRun(PageNumber.TOTAL_PAGES) ],
+                                }),
+                            ],
+                        }),
+                    ],
+                }),
+            }
+console.log(children)
     const doc = new File({
         numbering,
         features: {updateFields: true},styles: {characterStyles,paragraphStyles,default:default1},
-        sections: [{children}],
+        sections: [{properties,children,footers}],
     });
 
     Packer.toBuffer(doc).then(async(buffer) => {
