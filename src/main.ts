@@ -11,7 +11,12 @@ const httpsOptions = {
 
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{cors:true});
+  const app = await NestFactory.create(AppModule,{
+    cors:true,
+    //habilitar desarrollo
+    httpsOptions
+
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist:true,
@@ -62,10 +67,12 @@ async function bootstrap() {
   };
   app.enableCors(corsOptions);
   
+  //habilitar para desarrollo
   useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
   await app.listen(process.env.PORT || 3000 || 8000,()=>{
     console.log(`Launching NestJS app on port ${process.env.PORT}, URL: http://192.168.1.86:${process.env.PORT}`)
   });
+  //habilitar para produccion
   /*useContainer(app.select(AppModule), {fallbackOnErrors: true}); 
   await app.listen(process.env.PORT || 3000,()=>{
     console.log(`on port: ${process.env.PORT}`)

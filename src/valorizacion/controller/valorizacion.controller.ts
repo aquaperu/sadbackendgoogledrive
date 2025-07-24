@@ -91,8 +91,9 @@ export class ValorizacionController {
             [1.02,"partida 2","MES",6],
             [1.03,"partida 1","GLB",1],
     ]
-          
-      return this.valorizacionService.tablaDeContenidos(listaResumenMetrado)
+    let idDoc= await this.valorizacionService.tablaDeContenidos(listaResumenMetrado)
+          console.log (idDoc)
+      return idDoc
         
     }
     

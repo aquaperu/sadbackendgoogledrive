@@ -7,14 +7,14 @@ export const fixPathAudio = (recursoAssets:string)=>{
 }
 
 export const fixPathAssets = (recursoAssets:string)=>{
-    console.log(`Starting directory: ${process.cwd()}`);
+   
     //process.chdir()
    
    
     return `${path.join(process.cwd(),'/','dist/src/assets/',recursoAssets)}`
 }
 export const fixPathFromSRC = (nameFile:string)=>{
-   console.log(`Starting directory: ${process.cwd()}`);
+   //console.log(`Starting directory: ${process.cwd()}`);
    //process.chdir()
   
   

@@ -357,12 +357,15 @@ export class ValorizacionService {
 
     })
     
-    children.unshift(new Paragraph({text:"",pageBreakBefore:true}))
+    //tiene que actualizarse el indice para que pueda funcionar. arreglar
+    /*children.unshift(new Paragraph({text:"",pageBreakBefore:true}))
     children.unshift(new TableOfContents("Summary", {
         hyperlink: true,
         headingStyleRange: "1-5",
         stylesWithLevels: [new StyleLevel("MySpectacularStyle", 1)],
-    }),)
+    }),)*/
+
+
     let jo = fixPathAssets("logo_ferminv1.png");
     children.push(
       new Paragraph({
@@ -412,15 +415,16 @@ export class ValorizacionService {
                     ],
                 }),
             }
-console.log(children)
+
     const doc = new File({
         numbering,
-        features: {updateFields: true},styles: {characterStyles,paragraphStyles,default:default1},
+        features: {updateFields: true},
+        styles: {characterStyles,paragraphStyles,default:default1},
         sections: [{properties,children,footers}],
     });
 
-    Packer.toBuffer(doc).then(async(buffer) => {
-        this.generaIndiceEnWord(buffer,"especificaciones tecnicas",'1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt')    
+    return await Packer.toBuffer(doc).then(async(buffer) => {
+        return this.generaIndiceEnWord(buffer,"especificaciones tecnicas",'1Y3weOs-ZCOjB8ndIYKaQJd_bqQ-K15Lt')    
      }); 
 
   }
@@ -472,9 +476,12 @@ console.log(children)
               template,
               data: {evidencias}
             });
+            let idDoc:string=''
     
-            this.googleDocService.creaDocumento(buffer1,"panel fotografico",carpetaContenedoraId)//crea un nuevo archivo en google, con la plantilla reemplazada
+            idDoc = await this.googleDocService.creaDocumento(buffer1,"panel fotografico",carpetaContenedoraId)//crea un nuevo archivo en google, con la plantilla reemplazada
+            return idDoc
     
+          
           })
 
 
@@ -491,6 +498,7 @@ console.log(children)
       }
       private async generaIndiceEnWord(buffer:Uint8Array,nombreArchivo:string,carpetaContenedoraId:string){
         const docid = await this.googleDocService.creaDocumento(buffer,nombreArchivo,carpetaContenedoraId)//crea un nuevo archivo en google
+        return docid
 
       }
       private async generaBookmarkEnWord(buffer:Uint8Array,nombreArchivo:string,carpetaContenedoraId:string){
