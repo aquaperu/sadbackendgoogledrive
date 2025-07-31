@@ -16,7 +16,9 @@
                 "height": 50
             },"break":1},
 
-            {"text":"machazo","style":"strong","break":1}
+            {"text":"machazo","style":"strong","break":1},
+            {"text":"table"}
+
         ],
         "config":{
             "indent":{

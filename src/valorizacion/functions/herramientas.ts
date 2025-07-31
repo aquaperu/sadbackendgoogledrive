@@ -1,4 +1,4 @@
-import { HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, Paragraph, StyleLevel, TableOfContents, TextRun, TextWrappingSide, TextWrappingType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertMillimetersToTwip } from "docx"
+import { HorizontalPositionAlign, HorizontalPositionRelativeFrom, ImageRun, Paragraph, StyleLevel, Table, TableCell, TableOfContents, TableRow, TextRun, TextWrappingSide, TextWrappingType, VerticalPositionAlign, VerticalPositionRelativeFrom, convertMillimetersToTwip } from "docx"
 import { fixPathAssets, fixPathEspecificacionesTecnicas, pathEspecificacionesTecnicas, scanDirs } from "src/shared/toolbox/fixPath"
 import * as fs from 'fs'
 import { OutlineOptions } from "docx/build/file/drawing/inline/graphic/graphic-data/pic/shape-properties/outline/outline"
@@ -53,29 +53,43 @@ let llena:any[] = []
 
 
 
-jo.map((texSimple)=>{
-    if(extraeConfigDeJson(texSimple) !== undefined || extraeDataDeJson(texSimple) !== undefined){
-        let options = extraeConfigDeJson(texSimple) 
-        let children:any[] =  extraeDataDeJson(texSimple)
-        
-         children = children.map((el)=>{
-        if(el.text === "imagen"){
-          let img = fixPathAssets(el.img)
-          let data = fs.readFileSync(img)
-          let transformation = el.transformation;
-          let outline = el.outline
-          return new ImageRun({data,transformation,outline})
-        } else{
-          return new TextRun(el)
-        }  
-          
-        })
-        let parrafo = {children,...options}
-        //llena.push(agregaParrafo(parrafo))
-       // console.log(children)
-        llena.push(parrafo)
-    }
-})
+jo.map((texSimple) => {
+  if (
+    extraeConfigDeJson(texSimple) !== undefined ||
+    extraeDataDeJson(texSimple) !== undefined
+  ) {
+    let options = extraeConfigDeJson(texSimple);
+    let children: any[] = extraeDataDeJson(texSimple);
+
+    children = children.map((el) => {
+      if (el.text === "table") {
+        return new Table({
+          rows: [
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [new Paragraph("hello")],
+                }),
+              ],
+            }),
+          ],
+        });
+      } else if (el.text === "imagen") {
+        let img = fixPathAssets(el.img);
+        let data = fs.readFileSync(img);
+        let transformation = el.transformation;
+        let outline = el.outline;
+        return new ImageRun({ data, transformation, outline });
+      } else {
+        return new TextRun(el);
+      }
+    });
+    let parrafo = { children, ...options };
+    //llena.push(agregaParrafo(parrafo))
+    // console.log(children)
+    llena.push(parrafo);
+  }
+});
 
 todosLosParrafos = []
     /*llena.unshift(new Paragraph({text:"",pageBreakBefore:true}))
@@ -122,6 +136,6 @@ export function extraeConfigDeJson (unTextLineaJson:any)  {
     return unTextLineaJson.config
 }
 export function extraeDataDeJson (unTextLineaJson:any):any[]  {
-  //console.log(unTextLineaJson)
+    //console.log(unTextLineaJson)
     return unTextLineaJson.data
 }

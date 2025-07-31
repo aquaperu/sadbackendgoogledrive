@@ -352,6 +352,7 @@ export class ValorizacionService {
     let default1:IDefaultStylesOptions = require(fixPathFromSRC("docs/services/styles/headingDefault.json"))
         
     let children = prepareToParagraphsChildren(parrafos)
+    console.log(children)
     children = children.map((element)=>{
         return this.toolsDoc.addParagraph(element)
 
